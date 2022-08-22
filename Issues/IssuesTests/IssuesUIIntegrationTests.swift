@@ -114,17 +114,17 @@ private extension IssuesViewController {
     }
 
     func renderedFirstName(atIndex index: Int = 0) -> String? {
-        let dataSource = tableView.dataSource
-        let index = IndexPath(row: index, section: issuesSection)
-        let cell = dataSource?.tableView(tableView, cellForRowAt: index) as? IssueCell
-        return cell?.firstNameLabel.text
+        issueView(atIndex: index)?.firstNameLabel.text
     }
 
     func renderedSurname(atIndex index: Int = 0) -> String? {
+        issueView(atIndex: index)?.surNameLabel.text
+    }
+    
+    private func issueView(atIndex index: Int = 0) -> IssueCell? {
         let dataSource = tableView.dataSource
         let index = IndexPath(row: index, section: issuesSection)
-        let cell = dataSource?.tableView(tableView, cellForRowAt: index) as? IssueCell
-        return cell?.surNameLabel.text
+        return dataSource?.tableView(tableView, cellForRowAt: index) as? IssueCell
     }
 }
 
