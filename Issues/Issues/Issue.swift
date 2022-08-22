@@ -8,7 +8,7 @@ public struct Issue {
     public let firstName: String
     public let surname: String
     public let amountOfIssues: Int
-    let birthDate: Date
+    public let birthDate: Date
     
     public init(firstName: String, surname: String, amountOfIssues: Int, birthDate: Date) {
         self.firstName = firstName
