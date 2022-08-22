@@ -20,7 +20,7 @@ final class IssuesLoader {
         completions.append(completion)
     }
     
-    func completeIssuesLoading(with issues: [Issue], at index: Int = 0) {
+    func completeIssuesLoading(with issues: [Issue] = [], at index: Int = 0) {
         completions[index](issues)
     }
 }
@@ -44,9 +44,19 @@ final class IssuesViewController: UITableViewController {
     @available(*, unavailable)
     required init?(coder aDecoder: NSCoder) { return nil }
     
+    private(set) var activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        loader.loadIssues(completion: { [unowned self] in self.issues = $0 })
+        activityIndicator.startAnimating()
+        loader.loadIssues(completion: { [unowned self] in
+            issues = $0
+            activityIndicator.stopAnimating()
+        })
     }
     
     private var issues = [Issue]() {
@@ -106,6 +116,18 @@ final class IssuesUIIntegrationTests: XCTestCase {
         XCTAssertEqual(sut.renderedBirthDate(atIndex: 1), "27 okt. 1992")
     }
     
+    func test_loadingIssuesIndicator_isVisibleWhileLoadingIssues() {
+        let (sut, loader) = makeSUT()
+
+        sut.loadViewIfNeeded()
+        XCTAssertTrue(sut.isShowingLoadingIndicator, "Expected loading indicator once view is loaded")
+    
+        sut.loadViewIfNeeded()
+        loader.completeIssuesLoading(at: 0)
+        
+        XCTAssertFalse(sut.isShowingLoadingIndicator, "Expected no loading indicator once loading completes successfully")
+    }
+    
     // MARK: Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: IssuesViewController, loader: IssuesLoader) {
@@ -148,6 +170,10 @@ private extension IssuesViewController {
         let dataSource = tableView.dataSource
         let index = IndexPath(row: index, section: issuesSection)
         return dataSource?.tableView(tableView, cellForRowAt: index) as? IssueCell
+    }
+    
+    var isShowingLoadingIndicator: Bool {
+        activityIndicator.isAnimating
     }
 }
 
