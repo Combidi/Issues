@@ -54,8 +54,7 @@ final class IssuesViewController: UITableViewController {
 final class IssuesUIIntegrationTests: XCTestCase {
     
     func test_loadsIssuesActionLoadsIssuesFromLoader() {
-        let loader = IssuesLoader()
-        let sut = IssuesViewController(loader: loader)
+        let (sut, loader) = makeSUT()
         
         XCTAssertEqual(loader.loadIssuesCallCount, 0, "Expected no loading request before view is loaded")
 
@@ -66,9 +65,8 @@ final class IssuesUIIntegrationTests: XCTestCase {
     func test_loadIssuesCompletion_rendersSuccessfullyLoadedIssues() {
         let issue0 = Issue(firstName: "a first name", surname: "a surname", amountOfIssues: 2, birthDate: Date())
         let issue1 = Issue(firstName: "another first name", surname: "another surname", amountOfIssues: 1, birthDate: Date())
-        let loader = IssuesLoader()
-        let sut = IssuesViewController(loader: loader)
-
+        let (sut, loader) = makeSUT()
+        
         sut.loadViewIfNeeded()
         
         XCTAssertEqual(sut.numberOfRenderedIssueViews(), 0)
@@ -76,6 +74,14 @@ final class IssuesUIIntegrationTests: XCTestCase {
         loader.completeIssuesLoading(with: [issue0, issue1], at: 0)
         
         XCTAssertEqual(sut.numberOfRenderedIssueViews(), 2)
+    }
+    
+    // MARK: Helpers
+    
+    private func makeSUT() -> (sut: IssuesViewController, loader: IssuesLoader) {
+        let loader = IssuesLoader()
+        let sut = IssuesViewController(loader: loader)
+        return (sut, loader)
     }
 }
 
