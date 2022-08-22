@@ -7,7 +7,7 @@ import Foundation
 public struct Issue {
     public let firstName: String
     public let surname: String
-    let amountOfIssues: Int
+    public let amountOfIssues: Int
     let birthDate: Date
     
     public init(firstName: String, surname: String, amountOfIssues: Int, birthDate: Date) {

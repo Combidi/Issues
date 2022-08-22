@@ -28,6 +28,7 @@ final class IssuesLoader {
 final class IssueCell: UITableViewCell {
     let firstNameLabel = UILabel()
     let surNameLabel = UILabel()
+    let issueCountLabel = UILabel()
 }
 
 final class IssuesViewController: UITableViewController {
@@ -59,6 +60,7 @@ final class IssuesViewController: UITableViewController {
         let cell = IssueCell()
         cell.firstNameLabel.text = issues[indexPath.row].firstName
         cell.surNameLabel.text = issues[indexPath.row].surname
+        cell.issueCountLabel.text = String(issues[indexPath.row].amountOfIssues)
         return cell
     }
 }
@@ -89,6 +91,7 @@ final class IssuesUIIntegrationTests: XCTestCase {
         
         XCTAssertEqual(sut.renderedFirstName(atIndex: 0), "a first name")
         XCTAssertEqual(sut.renderedSurname(atIndex: 0), "a surname")
+        XCTAssertEqual(sut.renderedIssueCount(atIndex: 0), "2")
     }
     
     // MARK: Helpers
@@ -119,6 +122,10 @@ private extension IssuesViewController {
 
     func renderedSurname(atIndex index: Int = 0) -> String? {
         issueView(atIndex: index)?.surNameLabel.text
+    }
+    
+    func renderedIssueCount(atIndex index: Int = 0) -> String? {
+        issueView(atIndex: index)?.issueCountLabel.text
     }
     
     private func issueView(atIndex index: Int = 0) -> IssueCell? {
