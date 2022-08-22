@@ -53,9 +53,16 @@ final class IssuesViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         activityIndicator.startAnimating()
-        loader.loadIssues(completion: { [unowned self] in
-            issues = $0
-            activityIndicator.stopAnimating()
+        loader.loadIssues(completion: { [weak self] issues in
+            if Thread.isMainThread {
+                self?.issues = issues
+                self?.activityIndicator.stopAnimating()
+            } else {
+                DispatchQueue.main.async {
+                    self?.issues = issues
+                    self?.activityIndicator.stopAnimating()
+                }
+            }
         })
     }
     
@@ -128,6 +135,18 @@ final class IssuesUIIntegrationTests: XCTestCase {
         XCTAssertFalse(sut.isShowingLoadingIndicator, "Expected no loading indicator once loading completes successfully")
     }
     
+    func test_loadIssuesCompletion_dispatchesFromBackgroundToMainThread() {
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+
+        let exp = expectation(description: "Wait for background queue")
+        DispatchQueue.global().async {
+            loader.completeIssuesLoading(at: 0)
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
+    }
+    
     // MARK: Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: IssuesViewController, loader: IssuesLoader) {
@@ -142,6 +161,7 @@ final class IssuesUIIntegrationTests: XCTestCase {
 // MARK: Helpers
 
 private extension IssuesViewController {
+    
     private var issuesSection: Int {
         return 0
     }
