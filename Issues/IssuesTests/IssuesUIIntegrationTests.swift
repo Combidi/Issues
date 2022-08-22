@@ -27,6 +27,7 @@ final class IssuesLoader {
 
 final class IssueCell: UITableViewCell {
     let firstNameLabel = UILabel()
+    let surNameLabel = UILabel()
 }
 
 final class IssuesViewController: UITableViewController {
@@ -57,6 +58,7 @@ final class IssuesViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = IssueCell()
         cell.firstNameLabel.text = issues[indexPath.row].firstName
+        cell.surNameLabel.text = issues[indexPath.row].surname
         return cell
     }
 }
@@ -86,6 +88,7 @@ final class IssuesUIIntegrationTests: XCTestCase {
         XCTAssertEqual(sut.numberOfRenderedIssueViews(), 2)
         
         XCTAssertEqual(sut.renderedFirstName(atIndex: 0), "a first name")
+        XCTAssertEqual(sut.renderedSurname(atIndex: 0), "a surname")
     }
     
     // MARK: Helpers
@@ -115,6 +118,13 @@ private extension IssuesViewController {
         let index = IndexPath(row: index, section: issuesSection)
         let cell = dataSource?.tableView(tableView, cellForRowAt: index) as? IssueCell
         return cell?.firstNameLabel.text
+    }
+
+    func renderedSurname(atIndex index: Int = 0) -> String? {
+        let dataSource = tableView.dataSource
+        let index = IndexPath(row: index, section: issuesSection)
+        let cell = dataSource?.tableView(tableView, cellForRowAt: index) as? IssueCell
+        return cell?.surNameLabel.text
     }
 }
 

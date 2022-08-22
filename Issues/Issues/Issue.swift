@@ -6,7 +6,7 @@ import Foundation
 
 public struct Issue {
     public let firstName: String
-    let surname: String
+    public let surname: String
     let amountOfIssues: Int
     let birthDate: Date
     
