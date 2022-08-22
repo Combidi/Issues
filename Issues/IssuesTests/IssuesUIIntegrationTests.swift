@@ -39,7 +39,7 @@ final class IssuesViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loader.loadIssues(completion: { self.issues = $0 })
+        loader.loadIssues(completion: { [unowned self] in self.issues = $0 })
     }
     
     private var issues = [Issue]() {
@@ -78,9 +78,11 @@ final class IssuesUIIntegrationTests: XCTestCase {
     
     // MARK: Helpers
     
-    private func makeSUT() -> (sut: IssuesViewController, loader: IssuesLoader) {
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: IssuesViewController, loader: IssuesLoader) {
         let loader = IssuesLoader()
         let sut = IssuesViewController(loader: loader)
+        trackForMemoryLeaks(loader, file: file, line: line)
+        trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, loader)
     }
 }
@@ -94,5 +96,13 @@ private extension IssuesViewController {
 
     func numberOfRenderedIssueViews() -> Int {
         tableView.numberOfRows(inSection: issuesSection)
+    }
+}
+
+extension XCTestCase {
+    func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #file, line: UInt = #line) {
+        addTeardownBlock { [weak instance] in
+            XCTAssertNil(instance, "Instance should have been delocated. Potential memory leak", file: file, line: line)
+        }
     }
 }
