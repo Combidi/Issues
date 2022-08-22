@@ -4,11 +4,18 @@
 
 import Foundation
 
-struct Issue {
+public struct Issue {
     let firstName: String
     let surname: String
     let amountOfIssues: Int
     let birthDate: Date
+    
+    public init(firstName: String, surname: String, amountOfIssues: Int, birthDate: Date) {
+        self.firstName = firstName
+        self.surname = surname
+        self.amountOfIssues = amountOfIssues
+        self.birthDate = birthDate
+    }
 }
 
 protocol IssueLoader {
