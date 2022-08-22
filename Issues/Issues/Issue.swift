@@ -10,3 +10,7 @@ struct Issue {
     let amountOfIssues: Int
     let birthDate: Date
 }
+
+protocol IssueLoader {
+    func load(completion: (Result<[Issue], Error>) -> Void)
+}
