@@ -5,7 +5,7 @@
 import Foundation
 
 public struct Issue {
-    let firstName: String
+    public let firstName: String
     let surname: String
     let amountOfIssues: Int
     let birthDate: Date
