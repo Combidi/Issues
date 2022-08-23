@@ -7,6 +7,14 @@ import Issues
 
 final class IssuesUIIntegrationTests: XCTestCase {
     
+    func test_issuesView_hasTitle() {
+        let (sut, _) = makeSUT()
+    
+        sut.loadViewIfNeeded()
+
+        XCTAssertEqual(sut.title, "Issues")
+    }
+    
     func test_loadsIssuesActionLoadsIssuesFromLoader() {
         let (sut, loader) = makeSUT()
         
