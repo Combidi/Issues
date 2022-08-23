@@ -82,12 +82,12 @@
 			path = "Issues UI";
 			sourceTree = "<group>";
 		};
-		D0AB950028B55BFB0010B924 /* Issues */ = {
+		D0AB950028B55BFB0010B924 /* Issues Feature */ = {
 			isa = PBXGroup;
 			children = (
 				D0AB950128B55C040010B924 /* IssuesLoader.swift */,
 			);
-			path = Issues;
+			path = "Issues Feature";
 			sourceTree = "<group>";
 		};
 		D0AB950728B56AF50010B924 /* Issues Presentation */ = {
@@ -139,7 +139,7 @@
 			children = (
 				D0AB950C28B56B660010B924 /* Main */,
 				D0AB950728B56AF50010B924 /* Issues Presentation */,
-				D0AB950028B55BFB0010B924 /* Issues */,
+				D0AB950028B55BFB0010B924 /* Issues Feature */,
 				D0AB94FD28B55BBC0010B924 /* Issues UI */,
 				D0BAC24E28B3F388001D6538 /* AppDelegate.swift */,
 				D0BAC25028B3F388001D6538 /* SceneDelegate.swift */,
