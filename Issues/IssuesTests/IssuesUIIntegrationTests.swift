@@ -10,18 +10,25 @@ import Issues
 
 final class IssuesLoader {
     
+    typealias Result = Swift.Result<[Issue], Error>
+    typealias Completion = (Result) -> Void
+    
     var loadIssuesCallCount: Int {
         completions.count
     }
     
-    private var completions = [([Issue]) -> Void]()
+    private var completions = [Completion]()
     
-    func loadIssues(completion: @escaping ([Issue]) -> Void) {
+    func loadIssues(completion: @escaping Completion) {
         completions.append(completion)
     }
     
     func completeIssuesLoading(with issues: [Issue] = [], at index: Int = 0) {
-        completions[index](issues)
+        completions[index](.success(issues))
+    }
+    
+    func completeIssuesLoadingWithError(at index: Int = 0) {
+        completions[index](.failure(NSError(domain: "any", code: 1)))
     }
 }
 
@@ -50,17 +57,29 @@ final class IssuesViewController: UITableViewController {
         return indicator
     }()
     
+    private(set) var errorLabel = UILabel()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         activityIndicator.startAnimating()
-        loader.loadIssues(completion: { [weak self] issues in
+        loader.loadIssues(completion: { [weak self] result in
             if Thread.isMainThread {
-                self?.issues = issues
-                self?.activityIndicator.stopAnimating()
-            } else {
-                DispatchQueue.main.async {
+                switch result {
+                case let .success(issues):
                     self?.issues = issues
                     self?.activityIndicator.stopAnimating()
+                case .failure:
+                    self?.errorLabel.text = "Invalid data"
+                }
+            } else {
+                switch result {
+                case let .success(issues):
+                    DispatchQueue.main.async {
+                        self?.issues = issues
+                        self?.activityIndicator.stopAnimating()
+                    }
+                case .failure:
+                    self?.errorLabel.text = "Invalid data"
                 }
             }
         })
@@ -147,6 +166,16 @@ final class IssuesUIIntegrationTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
+    func test_loadIssuesCompletion_rendersErrorMessageOnError() {
+        let (sut, loader) = makeSUT()
+
+        sut.loadViewIfNeeded()
+        XCTAssertEqual(sut.renderedErrorMessage(), nil)
+
+        loader.completeIssuesLoadingWithError(at: 0)
+        XCTAssertEqual(sut.renderedErrorMessage(), "Invalid data")
+    }
+
     // MARK: Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: IssuesViewController, loader: IssuesLoader) {
@@ -194,6 +223,10 @@ private extension IssuesViewController {
     
     var isShowingLoadingIndicator: Bool {
         activityIndicator.isAnimating
+    }
+    
+    func renderedErrorMessage() -> String? {
+        errorLabel.text
     }
 }
 
