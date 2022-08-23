@@ -9,7 +9,7 @@ public enum IssuesUIComposer {
         let mainThreadDispatchingLoader = MainThreadDispatchingIssueLoaderDecorator(decoratee: loader)
         let presenter = IssuesPresenter(loader: mainThreadDispatchingLoader)
         let viewController = IssuesViewController(presenter: presenter)
-        presenter.view = viewController
+        presenter.view = WeakRefVirtualProxy(viewController)
         return viewController
     }
 }
@@ -31,5 +31,27 @@ private final class MainThreadDispatchingIssueLoaderDecorator: IssuesLoader {
                 }
             }
         }
+    }
+}
+
+final class WeakRefVirtualProxy<T: AnyObject> {
+    private(set) weak var object: T?
+    
+    init(_ object: T) {
+        self.object = object
+    }
+}
+
+extension WeakRefVirtualProxy: IssuesView where T: IssuesView {
+    func present(issues: [Issue]) {
+        object?.present(issues: issues)
+    }
+    
+    func presentLoading(_ isLoading: Bool) {
+        object?.presentLoading(isLoading)
+    }
+    
+    func presentError(_ message: String?) {
+        object?.presentError(message)
     }
 }

@@ -17,7 +17,7 @@ final class IssuesPresenter {
         self.loader = loader
     }
     
-    weak var view: IssuesView?
+    var view: IssuesView?
     
     func load() {
         loader.loadIssues(completion: { [weak view] result in
