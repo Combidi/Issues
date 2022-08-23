@@ -34,7 +34,7 @@ private final class MainThreadDispatchingIssueLoaderDecorator: IssuesLoader {
     }
 }
 
-final class WeakRefVirtualProxy<T: AnyObject> {
+private final class WeakRefVirtualProxy<T: AnyObject> {
     private(set) weak var object: T?
     
     init(_ object: T) {
