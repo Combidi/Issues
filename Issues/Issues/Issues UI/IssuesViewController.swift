@@ -6,10 +6,10 @@ import UIKit
 
 public final class IssuesViewController: UITableViewController {
     
-    private let presenter: IssuesPresenter
+    private let loadIssues: () -> Void
     
-    init(presenter: IssuesPresenter) {
-        self.presenter = presenter
+    init(loadIssues: @escaping () -> Void) {
+        self.loadIssues = loadIssues
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -27,7 +27,7 @@ public final class IssuesViewController: UITableViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         activityIndicator.startAnimating()
-        presenter.load()
+        loadIssues()
     }
         
     private var issues = [Issue]() {

@@ -8,7 +8,7 @@ public enum IssuesUIComposer {
     public static func compose(withLoader loader: IssuesLoader) -> UIViewController {
         let mainThreadDispatchingLoader = MainThreadDispatchingIssueLoaderDecorator(decoratee: loader)
         let presenter = IssuesPresenter(loader: mainThreadDispatchingLoader)
-        let viewController = IssuesViewController(presenter: presenter)
+        let viewController = IssuesViewController(loadIssues: presenter.load)
         presenter.view = WeakRefVirtualProxy(viewController)
         return viewController
     }
