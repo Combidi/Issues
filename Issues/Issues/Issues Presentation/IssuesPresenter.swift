@@ -8,13 +8,6 @@ protocol IssuesView: AnyObject {
     func presentError(_ message: String?)
 }
 
-struct IssueViewModel {
-    let firstName: String
-    let surname: String
-    let amountOfIssues: String
-    let birthDate: String
-}
-
 import Foundation
 
 final class IssuesPresenter {
