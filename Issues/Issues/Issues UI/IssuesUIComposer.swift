@@ -43,7 +43,7 @@ private final class WeakRefVirtualProxy<T: AnyObject> {
 }
 
 extension WeakRefVirtualProxy: IssuesView where T: IssuesView {
-    func present(issues: [Issue]) {
+    func present(issues: [IssueViewModel]) {
         object?.present(issues: issues)
     }
     

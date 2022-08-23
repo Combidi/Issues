@@ -24,7 +24,7 @@ public final class IssuesViewController: UITableViewController, IssuesView {
     
     public private(set) var errorLabel = UILabel()
         
-    private var issues = [Issue]() {
+    private var issues = [IssueViewModel]() {
         didSet { tableView.reloadData() }
     }
     
@@ -42,16 +42,12 @@ public final class IssuesViewController: UITableViewController, IssuesView {
         let cell = IssueCell()
         cell.firstNameLabel.text = issues[indexPath.row].firstName
         cell.surNameLabel.text = issues[indexPath.row].surname
-        cell.issueCountLabel.text = String(issues[indexPath.row].amountOfIssues)
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-        
-        cell.birthDateLabel.text = dateFormatter.string(for: issues[indexPath.row].birthDate)
+        cell.issueCountLabel.text = issues[indexPath.row].amountOfIssues
+        cell.birthDateLabel.text = issues[indexPath.row].birthDate
         return cell
     }
     
-    func present(issues: [Issue]) {
+    func present(issues: [IssueViewModel]) {
         self.issues = issues
         activityIndicator.stopAnimating()
     }
