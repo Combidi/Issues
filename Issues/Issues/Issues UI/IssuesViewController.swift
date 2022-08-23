@@ -5,7 +5,6 @@
 import UIKit
 
 public final class IssuesViewController: UITableViewController, IssuesView {
-    
     private let loadIssues: () -> Void
     
     init(loadIssues: @escaping () -> Void) {
@@ -30,7 +29,6 @@ public final class IssuesViewController: UITableViewController, IssuesView {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        presentLoading(false)
         loadIssues()
     }
 
