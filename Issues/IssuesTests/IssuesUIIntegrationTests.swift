@@ -8,112 +8,6 @@
 import XCTest
 import Issues
 
-protocol IssueLoader {
-    typealias Result = Swift.Result<[Issue], Error>
-    typealias Completion = (Result) -> Void
-    
-    func loadIssues(completion: @escaping Completion)
-}
-
-final class IssuesLoaderSpy: IssueLoader {
-    
-    typealias Result = Swift.Result<[Issue], Error>
-    typealias Completion = (Result) -> Void
-    
-    var loadIssuesCallCount: Int {
-        completions.count
-    }
-    
-    private var completions = [Completion]()
-    
-    func loadIssues(completion: @escaping Completion) {
-        completions.append(completion)
-    }
-    
-    func completeIssuesLoading(with issues: [Issue] = [], at index: Int = 0) {
-        completions[index](.success(issues))
-    }
-    
-    func completeIssuesLoadingWithError(at index: Int = 0) {
-        completions[index](.failure(NSError(domain: "any", code: 1)))
-    }
-}
-
-final class IssueCell: UITableViewCell {
-    let firstNameLabel = UILabel()
-    let surNameLabel = UILabel()
-    let issueCountLabel = UILabel()
-    let birthDateLabel = UILabel()
-}
-
-final class IssuesViewController: UITableViewController {
-    
-    private let loader: IssuesLoaderSpy
-    
-    init(loader: IssuesLoaderSpy) {
-        self.loader = loader
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    @available(*, unavailable)
-    required init?(coder aDecoder: NSCoder) { return nil }
-    
-    private(set) var activityIndicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView()
-        indicator.hidesWhenStopped = true
-        return indicator
-    }()
-    
-    private(set) var errorLabel = UILabel()
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        activityIndicator.startAnimating()
-        loader.loadIssues(completion: { [weak self] result in
-            if Thread.isMainThread {
-                switch result {
-                case let .success(issues):
-                    self?.issues = issues
-                    self?.activityIndicator.stopAnimating()
-                case .failure:
-                    self?.errorLabel.text = "Invalid data"
-                }
-            } else {
-                switch result {
-                case let .success(issues):
-                    DispatchQueue.main.async {
-                        self?.issues = issues
-                        self?.activityIndicator.stopAnimating()
-                    }
-                case .failure:
-                    self?.errorLabel.text = "Invalid data"
-                }
-            }
-        })
-    }
-    
-    private var issues = [Issue]() {
-        didSet { tableView.reloadData() }
-    }
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        issues.count
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = IssueCell()
-        cell.firstNameLabel.text = issues[indexPath.row].firstName
-        cell.surNameLabel.text = issues[indexPath.row].surname
-        cell.issueCountLabel.text = String(issues[indexPath.row].amountOfIssues)
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-        
-        cell.birthDateLabel.text = dateFormatter.string(for: issues[indexPath.row].birthDate)
-        return cell
-    }
-}
-
 final class IssuesUIIntegrationTests: XCTestCase {
     
     func test_loadsIssuesActionLoadsIssuesFromLoader() {
@@ -234,6 +128,29 @@ private extension IssuesViewController {
     
     func renderedErrorMessage() -> String? {
         errorLabel.text
+    }
+}
+
+private final class IssuesLoaderSpy: IssuesLoader {
+    typealias Result = Swift.Result<[Issue], Error>
+    typealias Completion = (Result) -> Void
+    
+    var loadIssuesCallCount: Int {
+        completions.count
+    }
+    
+    private var completions = [Completion]()
+    
+    func loadIssues(completion: @escaping Completion) {
+        completions.append(completion)
+    }
+    
+    func completeIssuesLoading(with issues: [Issue] = [], at index: Int = 0) {
+        completions[index](.success(issues))
+    }
+    
+    func completeIssuesLoadingWithError(at index: Int = 0) {
+        completions[index](.failure(NSError(domain: "any", code: 1)))
     }
 }
 
