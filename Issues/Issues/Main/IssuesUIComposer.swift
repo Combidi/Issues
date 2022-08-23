@@ -9,6 +9,7 @@ public enum IssuesUIComposer {
         let mainThreadDispatchingLoader = MainThreadDispatchingIssueLoaderDecorator(decoratee: loader)
         let presenter = IssuesPresenter(loader: mainThreadDispatchingLoader)
         let viewController = IssuesViewController(loadIssues: presenter.load)
+        viewController.title = presenter.issuesTitle
         presenter.view = WeakRefVirtualProxy(viewController)
         return viewController
     }

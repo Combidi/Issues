@@ -13,6 +13,8 @@ final class IssuesPresenter {
     
     var view: IssuesView?
     
+    let issuesTitle: String = "Issues"
+    
     func load() {
         view?.presentLoading(false)
         loader.loadIssues(completion: { [weak view] result in

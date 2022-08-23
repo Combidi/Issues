@@ -10,7 +10,6 @@ public final class IssuesViewController: UITableViewController, IssuesView {
     init(loadIssues: @escaping () -> Void) {
         self.loadIssues = loadIssues
         super.init(nibName: nil, bundle: nil)
-        title = "Issues"
     }
     
     @available(*, unavailable)
