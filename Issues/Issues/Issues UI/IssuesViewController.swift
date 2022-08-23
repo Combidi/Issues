@@ -4,6 +4,12 @@
 
 import UIKit
 
+protocol IssuesView: AnyObject {
+    func present(issues: [Issue])
+    func presentLoading(_ isLoading: Bool)
+    func presentError(_ message: String?)
+}
+
 final class IssuesPresenter {
     private let loader: IssuesLoader
     
@@ -11,7 +17,7 @@ final class IssuesPresenter {
         self.loader = loader
     }
     
-    weak var view: IssuesViewController?
+    weak var view: IssuesView?
     
     func load() {
         loader.loadIssues(completion: { [weak view] result in
@@ -51,20 +57,7 @@ public final class IssuesViewController: UITableViewController {
         activityIndicator.startAnimating()
         presenter.load()
     }
-    
-    func present(issues: [Issue]) {
-        self.issues = issues
-        activityIndicator.stopAnimating()
-    }
-    
-    func presentLoading(_ isLoading: Bool) {
-        activityIndicator.startAnimating()
-    }
-    
-    func presentError(_ message: String?) {
-        errorLabel.text = "Invalid data"
-    }
-    
+        
     private var issues = [Issue]() {
         didSet { tableView.reloadData() }
     }
@@ -84,5 +77,20 @@ public final class IssuesViewController: UITableViewController {
         
         cell.birthDateLabel.text = dateFormatter.string(for: issues[indexPath.row].birthDate)
         return cell
+    }
+}
+
+extension IssuesViewController: IssuesView {
+    func present(issues: [Issue]) {
+        self.issues = issues
+        activityIndicator.stopAnimating()
+    }
+    
+    func presentLoading(_ isLoading: Bool) {
+        activityIndicator.startAnimating()
+    }
+    
+    func presentError(_ message: String?) {
+        errorLabel.text = "Invalid data"
     }
 }
