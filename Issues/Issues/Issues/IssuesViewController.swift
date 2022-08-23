@@ -11,13 +11,6 @@ public protocol IssuesLoader {
     func loadIssues(completion: @escaping Completion)
 }
 
-public final class IssueCell: UITableViewCell {
-    public let firstNameLabel = UILabel()
-    public let surNameLabel = UILabel()
-    public let issueCountLabel = UILabel()
-    public let birthDateLabel = UILabel()
-}
-
 public final class IssuesViewController: UITableViewController {
     
     private let loader: IssuesLoader
