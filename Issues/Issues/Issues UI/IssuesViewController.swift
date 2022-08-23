@@ -4,13 +4,6 @@
 
 import UIKit
 
-public protocol IssuesLoader {
-    typealias Result = Swift.Result<[Issue], Error>
-    typealias Completion = (Result) -> Void
-    
-    func loadIssues(completion: @escaping Completion)
-}
-
 public final class IssuesViewController: UITableViewController {
     
     private let loader: IssuesLoader
