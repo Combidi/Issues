@@ -17,7 +17,3 @@ public struct Issue {
         self.birthDate = birthDate
     }
 }
-
-protocol IssueLoader {
-    func load(completion: (Result<[Issue], Error>) -> Void)
-}
