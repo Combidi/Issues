@@ -4,7 +4,7 @@
 
 import UIKit
 
-public final class IssuesViewController: UITableViewController {
+public final class IssuesViewController: UITableViewController, IssuesView {
     
     private let loadIssues: () -> Void
     
@@ -23,17 +23,17 @@ public final class IssuesViewController: UITableViewController {
     }()
     
     public private(set) var errorLabel = UILabel()
-
-    public override func viewDidLoad() {
-        super.viewDidLoad()
-        activityIndicator.startAnimating()
-        loadIssues()
-    }
         
     private var issues = [Issue]() {
         didSet { tableView.reloadData() }
     }
     
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+        activityIndicator.startAnimating()
+        loadIssues()
+    }
+
     public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         issues.count
     }
@@ -50,9 +50,7 @@ public final class IssuesViewController: UITableViewController {
         cell.birthDateLabel.text = dateFormatter.string(for: issues[indexPath.row].birthDate)
         return cell
     }
-}
-
-extension IssuesViewController: IssuesView {
+    
     func present(issues: [Issue]) {
         self.issues = issues
         activityIndicator.stopAnimating()
