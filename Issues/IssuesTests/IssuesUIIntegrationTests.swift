@@ -8,7 +8,14 @@
 import XCTest
 import Issues
 
-final class IssuesLoader {
+protocol IssueLoader {
+    typealias Result = Swift.Result<[Issue], Error>
+    typealias Completion = (Result) -> Void
+    
+    func loadIssues(completion: @escaping Completion)
+}
+
+final class IssuesLoaderSpy: IssueLoader {
     
     typealias Result = Swift.Result<[Issue], Error>
     typealias Completion = (Result) -> Void
@@ -41,9 +48,9 @@ final class IssueCell: UITableViewCell {
 
 final class IssuesViewController: UITableViewController {
     
-    private let loader: IssuesLoader
+    private let loader: IssuesLoaderSpy
     
-    init(loader: IssuesLoader) {
+    init(loader: IssuesLoaderSpy) {
         self.loader = loader
         super.init(nibName: nil, bundle: nil)
     }
@@ -178,8 +185,8 @@ final class IssuesUIIntegrationTests: XCTestCase {
 
     // MARK: Helpers
     
-    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: IssuesViewController, loader: IssuesLoader) {
-        let loader = IssuesLoader()
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: IssuesViewController, loader: IssuesLoaderSpy) {
+        let loader = IssuesLoaderSpy()
         let sut = IssuesViewController(loader: loader)
         trackForMemoryLeaks(loader, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
