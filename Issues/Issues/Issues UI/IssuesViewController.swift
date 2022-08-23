@@ -15,24 +15,12 @@ final class IssuesPresenter {
     
     func load() {
         loader.loadIssues(completion: { [weak view] result in
-            if Thread.isMainThread {
-                switch result {
-                case let .success(issues):
-                    view?.presentLoading(false)
-                    view?.present(issues: issues)
-                case .failure:
-                    view?.presentError("Invalid data")
-                }
-            } else {
-                DispatchQueue.main.async {
-                    switch result {
-                    case let .success(issues):
-                        view?.presentLoading(false)
-                        view?.present(issues: issues)
-                    case .failure:
-                        view?.presentError("Invalid data")
-                    }                
-                }
+            switch result {
+            case let .success(issues):
+                view?.presentLoading(false)
+                view?.present(issues: issues)
+            case .failure:
+                view?.presentError("Invalid data")
             }
         })
     }
