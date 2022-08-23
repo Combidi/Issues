@@ -80,7 +80,6 @@
 			children = (
 				D0AB94FB28B55B470010B924 /* IssuesViewController.swift */,
 				D0AB94FE28B55BCB0010B924 /* IssueCell.swift */,
-				D0AB950328B55C790010B924 /* IssuesUIComposer.swift */,
 			);
 			path = "Issues UI";
 			sourceTree = "<group>";
@@ -101,6 +100,22 @@
 				D0AB950A28B56B290010B924 /* IssuesView.swift */,
 			);
 			path = "Issues Presentation";
+			sourceTree = "<group>";
+		};
+		D0AB950C28B56B660010B924 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				D0AB950328B55C790010B924 /* IssuesUIComposer.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		D0AB950D28B56B7C0010B924 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				D08E51C928B3FE92005B4B80 /* IssuesUIIntegrationTests.swift */,
+			);
+			path = Main;
 			sourceTree = "<group>";
 		};
 		D0BAC24228B3F387001D6538 = {
@@ -124,6 +139,7 @@
 		D0BAC24D28B3F388001D6538 /* Issues */ = {
 			isa = PBXGroup;
 			children = (
+				D0AB950C28B56B660010B924 /* Main */,
 				D0AB950728B56AF50010B924 /* Issues Presentation */,
 				D0AB950028B55BFB0010B924 /* Issues */,
 				D0AB94FD28B55BBC0010B924 /* Issues UI */,
@@ -142,8 +158,8 @@
 		D0BAC26428B3F38B001D6538 /* IssuesTests */ = {
 			isa = PBXGroup;
 			children = (
+				D0AB950D28B56B7C0010B924 /* Main */,
 				D0BAC26528B3F38B001D6538 /* IssuesTests.swift */,
-				D08E51C928B3FE92005B4B80 /* IssuesUIIntegrationTests.swift */,
 			);
 			path = IssuesTests;
 			sourceTree = "<group>";
