@@ -30,7 +30,7 @@ public final class IssuesViewController: UITableViewController, IssuesView {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        activityIndicator.startAnimating()
+        presentLoading(false)
         loadIssues()
     }
 
