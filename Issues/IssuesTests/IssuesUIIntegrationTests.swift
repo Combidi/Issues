@@ -78,7 +78,7 @@ final class IssuesUIIntegrationTests: XCTestCase {
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: IssuesViewController, loader: IssuesLoaderSpy) {
         let loader = IssuesLoaderSpy()
-        let sut = IssuesViewController(loader: loader)
+        let sut = IssuesUIComposer.compose(withLoader: loader) as! IssuesViewController
         trackForMemoryLeaks(loader, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, loader)

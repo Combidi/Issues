@@ -4,12 +4,46 @@
 
 import UIKit
 
-public final class IssuesViewController: UITableViewController {
-    
+final class IssuesPresenter {
     private let loader: IssuesLoader
     
-    public init(loader: IssuesLoader) {
+    init(loader: IssuesLoader) {
         self.loader = loader
+    }
+    
+    weak var view: IssuesViewController?
+    
+    func load() {
+        loader.loadIssues(completion: { [weak view] result in
+            if Thread.isMainThread {
+                switch result {
+                case let .success(issues):
+                    view?.presentLoading(false)
+                    view?.present(issues: issues)
+                case .failure:
+                    view?.presentError("Invalid data")
+                }
+            } else {
+                DispatchQueue.main.async {
+                    switch result {
+                    case let .success(issues):
+                        view?.presentLoading(false)
+                        view?.present(issues: issues)
+                    case .failure:
+                        view?.presentError("Invalid data")
+                    }                
+                }
+            }
+        })
+    }
+}
+
+public final class IssuesViewController: UITableViewController {
+    
+    private let presenter: IssuesPresenter
+    
+    init(presenter: IssuesPresenter) {
+        self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -27,27 +61,20 @@ public final class IssuesViewController: UITableViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         activityIndicator.startAnimating()
-        loader.loadIssues(completion: { [weak self] result in
-            if Thread.isMainThread {
-                switch result {
-                case let .success(issues):
-                    self?.issues = issues
-                    self?.activityIndicator.stopAnimating()
-                case .failure:
-                    self?.errorLabel.text = "Invalid data"
-                }
-            } else {
-                switch result {
-                case let .success(issues):
-                    DispatchQueue.main.async {
-                        self?.issues = issues
-                        self?.activityIndicator.stopAnimating()
-                    }
-                case .failure:
-                    self?.errorLabel.text = "Invalid data"
-                }
-            }
-        })
+        presenter.load()
+    }
+    
+    func present(issues: [Issue]) {
+        self.issues = issues
+        activityIndicator.stopAnimating()
+    }
+    
+    func presentLoading(_ isLoading: Bool) {
+        activityIndicator.startAnimating()
+    }
+    
+    func presentError(_ message: String?) {
+        errorLabel.text = "Invalid data"
     }
     
     private var issues = [Issue]() {
