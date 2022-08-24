@@ -85,6 +85,7 @@
 		D0AB950028B55BFB0010B924 /* Issues Feature */ = {
 			isa = PBXGroup;
 			children = (
+				D08E51C728B3FA59005B4B80 /* Issue.swift */,
 				D0AB950128B55C040010B924 /* IssuesLoader.swift */,
 			);
 			path = "Issues Feature";
@@ -148,7 +149,6 @@
 				D0BAC25728B3F38A001D6538 /* Assets.xcassets */,
 				D0BAC25928B3F38A001D6538 /* LaunchScreen.storyboard */,
 				D0BAC25C28B3F38A001D6538 /* Info.plist */,
-				D08E51C728B3FA59005B4B80 /* Issue.swift */,
 			);
 			path = Issues;
 			sourceTree = "<group>";
