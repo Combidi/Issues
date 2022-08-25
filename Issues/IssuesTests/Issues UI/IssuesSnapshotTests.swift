@@ -16,6 +16,7 @@ final class IssuesSnapshotTests: XCTestCase {
     
         assert(snapshot: sut.snapshot(for: .iPhone13(style: .light)), named: "ISSUES_WITH_CONTENT_light")
         assert(snapshot: sut.snapshot(for: .iPhone13(style: .dark)), named: "ISSUES_WITH_CONTENT_dark")
+        assert(snapshot: sut.snapshot(for: .iPhone13(style: .light, contentSize: .extraExtraExtraLarge)), named: "ISSUES_WITH_CONTENT_light_extraExtraExtraLarge")
     }
     
     // MARK: Helpers
