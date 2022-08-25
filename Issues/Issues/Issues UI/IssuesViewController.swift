@@ -4,7 +4,7 @@
 
 import UIKit
 
-public final class IssuesViewController: UITableViewController, IssuesView {
+public final class IssuesViewController: UIViewController, IssuesView, UITableViewDataSource {
     var loadIssues: (() -> Void)?
     
     public private(set) lazy var activityIndicator: UIActivityIndicatorView = {
@@ -18,17 +18,32 @@ public final class IssuesViewController: UITableViewController, IssuesView {
     private var issues = [IssueViewModel]() {
         didSet { tableView.reloadData() }
     }
+
+    public private(set) lazy var tableView: UITableView = {
+        let tableView = UITableView(frame: .zero, style: .insetGrouped)
+        tableView.dataSource = self
+        tableView.register(UINib(nibName: "IssueCell", bundle: .main), forCellReuseIdentifier: "IssueCell")
+        view.addSubview(tableView)
+        
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+
+        return tableView
+    }()
     
     public override func viewDidLoad() {
         super.viewDidLoad()
         loadIssues?()
     }
     
-    override public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         issues.count
     }
     
-    override public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "IssueCell") as! IssueCell
         cell.nameLabel.text = issues[indexPath.row].name
         cell.issueCountLabel.text = issues[indexPath.row].amountOfIssues
@@ -41,7 +56,7 @@ public final class IssuesViewController: UITableViewController, IssuesView {
         activityIndicator.stopAnimating()
     }
     
-    func presentLoading(_ isLoading: Bool) {
+    public func presentLoading(_ isLoading: Bool) {
         activityIndicator.startAnimating()
     }
     

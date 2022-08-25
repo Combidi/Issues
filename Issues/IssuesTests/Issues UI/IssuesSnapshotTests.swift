@@ -9,8 +9,7 @@ final class IssuesSnapshotTests: XCTestCase {
     
     func test_withContent() {
         
-        let storyboard = UIStoryboard(name: "IssuesUI", bundle: .main)
-        let sut = storyboard.instantiateInitialViewController() as! IssuesViewController
+        let sut = IssuesViewController()
         
         sut.present(issues: issuesWithContent())
     
