@@ -10,7 +10,6 @@ public final class IssuesViewController: UIViewController, IssuesView, UITableVi
     public private(set) lazy var activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .large)
         indicator.hidesWhenStopped = true
-        indicator.translatesAutoresizingMaskIntoConstraints = false
         return indicator
     }()
         
