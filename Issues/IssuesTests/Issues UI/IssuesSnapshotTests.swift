@@ -9,7 +9,19 @@ final class IssuesSnapshotTests: XCTestCase {
     
     func test_withContent() {
         
-        let issues = [
+        let storyboard = UIStoryboard(name: "IssuesUI", bundle: .main)
+        let sut = storyboard.instantiateInitialViewController() as! IssuesViewController
+        
+        sut.present(issues: issuesWithContent())
+    
+        assert(snapshot: sut.snapshot(for: .iPhone13(style: .light)), named: "ISSUES_WITH_CONTENT_light")
+        assert(snapshot: sut.snapshot(for: .iPhone13(style: .dark)), named: "ISSUES_WITH_CONTENT_dark")
+    }
+    
+    // MARK: Helpers
+    
+    private func issuesWithContent() -> [IssueViewModel] {
+        [
             IssueViewModel(
                 name: "a name",
                 amountOfIssues: "10",
@@ -21,11 +33,6 @@ final class IssuesSnapshotTests: XCTestCase {
                 birthDate: "23-11-1991"
             )
         ]
-        let storyboard = UIStoryboard(name: "IssuesUI", bundle: .main)
-        let sut = storyboard.instantiateInitialViewController() as! IssuesViewController
-        sut.present(issues: issues)
-    
-        assert(snapshot: sut.snapshot(for: .iPhone13(style: .light)), named: "ISSUES_WITH_CONTENT_light")
     }
 }
 
