@@ -4,6 +4,62 @@
 
 import UIKit
 
+//public final class ErrorView: UIView {
+//
+//    private lazy var messageLabel = UILabel()
+//
+//    public var message: String? {
+//        get { messageLabel.text }
+//        set {
+//            if let message = newValue {
+//                messageLabel.text = message
+//                isHidden = false
+//            } else {
+//                isHidden = true
+//            }
+//        }
+//    }
+//
+//    public override init(frame: CGRect) {
+//        super.init(frame: frame)
+//
+//        isHidden = true
+//
+//        let stack = UIStackView()
+//        stack.axis = .vertical
+//        stack.contentMode = .scaleToFill
+//
+//        addSubview(stack)
+//
+//        messageLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+//
+//        stack.translatesAutoresizingMaskIntoConstraints = false
+//        stack.topAnchor.constraint(equalTo: topAnchor).isActive = true
+//        stack.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+//        stack.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+//        stack.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+//
+//        heightAnchor.constraint(greaterThanOrEqualTo: stack.heightAnchor, multiplier: 0).isActive = true
+//        widthAnchor.constraint(greaterThanOrEqualTo: stack.widthAnchor, multiplier: 0).isActive = true
+//
+//        let image = UIImage(systemName: "trash")
+//        let imageView = UIImageView(image: image)
+//        imageView.contentMode = .scaleAspectFit
+//
+//        stack.addArrangedSubview(imageView)
+//
+//        imageView.translatesAutoresizingMaskIntoConstraints = false
+//        imageView.widthAnchor.constraint(equalToConstant: 50).isActive = true
+//        imageView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+//
+//        stack.addArrangedSubview(messageLabel)
+//    }
+//
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
+//}
+
 public final class IssuesViewController: UIViewController, IssuesView, UITableViewDataSource {
     var loadIssues: (() -> Void)?
     
@@ -14,7 +70,12 @@ public final class IssuesViewController: UIViewController, IssuesView, UITableVi
         return indicator
     }()
         
-    public private(set) var errorLabel = UILabel()
+    public private(set) lazy var errorLabel: UILabel = {
+        let label = UILabel()
+        label.font = .preferredFont(forTextStyle: .title1)
+        label.adjustsFontForContentSizeCategory = true
+        return label
+    }()
         
     private var issues = [IssueViewModel]() {
         didSet { tableView.reloadData() }
@@ -44,6 +105,12 @@ public final class IssuesViewController: UIViewController, IssuesView, UITableVi
         activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
+        view.addSubview(errorLabel)
+        
+        errorLabel.translatesAutoresizingMaskIntoConstraints = false
+        errorLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        errorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        
         loadIssues?()
     }
     
@@ -67,7 +134,8 @@ public final class IssuesViewController: UIViewController, IssuesView, UITableVi
         isLoading ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
     }
     
-    func presentError(_ message: String?) {
-        errorLabel.text = "Invalid data"
+    public func presentError(_ message: String?) {
+        errorLabel.text = message
+        errorLabel.isHidden = message == nil
     }
 }

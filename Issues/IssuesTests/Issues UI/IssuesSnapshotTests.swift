@@ -8,7 +8,6 @@ import Issues
 final class IssuesSnapshotTests: XCTestCase {
     
     func test_withContent() {
-        
         let sut = IssuesViewController()
         
         sut.present(issues: issuesWithContent())
@@ -19,13 +18,22 @@ final class IssuesSnapshotTests: XCTestCase {
     }
     
     func test_loading() {
-        
         let sut = IssuesViewController()
         
         sut.presentLoading(true)
     
         assert(snapshot: sut.snapshot(for: .iPhone13(style: .light)), named: "ISSUES_LOADING_light")
         assert(snapshot: sut.snapshot(for: .iPhone13(style: .dark)), named: "ISSUES_LOADING_dark")
+    }
+
+    func test_withError() {
+        let sut = IssuesViewController()
+        
+        sut.presentError("A message")
+        
+        assert(snapshot: sut.snapshot(for: .iPhone13(style: .light)), named: "ISSUES_WITH_ERROR_light")
+        assert(snapshot: sut.snapshot(for: .iPhone13(style: .dark)), named: "ISSUES_WITH_ERROR_dark")
+        assert(snapshot: sut.snapshot(for: .iPhone13(style: .light, contentSize: .extraSmall)), named: "ISSUES_WITH_ERROR_light_extraSmall")
     }
     
     // MARK: Helpers
