@@ -7,7 +7,7 @@ import Issues
 
 final class IssuesSnapshotTests: XCTestCase {
     
-    func test() {
+    func test_withContent() {
         
         let issues = [
             IssueViewModel(
