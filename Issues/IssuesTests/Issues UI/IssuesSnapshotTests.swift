@@ -18,6 +18,16 @@ final class IssuesSnapshotTests: XCTestCase {
         assert(snapshot: sut.snapshot(for: .iPhone13(style: .light, contentSize: .extraExtraExtraLarge)), named: "ISSUES_WITH_CONTENT_light_extraExtraExtraLarge")
     }
     
+    func test_loading() {
+        
+        let sut = IssuesViewController()
+        
+        sut.presentLoading(true)
+    
+        record(snapshot: sut.snapshot(for: .iPhone13(style: .light)), named: "ISSUES_LOADING_light")
+        record(snapshot: sut.snapshot(for: .iPhone13(style: .dark)), named: "ISSUES_LOADING_dark")
+    }
+    
     // MARK: Helpers
     
     private func issuesWithContent() -> [IssueViewModel] {

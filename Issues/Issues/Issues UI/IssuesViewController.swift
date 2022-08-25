@@ -8,8 +8,9 @@ public final class IssuesViewController: UIViewController, IssuesView, UITableVi
     var loadIssues: (() -> Void)?
     
     public private(set) lazy var activityIndicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView()
+        let indicator = UIActivityIndicatorView(style: .large)
         indicator.hidesWhenStopped = true
+        indicator.translatesAutoresizingMaskIntoConstraints = false
         return indicator
     }()
         
@@ -21,8 +22,14 @@ public final class IssuesViewController: UIViewController, IssuesView, UITableVi
 
     public private(set) lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
-        tableView.dataSource = self
         tableView.register(UINib(nibName: "IssueCell", bundle: .main), forCellReuseIdentifier: "IssueCell")
+        tableView.dataSource = self
+        return tableView
+    }()
+    
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+        
         view.addSubview(tableView)
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -31,11 +38,12 @@ public final class IssuesViewController: UIViewController, IssuesView, UITableVi
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
 
-        return tableView
-    }()
-    
-    public override func viewDidLoad() {
-        super.viewDidLoad()
+        view.addSubview(activityIndicator)
+        
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        
         loadIssues?()
     }
     
