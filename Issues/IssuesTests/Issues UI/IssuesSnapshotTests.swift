@@ -24,8 +24,8 @@ final class IssuesSnapshotTests: XCTestCase {
         
         sut.presentLoading(true)
     
-        record(snapshot: sut.snapshot(for: .iPhone13(style: .light)), named: "ISSUES_LOADING_light")
-        record(snapshot: sut.snapshot(for: .iPhone13(style: .dark)), named: "ISSUES_LOADING_dark")
+        assert(snapshot: sut.snapshot(for: .iPhone13(style: .light)), named: "ISSUES_LOADING_light")
+        assert(snapshot: sut.snapshot(for: .iPhone13(style: .dark)), named: "ISSUES_LOADING_dark")
     }
     
     // MARK: Helpers
