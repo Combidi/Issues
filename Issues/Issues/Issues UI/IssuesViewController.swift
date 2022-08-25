@@ -5,22 +5,14 @@
 import UIKit
 
 public final class IssuesViewController: UITableViewController, IssuesView {
-    private let loadIssues: () -> Void
+    var loadIssues: (() -> Void)?
     
-    init(loadIssues: @escaping () -> Void) {
-        self.loadIssues = loadIssues
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    @available(*, unavailable)
-    required init?(coder aDecoder: NSCoder) { return nil }
-    
-    public private(set) var activityIndicator: UIActivityIndicatorView = {
+    public private(set) lazy var activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView()
         indicator.hidesWhenStopped = true
         return indicator
     }()
-    
+        
     public private(set) var errorLabel = UILabel()
         
     private var issues = [IssueViewModel]() {
@@ -29,23 +21,22 @@ public final class IssuesViewController: UITableViewController, IssuesView {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        loadIssues()
+        loadIssues?()
     }
-
-    public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    
+    override public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         issues.count
     }
     
-    public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = IssueCell()
-        cell.firstNameLabel.text = issues[indexPath.row].firstName
-        cell.surNameLabel.text = issues[indexPath.row].surname
+    override public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "IssueCell") as! IssueCell
+        cell.nameLabel.text = issues[indexPath.row].name
         cell.issueCountLabel.text = issues[indexPath.row].amountOfIssues
         cell.birthDateLabel.text = issues[indexPath.row].birthDate
         return cell
     }
     
-    func present(issues: [IssueViewModel]) {
+    public func present(issues: [IssueViewModel]) {
         self.issues = issues
         activityIndicator.stopAnimating()
     }

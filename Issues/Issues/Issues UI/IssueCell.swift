@@ -5,8 +5,7 @@
 import UIKit
 
 public final class IssueCell: UITableViewCell {
-    public let firstNameLabel = UILabel()
-    public let surNameLabel = UILabel()
-    public let issueCountLabel = UILabel()
-    public let birthDateLabel = UILabel()
+    @IBOutlet public private(set) var nameLabel: UILabel!
+    @IBOutlet public private(set) var issueCountLabel: UILabel!
+    @IBOutlet public private(set) var birthDateLabel: UILabel!
 }

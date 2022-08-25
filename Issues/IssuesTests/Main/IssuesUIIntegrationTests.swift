@@ -25,8 +25,8 @@ final class IssuesUIIntegrationTests: XCTestCase {
     }
     
     func test_loadIssuesCompletion_rendersSuccessfullyLoadedIssues() {
-        let issue0 = Issue(firstName: "a first name", surname: "a surname", amountOfIssues: 2, birthDate: Date(timeIntervalSince1970: 662072400))
-        let issue1 = Issue(firstName: "another first name", surname: "another surname", amountOfIssues: 1, birthDate: Date(timeIntervalSince1970: 720220087))
+        let issue0 = Issue(firstName: "Peter", surname: "Combee", amountOfIssues: 2, birthDate: Date(timeIntervalSince1970: 662072400))
+        let issue1 = Issue(firstName: "Luna", surname: "Combee", amountOfIssues: 1, birthDate: Date(timeIntervalSince1970: 720220087))
         let (sut, loader) = makeSUT()
         
         sut.loadViewIfNeeded()
@@ -37,13 +37,11 @@ final class IssuesUIIntegrationTests: XCTestCase {
         
         XCTAssertEqual(sut.numberOfRenderedIssueViews(), 2)
         
-        XCTAssertEqual(sut.renderedFirstName(atIndex: 0), "a first name")
-        XCTAssertEqual(sut.renderedSurname(atIndex: 0), "a surname")
+        XCTAssertEqual(sut.renderedName(atIndex: 0), "Peter Combee")
         XCTAssertEqual(sut.renderedIssueCount(atIndex: 0), "2")
         XCTAssertEqual(sut.renderedBirthDate(atIndex: 0), "24 dec. 1990")
 
-        XCTAssertEqual(sut.renderedFirstName(atIndex: 1), "another first name")
-        XCTAssertEqual(sut.renderedSurname(atIndex: 1), "another surname")
+        XCTAssertEqual(sut.renderedName(atIndex: 1), "Luna Combee")
         XCTAssertEqual(sut.renderedIssueCount(atIndex: 1), "1")
         XCTAssertEqual(sut.renderedBirthDate(atIndex: 1), "27 okt. 1992")
     }
@@ -105,12 +103,8 @@ private extension IssuesViewController {
         tableView.numberOfRows(inSection: issuesSection)
     }
 
-    func renderedFirstName(atIndex index: Int = 0) -> String? {
-        issueView(atIndex: index)?.firstNameLabel.text
-    }
-
-    func renderedSurname(atIndex index: Int = 0) -> String? {
-        issueView(atIndex: index)?.surNameLabel.text
+    func renderedName(atIndex index: Int = 0) -> String? {
+        issueView(atIndex: index)?.nameLabel.text
     }
     
     func renderedIssueCount(atIndex index: Int = 0) -> String? {

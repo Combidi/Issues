@@ -34,8 +34,7 @@ final class IssuesPresenter {
 
         return issues.map {
             IssueViewModel(
-                firstName: $0.firstName,
-                surname: $0.surname,
+                name: $0.firstName + " " + $0.surname,
                 amountOfIssues: String($0.amountOfIssues),
                 birthDate: dateFormatter.string(from: $0.birthDate)
             )
