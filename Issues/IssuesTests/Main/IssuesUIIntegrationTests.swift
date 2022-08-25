@@ -52,7 +52,6 @@ final class IssuesUIIntegrationTests: XCTestCase {
         sut.loadViewIfNeeded()
         XCTAssertTrue(sut.isShowingLoadingIndicator, "Expected loading indicator once view is loaded")
     
-        sut.loadViewIfNeeded()
         loader.completeIssuesLoading(at: 0)
         
         XCTAssertFalse(sut.isShowingLoadingIndicator, "Expected no loading indicator once loading completes successfully")

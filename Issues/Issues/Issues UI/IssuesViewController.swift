@@ -61,11 +61,10 @@ public final class IssuesViewController: UIViewController, IssuesView, UITableVi
     
     public func present(issues: [IssueViewModel]) {
         self.issues = issues
-        activityIndicator.stopAnimating()
     }
     
     public func presentLoading(_ isLoading: Bool) {
-        activityIndicator.startAnimating()
+        isLoading ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
     }
     
     func presentError(_ message: String?) {

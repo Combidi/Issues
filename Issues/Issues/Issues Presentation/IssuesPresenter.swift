@@ -16,7 +16,7 @@ final class IssuesPresenter {
     let issuesTitle: String = "Issues"
     
     func load() {
-        view?.presentLoading(false)
+        view?.presentLoading(true)
         loader.loadIssues(completion: { [weak view] result in
             switch result {
             case let .success(issues):
