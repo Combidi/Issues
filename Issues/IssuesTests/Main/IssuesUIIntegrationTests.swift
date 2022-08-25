@@ -45,8 +45,8 @@ final class IssuesUIIntegrationTests: XCTestCase {
         XCTAssertEqual(sut.renderedIssueCount(atIndex: 1), "1")
         XCTAssertEqual(sut.renderedBirthDate(atIndex: 1), "27 okt. 1992")
     }
-    
-    func test_loadingIssuesIndicator_isVisibleWhileLoadingIssues() {
+
+    func test_loadingIssuesIndicator_isVisibleWhileLoadingIssues_success() {
         let (sut, loader) = makeSUT()
 
         sut.loadViewIfNeeded()
@@ -55,6 +55,17 @@ final class IssuesUIIntegrationTests: XCTestCase {
         loader.completeIssuesLoading(at: 0)
         
         XCTAssertFalse(sut.isShowingLoadingIndicator, "Expected no loading indicator once loading completes successfully")
+    }
+
+    func test_loadingIssuesIndicator_isVisibleWhileLoadingIssues_failure() {
+        let (sut, loader) = makeSUT()
+
+        sut.loadViewIfNeeded()
+        XCTAssertTrue(sut.isShowingLoadingIndicator, "Expected loading indicator once view is loaded")
+    
+        loader.completeIssuesLoadingWithError()
+        
+        XCTAssertFalse(sut.isShowingLoadingIndicator, "Expected no loading indicator once loading completes with error")
     }
     
     func test_loadIssuesCompletion_dispatchesFromBackgroundToMainThread() {

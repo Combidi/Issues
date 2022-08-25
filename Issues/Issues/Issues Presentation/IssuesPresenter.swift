@@ -24,6 +24,7 @@ final class IssuesPresenter {
                 view?.present(issues: Self.map(issues: issues))
             case .failure:
                 view?.presentError("Invalid data")
+                view?.presentLoading(false)
             }
         })
     }
