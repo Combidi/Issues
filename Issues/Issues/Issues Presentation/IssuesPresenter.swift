@@ -18,13 +18,12 @@ final class IssuesPresenter {
     func load() {
         view?.presentLoading(true)
         loader.loadIssues(completion: { [weak view] result in
+            view?.presentLoading(false)
             switch result {
             case let .success(issues):
-                view?.presentLoading(false)
                 view?.present(issues: Self.map(issues: issues))
             case .failure:
                 view?.presentError("Invalid data")
-                view?.presentLoading(false)
             }
         })
     }
