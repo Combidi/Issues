@@ -63,9 +63,10 @@ public final class IssuesViewController: UIViewController, IssuesView, UITableVi
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "IssueCell") as! IssueCell
-        cell.nameLabel.text = issues[indexPath.row].name
-        cell.issueCountLabel.text = issues[indexPath.row].amountOfIssues
-        cell.birthDateLabel.text = issues[indexPath.row].birthDate
+        let issue = issues[indexPath.row]
+        cell.nameLabel.text = issue.name
+        cell.issueCountLabel.text = issue.amountOfIssues
+        cell.birthDateLabel.text = issue.birthDate
         return cell
     }
     
