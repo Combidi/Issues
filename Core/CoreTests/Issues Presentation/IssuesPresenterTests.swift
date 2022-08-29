@@ -16,6 +16,7 @@ final class IssuesPresenter {
     
     func loadIssues() {
         loader.loadIssues { [weak view] result in
+            view?.present("Invalid data")
             if case let .success(issues) = result {
                 let viewModels = issues.map { issue -> IssueViewModel in
                     let dateFormatter = DateFormatter()
@@ -47,12 +48,21 @@ final private class LoaderSpy: IssuesLoader {
     func completeLoading(with issues: [Issue], at index: Int = 0) {
         loadCompletions[index](.success(issues))
     }
+
+    func completeLoading(with error: Error, at index: Int = 0) {
+        loadCompletions[index](.failure(error))
+    }
 }
 
 final class IssuesView {
     private(set) var capturedIssues = [[IssueViewModel]]()
     func present(issues: [IssueViewModel]) {
         capturedIssues.append(issues)
+    }
+    
+    private(set) var capturedMessages = [String]()
+    func present(_ message: String) {
+        capturedMessages.append(message)
     }
 }
 
@@ -83,6 +93,17 @@ final class IssuesPresenterTests: XCTestCase {
             IssueViewModel(name: "Luna Combee", amountOfIssues: "1", birthDate: "27 okt. 1992"),
         ]
         XCTAssertEqual(view.capturedIssues, [expectedViewModels])
+    }
+    
+    func test_loadIssuesActions_presentsErrorMessageOnFailedLoad() {
+
+        let (sut, loader, view) = makeSUT()
+                
+        sut.loadIssues()
+
+        loader.completeLoading(with: NSError(domain: "any", code: 0))
+        
+        XCTAssertEqual(view.capturedMessages, ["Invalid data"])
     }
     
     // MARK: Helpers
