@@ -3,6 +3,7 @@
 //
 
 import Foundation
+import Core
 
 final class IssuesPresenter {
     private let loader: IssuesLoader

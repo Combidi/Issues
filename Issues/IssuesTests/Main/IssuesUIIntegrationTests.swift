@@ -4,6 +4,7 @@
 
 import XCTest
 import Issues
+import Core
 
 final class IssuesUIIntegrationTests: XCTestCase {
     

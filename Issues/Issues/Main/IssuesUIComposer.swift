@@ -3,6 +3,7 @@
 //
 
 import UIKit
+import Core
 
 public enum IssuesUIComposer {
     public static func compose(withLoader loader: IssuesLoader) -> UIViewController {
