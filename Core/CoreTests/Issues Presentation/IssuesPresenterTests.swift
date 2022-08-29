@@ -14,6 +14,8 @@ final class IssuesPresenter {
         self.view = view
     }
     
+    static let title: String = "Issues"
+
     func loadIssues() {
         view.presentLoading(true)
         loader.loadIssues { [weak self] result in
@@ -84,6 +86,10 @@ final class ViewSpy: IssuesView {
 }
 
 final class IssuesPresenterTests: XCTestCase {
+    
+    func test_title() {
+        XCTAssertEqual(IssuesPresenter.title, "Issues")
+    }
     
     func test_loadIssuesActions_requestIssuesFromLoader() {
         let (sut, loader, _) = makeSUT()
