@@ -26,7 +26,7 @@ final private class LoaderSpy: IssuesLoader {
 
 final class IssuesPresenterTests: XCTestCase {
     
-    func test_loadIssuesPerformsLoadCommand() {
+    func test_loadIssuesActions_requestIssuesFromLoader() {
         
         let loader = LoaderSpy()
         let sut = IssuesPresenter(loader: loader)
@@ -35,4 +35,5 @@ final class IssuesPresenterTests: XCTestCase {
         
         XCTAssertEqual(loader.loadCommentsCallCount, 1, "Expected a loading request on load issues command")
     }
+    
 }
