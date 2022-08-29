@@ -4,12 +4,6 @@
 
 import Foundation
 
-public protocol IssuesView {
-    func present(issues: [IssueViewModel])
-    func present(_ message: String)
-    func presentLoading(_ flag: Bool)
-}
-
 public final class IssuesPresenter {
     private let loader: IssuesLoader
     private let view: IssuesView

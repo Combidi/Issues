@@ -13,6 +13,7 @@
 		D0AC699D28BD32280073363F /* IssuesPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AC699C28BD32280073363F /* IssuesPresenterTests.swift */; };
 		D0AC69A028BD365E0073363F /* IssueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AC699F28BD365E0073363F /* IssueViewModel.swift */; };
 		D0AC69A628BD55BA0073363F /* IssuesPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AC69A528BD55BA0073363F /* IssuesPresenter.swift */; };
+		D0AC69A828BD561E0073363F /* IssuesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AC69A728BD561E0073363F /* IssuesView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,6 +34,7 @@
 		D0AC699C28BD32280073363F /* IssuesPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesPresenterTests.swift; sourceTree = "<group>"; };
 		D0AC699F28BD365E0073363F /* IssueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueViewModel.swift; sourceTree = "<group>"; };
 		D0AC69A528BD55BA0073363F /* IssuesPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesPresenter.swift; sourceTree = "<group>"; };
+		D0AC69A728BD561E0073363F /* IssuesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +113,7 @@
 			children = (
 				D0AC699F28BD365E0073363F /* IssueViewModel.swift */,
 				D0AC69A528BD55BA0073363F /* IssuesPresenter.swift */,
+				D0AC69A728BD561E0073363F /* IssuesView.swift */,
 			);
 			path = "Issues Presentation";
 			sourceTree = "<group>";
@@ -225,6 +228,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0AC69A628BD55BA0073363F /* IssuesPresenter.swift in Sources */,
+				D0AC69A828BD561E0073363F /* IssuesView.swift in Sources */,
 				D0AC699428BD31930073363F /* IssuesLoader.swift in Sources */,
 				D0AC69A028BD365E0073363F /* IssueViewModel.swift in Sources */,
 				D0AC699228BD31760073363F /* Issue.swift in Sources */,
