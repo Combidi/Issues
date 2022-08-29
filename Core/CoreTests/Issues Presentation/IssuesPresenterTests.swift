@@ -49,8 +49,8 @@ final private class LoaderSpy: IssuesLoader {
         loadCompletions[index](.success(issues))
     }
 
-    func completeLoading(with error: Error, at index: Int = 0) {
-        loadCompletions[index](.failure(error))
+    func completeLoadingWithError(at index: Int = 0) {
+        loadCompletions[index](.failure(NSError(domain: "any", code: 0)))
     }
 }
 
@@ -101,7 +101,7 @@ final class IssuesPresenterTests: XCTestCase {
                 
         sut.loadIssues()
 
-        loader.completeLoading(with: NSError(domain: "any", code: 0))
+        loader.completeLoadingWithError()
         
         XCTAssertEqual(view.capturedMessages, ["Invalid data"])
     }
@@ -116,7 +116,7 @@ final class IssuesPresenterTests: XCTestCase {
         trackForMemoryLeaks(view, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, loader, view)
-    }
+    }    
 }
 
 // MARK: Helpers
