@@ -16,8 +16,8 @@ final class IssuesPresenter {
     
     func loadIssues() {
         loader.loadIssues { [weak view] result in
-            view?.present("Invalid data")
-            if case let .success(issues) = result {
+            switch result {
+            case .success(let issues):
                 let viewModels = issues.map { issue -> IssueViewModel in
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateStyle = .medium
@@ -28,6 +28,10 @@ final class IssuesPresenter {
                         birthDate: dateFormatter.string(from: issue.birthDate))
                 }
                 view?.present(issues: viewModels)
+
+            case .failure:
+                view?.present("Invalid data")
+
             }
         }
     }
@@ -69,7 +73,6 @@ final class IssuesView {
 final class IssuesPresenterTests: XCTestCase {
     
     func test_loadIssuesActions_requestIssuesFromLoader() {
-        
         let (sut, loader, _) = makeSUT()
                 
         sut.loadIssues()
@@ -78,14 +81,11 @@ final class IssuesPresenterTests: XCTestCase {
     }
     
     func test_loadIssuesActions_presentsMappedIssuesOnSuccessfullLoad() {
-
         let (sut, loader, view) = makeSUT()
-                
         sut.loadIssues()
 
         let issue0 = Issue(firstName: "Peter", surname: "Combee", amountOfIssues: 2, birthDate: Date(timeIntervalSince1970: 662072400))
         let issue1 = Issue(firstName: "Luna", surname: "Combee", amountOfIssues: 1, birthDate: Date(timeIntervalSince1970: 720220087))
-        
         loader.completeLoading(with: [issue0, issue1])
         
         let expectedViewModels = [
@@ -96,14 +96,21 @@ final class IssuesPresenterTests: XCTestCase {
     }
     
     func test_loadIssuesActions_presentsErrorMessageOnFailedLoad() {
-
         let (sut, loader, view) = makeSUT()
-                
         sut.loadIssues()
 
         loader.completeLoadingWithError()
         
         XCTAssertEqual(view.capturedMessages, ["Invalid data"])
+    }
+
+    func test_loadIssuesActions_doesNotPresentsErrorMessageOnSuccessfullLoad() {
+        let (sut, loader, view) = makeSUT()
+        sut.loadIssues()
+
+        loader.completeLoading(with: [])
+        
+        XCTAssertTrue(view.capturedMessages.isEmpty, "Expect no messages on successfull loads")
     }
     
     // MARK: Helpers
@@ -116,7 +123,7 @@ final class IssuesPresenterTests: XCTestCase {
         trackForMemoryLeaks(view, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, loader, view)
-    }    
+    }
 }
 
 // MARK: Helpers
