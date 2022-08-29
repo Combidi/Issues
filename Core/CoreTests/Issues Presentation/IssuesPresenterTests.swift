@@ -20,7 +20,7 @@ final class IssuesPresenterTests: XCTestCase {
     }
     
     func test_loadIssuesActions_presentsMappedIssuesOnSuccessfullLoad() {
-        let (sut, loader, view) = makeSUT()
+        let (sut, loader, view) = makeSUT(locale: Locale(identifier: "en_US_POSIX"))
         sut.loadIssues()
 
         let issue0 = Issue(firstName: "Peter", surname: "Combee", amountOfIssues: 2, birthDate: Date(timeIntervalSince1970: 662072400))
@@ -28,8 +28,8 @@ final class IssuesPresenterTests: XCTestCase {
         loader.completeLoading(with: [issue0, issue1])
         
         let expectedViewModels = [
-            IssueViewModel(name: "Peter Combee", amountOfIssues: "2", birthDate: "24 dec. 1990"),
-            IssueViewModel(name: "Luna Combee", amountOfIssues: "1", birthDate: "27 okt. 1992"),
+            IssueViewModel(name: "Peter Combee", amountOfIssues: "2", birthDate: "Dec 24, 1990"),
+            IssueViewModel(name: "Luna Combee", amountOfIssues: "1", birthDate: "Oct 27, 1992"),
         ]
         XCTAssertEqual(view.capturedIssues, [expectedViewModels])
     }
@@ -72,10 +72,14 @@ final class IssuesPresenterTests: XCTestCase {
     
     // MARK: Helpers
     
-    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: IssuesPresenter, loader: LoaderSpy, view: ViewSpy) {
+    private func makeSUT(
+        locale: Locale = .current,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) -> (sut: IssuesPresenter, loader: LoaderSpy, view: ViewSpy) {
         let loader = LoaderSpy()
         let view = ViewSpy()
-        let sut = IssuesPresenter(loader: loader, view: view)
+        let sut = IssuesPresenter(loader: loader, view: view, locale: locale)
         trackForMemoryLeaks(loader, file: file, line: line)
         trackForMemoryLeaks(view, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)

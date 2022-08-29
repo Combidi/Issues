@@ -8,32 +8,38 @@ public final class IssuesPresenter {
     private let loader: IssuesLoader
     private let view: IssuesView
     
-    public init(loader: IssuesLoader, view: IssuesView) {
+    public init(loader: IssuesLoader, view: IssuesView, locale: Locale = .current) {
         self.loader = loader
         self.view = view
     }
     
-    public static let title: String = "Issues"
+    public static var title: String {
+        NSLocalizedString("ISSUES_VIEW_TITLE",
+            tableName: "Issues",
+            bundle: Bundle(for: Self.self),
+            comment: "Title for the issues view")
+    }
 
     public func loadIssues() {
         view.presentLoading(true)
         loader.loadIssues { [weak self] result in
-            self?.view.presentLoading(false)
+            guard let self = self else { return }
+            self.view.presentLoading(false)
             switch result {
             case .success(let issues):
-                self?.view.present(issues: issues.map(Self.map(issue:)))
+                self.view.present(issues: issues.map(self.map(issue:)))
 
             case .failure:
-                self?.view.present("Invalid data")
-
+                self.view.present("Invalid data")
             }
         }
     }
     
-    static private func map(issue: Issue) -> IssueViewModel {
+    private func map(issue: Issue) -> IssueViewModel {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
-        
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+
         return IssueViewModel(
             name: issue.firstName + " " + issue.surname,
             amountOfIssues: String(issue.amountOfIssues),
