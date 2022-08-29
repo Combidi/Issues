@@ -11,6 +11,7 @@
 		D0AC698628BD30E00073363F /* CoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AC698528BD30E00073363F /* CoreTests.swift */; };
 		D0AC699228BD31760073363F /* Issue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AC699128BD31760073363F /* Issue.swift */; };
 		D0AC699428BD31930073363F /* IssuesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AC699328BD31930073363F /* IssuesLoader.swift */; };
+		D0AC699D28BD32280073363F /* IssuesPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AC699C28BD32280073363F /* IssuesPresenterTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +30,7 @@
 		D0AC698528BD30E00073363F /* CoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreTests.swift; sourceTree = "<group>"; };
 		D0AC699128BD31760073363F /* Issue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Issue.swift; sourceTree = "<group>"; };
 		D0AC699328BD31930073363F /* IssuesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesLoader.swift; sourceTree = "<group>"; };
+		D0AC699C28BD32280073363F /* IssuesPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesPresenterTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 		D0AC698428BD30E00073363F /* CoreTests */ = {
 			isa = PBXGroup;
 			children = (
+				D0AC699B28BD321A0073363F /* Issues Presentation */,
 				D0AC698528BD30E00073363F /* CoreTests.swift */,
 			);
 			path = CoreTests;
@@ -91,6 +94,14 @@
 				D0AC699328BD31930073363F /* IssuesLoader.swift */,
 			);
 			path = "Issues Feature";
+			sourceTree = "<group>";
+		};
+		D0AC699B28BD321A0073363F /* Issues Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				D0AC699C28BD32280073363F /* IssuesPresenterTests.swift */,
+			);
+			path = "Issues Presentation";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -211,6 +222,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0AC699D28BD32280073363F /* IssuesPresenterTests.swift in Sources */,
 				D0AC698628BD30E00073363F /* CoreTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
