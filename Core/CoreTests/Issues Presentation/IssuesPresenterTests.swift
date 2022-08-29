@@ -5,44 +5,6 @@
 import XCTest
 import Core
 
-final private class LoaderSpy: IssuesLoader {
-    
-    private var loadCompletions = [IssuesLoader.Completion]()
-
-    var loadIssuesCallCount: Int {
-        loadCompletions.count
-    }
-    
-    func loadIssues(completion: @escaping Completion) {
-        loadCompletions.append(completion)
-    }
-    
-    func completeLoading(with issues: [Issue], at index: Int = 0) {
-        loadCompletions[index](.success(issues))
-    }
-
-    func completeLoadingWithError(at index: Int = 0) {
-        loadCompletions[index](.failure(NSError(domain: "any", code: 0)))
-    }
-}
-
-final class ViewSpy: IssuesView {
-    private(set) var capturedIssues = [[IssueViewModel]]()
-    func present(issues: [IssueViewModel]) {
-        capturedIssues.append(issues)
-    }
-    
-    private(set) var capturedMessages = [String]()
-    func present(_ message: String) {
-        capturedMessages.append(message)
-    }
-    
-    private(set) var capturedLoadings = [Bool]()
-    func presentLoading(_ flag: Bool) {
-        capturedLoadings.append(flag)
-    }
-}
-
 final class IssuesPresenterTests: XCTestCase {
     
     func test_title() {
@@ -122,6 +84,45 @@ final class IssuesPresenterTests: XCTestCase {
 }
 
 // MARK: Helpers
+
+final private class LoaderSpy: IssuesLoader {
+    
+    private var loadCompletions = [IssuesLoader.Completion]()
+
+    var loadIssuesCallCount: Int {
+        loadCompletions.count
+    }
+    
+    func loadIssues(completion: @escaping Completion) {
+        loadCompletions.append(completion)
+    }
+    
+    func completeLoading(with issues: [Issue], at index: Int = 0) {
+        loadCompletions[index](.success(issues))
+    }
+
+    func completeLoadingWithError(at index: Int = 0) {
+        loadCompletions[index](.failure(NSError(domain: "any", code: 0)))
+    }
+}
+
+final class ViewSpy: IssuesView {
+    private(set) var capturedIssues = [[IssueViewModel]]()
+    func present(issues: [IssueViewModel]) {
+        capturedIssues.append(issues)
+    }
+    
+    private(set) var capturedMessages = [String]()
+    func present(_ message: String) {
+        capturedMessages.append(message)
+    }
+    
+    private(set) var capturedLoadings = [Bool]()
+    func presentLoading(_ flag: Bool) {
+        capturedLoadings.append(flag)
+    }
+}
+
 
 private extension XCTestCase {
     func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #file, line: UInt = #line) {
