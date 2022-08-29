@@ -8,7 +8,7 @@ import Core
 final class IssuesPresenterTests: XCTestCase {
     
     func test_title() {
-        XCTAssertEqual(IssuesPresenter.title, "Issues")
+        XCTAssertEqual(IssuesPresenter.title, localized("ISSUES_VIEW_TITLE"))
     }
     
     func test_loadIssuesActions_requestIssuesFromLoader() {
@@ -81,6 +81,17 @@ final class IssuesPresenterTests: XCTestCase {
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, loader, view)
     }
+    
+    private func localized(_ key: String, file: StaticString = #file, line: UInt = #line) -> String {
+        let table = "Issues"
+        let bundle = Bundle(for: IssuesPresenter.self)
+        let value = bundle.localizedString(forKey: key, value: nil, table: table)
+        if value == key {
+            XCTFail("Missing localized string for key: \(key) in table: \(table)", file: file, line: line)
+        }
+        return value
+    }
+
 }
 
 // MARK: Helpers
