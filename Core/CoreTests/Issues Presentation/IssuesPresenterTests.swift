@@ -7,7 +7,7 @@ import Core
 
 final class IssuesPresenterTests: XCTestCase {
     
-    func test_title() {
+    func test_title_isLocalized() {
         XCTAssertEqual(IssuesPresenter.title, localized("ISSUES_VIEW_TITLE"))
     }
     
@@ -95,7 +95,6 @@ final class IssuesPresenterTests: XCTestCase {
         }
         return value
     }
-
 }
 
 // MARK: Helpers
