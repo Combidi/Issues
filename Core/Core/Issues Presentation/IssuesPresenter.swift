@@ -21,21 +21,22 @@ public final class IssuesPresenter {
             self?.view.presentLoading(false)
             switch result {
             case .success(let issues):
-                let viewModels = issues.map { issue -> IssueViewModel in
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateStyle = .medium
-                    
-                    return IssueViewModel(
-                        name: issue.firstName + " " + issue.surname,
-                        amountOfIssues: String(issue.amountOfIssues),
-                        birthDate: dateFormatter.string(from: issue.birthDate))
-                }
-                self?.view.present(issues: viewModels)
+                self?.view.present(issues: issues.map(Self.map(issue:)))
 
             case .failure:
                 self?.view.present("Invalid data")
 
             }
         }
+    }
+    
+    static private func map(issue: Issue) -> IssueViewModel {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        
+        return IssueViewModel(
+            name: issue.firstName + " " + issue.surname,
+            amountOfIssues: String(issue.amountOfIssues),
+            birthDate: dateFormatter.string(from: issue.birthDate))
     }
 }
