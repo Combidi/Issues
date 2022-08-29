@@ -67,7 +67,7 @@ final class IssuesPresenterTests: XCTestCase {
         XCTAssertEqual(loader.loadIssuesCallCount, 1, "Expected a loading request on load issues command")
     }
     
-    func test_loadIssuesActions_displaysMappedIssuesOnSuccessfullLoad() {
+    func test_loadIssuesActions_presentsMappedIssuesOnSuccessfullLoad() {
 
         let (sut, loader, view) = makeSUT()
                 
