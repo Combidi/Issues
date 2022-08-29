@@ -15,7 +15,7 @@ final class IssuesPresenter {
     }
     
     func loadIssues() {
-        loader.loadIssues { result in
+        loader.loadIssues { [weak view] result in
             if case let .success(issues) = result {
                 let viewModels = issues.map { issue -> IssueViewModel in
                     let dateFormatter = DateFormatter()
@@ -26,7 +26,7 @@ final class IssuesPresenter {
                         amountOfIssues: String(issue.amountOfIssues),
                         birthDate: dateFormatter.string(from: issue.birthDate))
                 }
-                self.view.present(issues: viewModels)
+                view?.present(issues: viewModels)
             }
         }
     }
@@ -60,9 +60,8 @@ final class IssuesPresenterTests: XCTestCase {
     
     func test_loadIssuesActions_requestIssuesFromLoader() {
         
-        let loader = LoaderSpy()
-        let sut = IssuesPresenter(loader: loader, view: IssuesView())
-        
+        let (sut, loader, _) = makeSUT()
+                
         sut.loadIssues()
         
         XCTAssertEqual(loader.loadIssuesCallCount, 1, "Expected a loading request on load issues command")
@@ -70,10 +69,8 @@ final class IssuesPresenterTests: XCTestCase {
     
     func test_loadIssuesActions_displaysMappedIssuesOnSuccessfullLoad() {
 
-        let loader = LoaderSpy()
-        let view = IssuesView()
-        let sut = IssuesPresenter(loader: loader, view: view)
-        
+        let (sut, loader, view) = makeSUT()
+                
         sut.loadIssues()
 
         let issue0 = Issue(firstName: "Peter", surname: "Combee", amountOfIssues: 2, birthDate: Date(timeIntervalSince1970: 662072400))
@@ -86,5 +83,27 @@ final class IssuesPresenterTests: XCTestCase {
             IssueViewModel(name: "Luna Combee", amountOfIssues: "1", birthDate: "27 okt. 1992"),
         ]
         XCTAssertEqual(view.capturedIssues, [expectedViewModels])
+    }
+    
+    // MARK: Helpers
+    
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: IssuesPresenter, loader: LoaderSpy, view: IssuesView) {
+        let loader = LoaderSpy()
+        let view = IssuesView()
+        let sut = IssuesPresenter(loader: loader, view: view)
+        trackForMemoryLeaks(loader, file: file, line: line)
+        trackForMemoryLeaks(view, file: file, line: line)
+        trackForMemoryLeaks(sut, file: file, line: line)
+        return (sut, loader, view)
+    }
+}
+
+// MARK: Helpers
+
+private extension XCTestCase {
+    func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #file, line: UInt = #line) {
+        addTeardownBlock { [weak instance] in
+            XCTAssertNil(instance, "Instance should have been delocated. Potential memory leak", file: file, line: line)
+        }
     }
 }
