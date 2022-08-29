@@ -5,42 +5,6 @@
 import XCTest
 import Core
 
-final class IssuesPresenter {
-    private let loader: IssuesLoader
-    private let view: IssuesView
-    
-    init(loader: IssuesLoader, view: IssuesView) {
-        self.loader = loader
-        self.view = view
-    }
-    
-    static let title: String = "Issues"
-
-    func loadIssues() {
-        view.presentLoading(true)
-        loader.loadIssues { [weak self] result in
-            self?.view.presentLoading(false)
-            switch result {
-            case .success(let issues):
-                let viewModels = issues.map { issue -> IssueViewModel in
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateStyle = .medium
-                    
-                    return IssueViewModel(
-                        name: issue.firstName + " " + issue.surname,
-                        amountOfIssues: String(issue.amountOfIssues),
-                        birthDate: dateFormatter.string(from: issue.birthDate))
-                }
-                self?.view.present(issues: viewModels)
-
-            case .failure:
-                self?.view.present("Invalid data")
-
-            }
-        }
-    }
-}
-
 final private class LoaderSpy: IssuesLoader {
     
     private var loadCompletions = [IssuesLoader.Completion]()
@@ -60,12 +24,6 @@ final private class LoaderSpy: IssuesLoader {
     func completeLoadingWithError(at index: Int = 0) {
         loadCompletions[index](.failure(NSError(domain: "any", code: 0)))
     }
-}
-
-protocol IssuesView {
-    func present(issues: [IssueViewModel])
-    func present(_ message: String)
-    func presentLoading(_ flag: Bool)
 }
 
 final class ViewSpy: IssuesView {
