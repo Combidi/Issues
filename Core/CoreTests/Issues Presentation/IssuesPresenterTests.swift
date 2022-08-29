@@ -15,7 +15,9 @@ final class IssuesPresenter {
     }
     
     func loadIssues() {
+        view.presentLoading(true)
         loader.loadIssues { [weak view] result in
+            view?.presentLoading(false)
             switch result {
             case .success(let issues):
                 let viewModels = issues.map { issue -> IssueViewModel in
@@ -68,6 +70,11 @@ final class IssuesView {
     func present(_ message: String) {
         capturedMessages.append(message)
     }
+    
+    private(set) var capturedLoadings = [Bool]()
+    func presentLoading(_ flag: Bool) {
+        capturedLoadings.append(flag)
+    }
 }
 
 final class IssuesPresenterTests: XCTestCase {
@@ -111,6 +118,24 @@ final class IssuesPresenterTests: XCTestCase {
         loader.completeLoading(with: [])
         
         XCTAssertTrue(view.capturedMessages.isEmpty, "Expect no messages on successfull loads")
+    }
+
+    func test_loadIssuesActions_presentsLoadingDuringLoad() {
+        let (sut, loader, view) = makeSUT()
+
+        XCTAssertTrue(view.capturedLoadings.isEmpty, "Expect no loading before loading starts")
+
+        sut.loadIssues()
+
+        XCTAssertEqual(view.capturedLoadings, [true], "Expect to present loading during loading")
+        
+        loader.completeLoading(with: [])
+        
+        XCTAssertEqual(view.capturedLoadings, [true, false], "Expect to stop presenting loading once loading finished successfully")
+
+        loader.completeLoadingWithError()
+
+        XCTAssertEqual(view.capturedLoadings, [true, false, false], "Expect to stop presenting loading once loading finished with error")
     }
     
     // MARK: Helpers
