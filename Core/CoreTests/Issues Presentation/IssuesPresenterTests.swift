@@ -16,8 +16,8 @@ final class IssuesPresenter {
     
     func loadIssues() {
         view.presentLoading(true)
-        loader.loadIssues { [weak view] result in
-            view?.presentLoading(false)
+        loader.loadIssues { [weak self] result in
+            self?.view.presentLoading(false)
             switch result {
             case .success(let issues):
                 let viewModels = issues.map { issue -> IssueViewModel in
@@ -29,10 +29,10 @@ final class IssuesPresenter {
                         amountOfIssues: String(issue.amountOfIssues),
                         birthDate: dateFormatter.string(from: issue.birthDate))
                 }
-                view?.present(issues: viewModels)
+                self?.view.present(issues: viewModels)
 
             case .failure:
-                view?.present("Invalid data")
+                self?.view.present("Invalid data")
 
             }
         }
@@ -60,7 +60,13 @@ final private class LoaderSpy: IssuesLoader {
     }
 }
 
-final class IssuesView {
+protocol IssuesView {
+    func present(issues: [IssueViewModel])
+    func present(_ message: String)
+    func presentLoading(_ flag: Bool)
+}
+
+final class ViewSpy: IssuesView {
     private(set) var capturedIssues = [[IssueViewModel]]()
     func present(issues: [IssueViewModel]) {
         capturedIssues.append(issues)
@@ -140,9 +146,9 @@ final class IssuesPresenterTests: XCTestCase {
     
     // MARK: Helpers
     
-    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: IssuesPresenter, loader: LoaderSpy, view: IssuesView) {
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: IssuesPresenter, loader: LoaderSpy, view: ViewSpy) {
         let loader = LoaderSpy()
-        let view = IssuesView()
+        let view = ViewSpy()
         let sut = IssuesPresenter(loader: loader, view: view)
         trackForMemoryLeaks(loader, file: file, line: line)
         trackForMemoryLeaks(view, file: file, line: line)
