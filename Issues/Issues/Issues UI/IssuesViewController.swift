@@ -3,6 +3,7 @@
 //
 
 import UIKit
+import Core
 
 public final class IssuesViewController: UIViewController, IssuesView, UITableViewDataSource {
     var loadIssues: (() -> Void)?
@@ -78,7 +79,7 @@ public final class IssuesViewController: UIViewController, IssuesView, UITableVi
         isLoading ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
     }
     
-    public func presentError(_ message: String?) {
+    public func presentMessage(_ message: String?) {
         errorLabel.text = message
         errorLabel.isHidden = message == nil
     }

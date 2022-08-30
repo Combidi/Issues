@@ -4,6 +4,7 @@
 
 import XCTest
 import Issues
+import Core
 
 final class IssuesSnapshotTests: XCTestCase {
     
@@ -29,7 +30,7 @@ final class IssuesSnapshotTests: XCTestCase {
     func test_withError() {
         let sut = IssuesViewController()
         
-        sut.presentError("A message")
+        sut.presentMessage("A message")
         
         assert(snapshot: sut.snapshot(for: .iPhone13(style: .light)), named: "ISSUES_WITH_ERROR_light")
         assert(snapshot: sut.snapshot(for: .iPhone13(style: .dark)), named: "ISSUES_WITH_ERROR_dark")

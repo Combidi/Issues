@@ -28,7 +28,7 @@ final class IssuesUIIntegrationTests: XCTestCase {
     func test_loadIssuesCompletion_rendersSuccessfullyLoadedIssues() {
         let issue0 = Issue(firstName: "Peter", surname: "Combee", amountOfIssues: 2, birthDate: Date(timeIntervalSince1970: 662072400))
         let issue1 = Issue(firstName: "Luna", surname: "Combee", amountOfIssues: 1, birthDate: Date(timeIntervalSince1970: 720220087))
-        let (sut, loader) = makeSUT()
+        let (sut, loader) = makeSUT(locale: Locale(identifier: "NL"))
         
         sut.loadViewIfNeeded()
         
@@ -93,9 +93,13 @@ final class IssuesUIIntegrationTests: XCTestCase {
 
     // MARK: Helpers
     
-    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: IssuesViewController, loader: IssuesLoaderSpy) {
+    private func makeSUT(
+        locale: Locale = .current,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) -> (sut: IssuesViewController, loader: IssuesLoaderSpy) {
         let loader = IssuesLoaderSpy()
-        let sut = IssuesUIComposer.compose(withLoader: loader) as! IssuesViewController
+        let sut = IssuesUIComposer.compose(withLoader: loader, locale: locale) as! IssuesViewController
         trackForMemoryLeaks(loader, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, loader)

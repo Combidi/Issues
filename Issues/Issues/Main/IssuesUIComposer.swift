@@ -6,13 +6,19 @@ import UIKit
 import Core
 
 public enum IssuesUIComposer {
-    public static func compose(withLoader loader: IssuesLoader) -> UIViewController {
+    public static func compose(
+        withLoader loader: IssuesLoader,
+        locale: Locale = .current
+    ) -> UIViewController {
         let mainThreadDispatchingLoader = MainThreadDispatchingIssueLoaderDecorator(decoratee: loader)
-        let presenter = IssuesPresenter(loader: mainThreadDispatchingLoader)
         let viewController = IssuesViewController()
-        viewController.loadIssues = presenter.load
-        viewController.title = presenter.issuesTitle
-        presenter.view = WeakRefVirtualProxy(viewController)
+        let presenter = IssuesPresenter(
+            loader: mainThreadDispatchingLoader,
+            view: WeakRefVirtualProxy(viewController),
+            locale: locale
+        )
+        viewController.loadIssues = presenter.loadIssues
+        viewController.title = IssuesPresenter.title
         return viewController
     }
 }
@@ -54,7 +60,7 @@ extension WeakRefVirtualProxy: IssuesView where T: IssuesView {
         object?.presentLoading(isLoading)
     }
     
-    func presentError(_ message: String?) {
-        object?.presentError(message)
+    func presentMessage(_ message: String?) {
+        object?.presentMessage(message)
     }
 }
