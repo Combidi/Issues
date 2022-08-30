@@ -4,6 +4,6 @@
 
 public protocol IssuesView {
     func present(issues: [IssueViewModel])
-    func present(_ message: String?)
+    func presentMessage(_ message: String?)
     func presentLoading(_ flag: Bool)
 }

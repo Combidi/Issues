@@ -127,7 +127,7 @@ final class ViewSpy: IssuesView {
     }
     
     private(set) var capturedMessages = [String?]()
-    func present(_ message: String?) {
+    func presentMessage(_ message: String?) {
         capturedMessages.append(message)
     }
     
