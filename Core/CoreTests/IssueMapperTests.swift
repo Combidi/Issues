@@ -18,7 +18,7 @@ final class IssueMapper {
 
 final class CSVIssueParserTests: XCTestCase {
     
-    func test_deliversErrorOnInvalidHeaders() {
+    func test_map_deliversErrorOnInvalidHeaders() {
         let dataWithInvalidHeaders = Data("""
             "first col header", "second col header", "third col header", "fourth col header",
             "Theo","Jansen",5,"1978-01-02T00:00:00"
