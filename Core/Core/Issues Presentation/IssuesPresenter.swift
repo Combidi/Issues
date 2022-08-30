@@ -28,7 +28,8 @@ public final class IssuesPresenter {
             switch result {
             case .success(let issues):
                 self.view.present(issues: issues.map(self.map(issue:)))
-
+                self.view.present(nil)
+                
             case .failure:
                 self.view.present("Invalid data")
             }

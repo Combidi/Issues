@@ -43,15 +43,6 @@ final class IssuesPresenterTests: XCTestCase {
         XCTAssertEqual(view.capturedMessages, ["Invalid data"])
     }
 
-    func test_loadIssuesActions_doesNotPresentsErrorMessageOnSuccessfullLoad() {
-        let (sut, loader, view) = makeSUT()
-        sut.loadIssues()
-
-        loader.completeLoading(with: [])
-        
-        XCTAssertTrue(view.capturedMessages.isEmpty, "Expect no messages on successfull loads")
-    }
-
     func test_loadIssuesActions_presentsLoadingDuringLoad() {
         let (sut, loader, view) = makeSUT()
 
@@ -68,6 +59,16 @@ final class IssuesPresenterTests: XCTestCase {
         loader.completeLoadingWithError()
 
         XCTAssertEqual(view.capturedLoadings, [true, false, false], "Expect to stop presenting loading once loading finished with error")
+    }
+
+    func test_loadIssuesActions_hidesMessageOnSuccessfullLoad() {
+        let (sut, loader, view) = makeSUT()
+
+        sut.loadIssues()
+        
+        loader.completeLoading(with: [])
+
+        XCTAssertEqual(view.capturedMessages, [nil], "Expect to hide message on successfull load")
     }
     
     // MARK: Helpers
@@ -100,13 +101,12 @@ final class IssuesPresenterTests: XCTestCase {
 // MARK: Helpers
 
 final private class LoaderSpy: IssuesLoader {
-    
     private var loadCompletions = [IssuesLoader.Completion]()
-
+    
     var loadIssuesCallCount: Int {
         loadCompletions.count
     }
-    
+
     func loadIssues(completion: @escaping Completion) {
         loadCompletions.append(completion)
     }
@@ -126,8 +126,8 @@ final class ViewSpy: IssuesView {
         capturedIssues.append(issues)
     }
     
-    private(set) var capturedMessages = [String]()
-    func present(_ message: String) {
+    private(set) var capturedMessages = [String?]()
+    func present(_ message: String?) {
         capturedMessages.append(message)
     }
     
