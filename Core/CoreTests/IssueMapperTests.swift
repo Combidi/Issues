@@ -8,19 +8,24 @@ import Core
 final class IssueMapper {
     
     private enum Error: Swift.Error {
-        case invalidData
+        case invalidHeaders
     }
     
-    static func map(file: Data) throws -> [Issue] {
-        throw Error.invalidData
+    static func map(_ data: Data) throws -> [Issue] {
+        throw Error.invalidHeaders
     }
 }
 
 final class CSVIssueParserTests: XCTestCase {
     
-    func test_deliversErrorOnInvalidData() {
-        let invalidData = Data("invalid data".utf8)
+    func test_deliversErrorOnInvalidHeaders() {
+        let dataWithInvalidHeaders = Data("""
+            "first col header", "second col header", "third col header", "fourth col header",
+            "Theo","Jansen",5,"1978-01-02T00:00:00"
+            """.utf8
+        )
         
-        XCTAssertThrowsError(try IssueMapper.map(file: invalidData), "Expected an error on invalid data format")
+        
+        XCTAssertThrowsError(try IssueMapper.map(dataWithInvalidHeaders), "Expected an error on invalid headers")
     }
 }
