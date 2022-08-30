@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct Issue {
+public struct Issue: Equatable {
     public let firstName: String
     public let surname: String
     public let amountOfIssues: Int
