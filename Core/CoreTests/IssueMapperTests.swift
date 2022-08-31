@@ -11,6 +11,7 @@ final class IssueMapper {
         case invalidHeaders
         case invalidColumnSize
         case invalidData
+        case invalidDateFormat
     }
     
     static func map(_ data: Data) throws -> [Issue] {
@@ -33,7 +34,10 @@ final class IssueMapper {
                         
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-            let birthDate = formatter.date(from: column[3])!
+            
+            guard let birthDate = formatter.date(from: column[3]) else {
+                throw Error.invalidDateFormat
+            }
             
             return Issue(firstName: column[0], surname: column[1], amountOfIssues: amountOfIssues, birthDate: birthDate)
         }
@@ -105,6 +109,18 @@ final class CSVIssueParserTests: XCTestCase {
 
         XCTAssertEqual(try IssueMapper.map(validDataWithIssues), expectedIssues)
     }
+
+    func test_map_throwsOnIncorrectBirthDateFormat() {
+        let dateWithInvalidDateFormat = Data(
+            """
+            "First name","Sur name","Issue count","Date of birth"
+            "Theo","Jansen",5,"2020-08-28T15:07:02+00:00"
+            """.utf8
+        )
+
+        assertThat(try IssueMapper.map(dateWithInvalidDateFormat), throws: IssueMapper.Error.invalidDateFormat)
+    }
+
     
     // MARK: Helpers
     
