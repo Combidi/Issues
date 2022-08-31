@@ -8,6 +8,7 @@ import Core
 final class IssueMapper {
 
     enum Error: Swift.Error {
+        case invalidData
         case invalidHeaders
         case invalidColumnSize
         case nonIntConvertable
@@ -16,7 +17,7 @@ final class IssueMapper {
     
     static func map(_ data: Data) throws -> [Issue] {
         
-        guard let dataString = String(data: data, encoding: .utf8) else { return [] }
+        guard let dataString = String(data: data, encoding: .utf8), !dataString.isEmpty else { throw Error.invalidData }
         let stripped = dataString.replacingOccurrences(of: "\"", with: "")
         let lines = stripped.split(separator: "\n")
         var colums = lines.map { $0.split(separator: ",").map(String.init) }
@@ -47,6 +48,12 @@ final class IssueMapper {
 }
 
 final class CSVIssueParserTests: XCTestCase {
+    
+    func test_map_throwsOnInvalidData() {
+        let invalidData = Data(capacity: 1)
+        
+        assertThat(try IssueMapper.map(invalidData), throws: IssueMapper.Error.invalidData)
+    }
     
     func test_map_throwsOnInvalidHeaders() {
         let dataWithInvalidHeaders = Data(
