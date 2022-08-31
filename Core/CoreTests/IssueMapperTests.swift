@@ -6,11 +6,11 @@ import XCTest
 import Core
 
 final class IssueMapper {
-    
+
     enum Error: Swift.Error {
         case invalidHeaders
         case invalidColumnSize
-        case invalidData
+        case nonIntConvertable
         case invalidDateFormat
     }
     
@@ -30,7 +30,7 @@ final class IssueMapper {
         }
         
         let issues: [Issue] = try colums.map { column in
-            guard let amountOfIssues = Int(column[2]) else { throw Error.invalidData }
+            guard let amountOfIssues = Int(column[2]) else { throw Error.nonIntConvertable }
                         
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
@@ -88,7 +88,7 @@ final class CSVIssueParserTests: XCTestCase {
             """.utf8
         )
 
-        assertThat(try IssueMapper.map(dataWithInvalidColumsSize), throws: IssueMapper.Error.invalidData)
+        assertThat(try IssueMapper.map(dataWithInvalidColumsSize), throws: IssueMapper.Error.nonIntConvertable)
     }
     
     func test_map_validIssueDataDeliversIssues() {
