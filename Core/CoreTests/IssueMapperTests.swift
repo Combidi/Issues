@@ -29,8 +29,13 @@ final class IssueMapper {
         }
         
         let issues: [Issue] = try colums.map { column in
-            guard let _ = Int(column[2]) else { throw Error.invalidData }
-            return Issue(firstName: "", surname: "", amountOfIssues: 1, birthDate: Date())
+            guard let amountOfIssues = Int(column[2]) else { throw Error.invalidData }
+                        
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+            let birthDate = formatter.date(from: column[3])!
+            
+            return Issue(firstName: column[0], surname: column[1], amountOfIssues: amountOfIssues, birthDate: birthDate)
         }
 
         return issues
@@ -80,6 +85,25 @@ final class CSVIssueParserTests: XCTestCase {
         )
 
         assertThat(try IssueMapper.map(dataWithInvalidColumsSize), throws: IssueMapper.Error.invalidData)
+    }
+    
+    func test_map_validIssueDataDeliversIssues() {
+        let validDataWithIssues = Data(
+            """
+            "First name","Sur name","Issue count","Date of birth"
+            "Theo","Jansen",5,"1978-01-02T00:00:00"
+            "Fiona","de Vries",7,"1950-11-12T00:00:00"
+            "Petra","Boersma",1,"2001-04-20T00:00:00"
+            """.utf8
+        )
+
+        let expectedIssues = [
+            Issue(firstName: "Theo", surname: "Jansen", amountOfIssues: 5, birthDate: Date(timeIntervalSince1970: 252543600)),
+            Issue(firstName: "Fiona", surname: "de Vries", amountOfIssues: 7, birthDate: Date(timeIntervalSince1970: -603939600)),
+            Issue(firstName: "Petra", surname: "Boersma", amountOfIssues: 1, birthDate: Date(timeIntervalSince1970: 987717600)),
+        ]
+
+        XCTAssertEqual(try IssueMapper.map(validDataWithIssues), expectedIssues)
     }
     
     // MARK: Helpers
