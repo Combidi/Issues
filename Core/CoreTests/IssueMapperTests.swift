@@ -128,7 +128,6 @@ final class CSVIssueParserTests: XCTestCase {
         assertThat(try IssueMapper.map(dateWithInvalidDateFormat), throws: IssueMapper.Error.invalidDateFormat)
     }
 
-    
     // MARK: Helpers
     
     private func assertThat<T, E: Error & Equatable>(
@@ -138,21 +137,8 @@ final class CSVIssueParserTests: XCTestCase {
         line: UInt = #line
     ) {
         var thrownError: Error?
-
-        XCTAssertThrowsError(try expression(),
-                             file: file, line: line) {
-            thrownError = $0
-        }
-
-        XCTAssertTrue(
-            thrownError is E,
-            "Unexpected error type: \(type(of: thrownError))",
-            file: file, line: line
-        )
-
-        XCTAssertEqual(
-            thrownError as? E, error,
-            file: file, line: line
-        )
+        XCTAssertThrowsError(try expression(), file: file, line: line) { thrownError = $0 }
+        XCTAssertTrue(thrownError is E, "Unexpected error type: \(type(of: thrownError))", file: file, line: line)
+        XCTAssertEqual(thrownError as? E, error, file: file, line: line)
     }
 }
