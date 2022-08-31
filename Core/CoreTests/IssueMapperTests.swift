@@ -10,6 +10,7 @@ final class IssueMapper {
     enum Error: Swift.Error {
         case invalidHeaders
         case invalidColumnSize
+        case invalidData
     }
     
     static func map(_ data: Data) throws -> [Issue] {
@@ -26,8 +27,13 @@ final class IssueMapper {
         guard colums.allSatisfy({ $0.count == 4 }) else {
             throw Error.invalidColumnSize
         }
+        
+        let issues: [Issue] = try colums.map { column in
+            guard let _ = Int(column[2]) else { throw Error.invalidData }
+            return Issue(firstName: "", surname: "", amountOfIssues: 1, birthDate: Date())
+        }
 
-        return []
+        return issues
     }
 }
 
@@ -63,6 +69,17 @@ final class CSVIssueParserTests: XCTestCase {
         )
 
         assertThat(try IssueMapper.map(dataWithInvalidColumsSize), throws: IssueMapper.Error.invalidColumnSize)
+    }
+    
+    func test_map_throwsOnNonIntConvertibleIssueCount() {
+        let dataWithInvalidColumsSize = Data(
+            """
+            "First name","Sur name","Issue count","Date of birth"
+            "Theo","Jansen","non Int convertible value","1978-01-02T00:00:00"
+            """.utf8
+        )
+
+        assertThat(try IssueMapper.map(dataWithInvalidColumsSize), throws: IssueMapper.Error.invalidData)
     }
     
     // MARK: Helpers
