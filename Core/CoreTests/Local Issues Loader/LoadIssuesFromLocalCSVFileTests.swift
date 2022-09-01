@@ -27,12 +27,12 @@ final class LocalIssueLoader: IssuesLoader {
 final class LoadIssuesFromLocalCSVFileTests: XCTestCase {
     
     func test_loadIssue_deliversIssuesOnSuccessMapping() {
-        let fileURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("\(type(of: self)).csv")
         let timeZone = TimeZone(identifier: "Europe/Amsterdam")!
+        let fileURL = testSpecificFileURL()
         let csvMapper = { data in
             try CSVIssuesMapper.map(data, timeZone: timeZone)
         }
-        let sut = LocalIssueLoader(fileURL: fileURL, mapper: csvMapper)
+        let sut = LocalIssueLoader(fileURL: testSpecificFileURL(), mapper: csvMapper)
         
         try! sampleIssues().data.write(to: fileURL)
 
@@ -52,7 +52,7 @@ final class LoadIssuesFromLocalCSVFileTests: XCTestCase {
     }
 
     func test_loadIssue_deliversErrorOnMissingFile() {
-        let fileURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("\(type(of: self)).csv")
+        let fileURL = testSpecificFileURL()
         let timeZone = TimeZone(identifier: "Europe/Amsterdam")!
         let csvMapper = { data in
             try CSVIssuesMapper.map(data, timeZone: timeZone)
@@ -76,6 +76,10 @@ final class LoadIssuesFromLocalCSVFileTests: XCTestCase {
     
     // MARK: Helpers
     
+    private func testSpecificFileURL() -> URL {
+        return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("\(type(of: self)).csv")
+    }
+
     private func sampleIssues() -> (data: Data, issues: [Issue]) {
         let issuesData = Data(
             """
