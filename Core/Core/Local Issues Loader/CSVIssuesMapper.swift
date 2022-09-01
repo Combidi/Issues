@@ -4,7 +4,7 @@
 
 import Foundation
 
-public final class IssueMapper {
+public final class CSVIssuesMapper {
     private typealias Column = [String]
     
     public enum Error: Swift.Error, Equatable {

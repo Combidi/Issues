@@ -10,7 +10,7 @@ final class CSVIssuesMapperTests: XCTestCase {
     func test_map_throwsOnInvalidData() {
         let invalidData = Data(capacity: 1)
         
-        assertThat(try IssueMapper.map(invalidData), throws: IssueMapper.Error.invalidData)
+        assertThat(try CSVIssuesMapper.map(invalidData), throws: CSVIssuesMapper.Error.invalidData)
     }
     
     func test_map_throwsOnInvalidHeaders() {
@@ -21,7 +21,7 @@ final class CSVIssuesMapperTests: XCTestCase {
             """.utf8
         )
         
-        assertThat(try IssueMapper.map(dataWithInvalidHeaders), throws: IssueMapper.Error.invalidHeaders)
+        assertThat(try CSVIssuesMapper.map(dataWithInvalidHeaders), throws: CSVIssuesMapper.Error.invalidHeaders)
     }
     
     func test_map_deliversEmptyIssuesOnValidHeaderWithEmptyData() {
@@ -31,7 +31,7 @@ final class CSVIssuesMapperTests: XCTestCase {
             """.utf8
         )
                 
-        XCTAssertTrue(try IssueMapper.map(dataWithEmptyIssues).isEmpty, "Expected empty issues")
+        XCTAssertTrue(try CSVIssuesMapper.map(dataWithEmptyIssues).isEmpty, "Expected empty issues")
     }
 
     func test_map_throwsOnInvalidColumnSize() {
@@ -43,7 +43,7 @@ final class CSVIssuesMapperTests: XCTestCase {
             """.utf8
         )
 
-        assertThat(try IssueMapper.map(dataWithInvalidColumsSize), throws: IssueMapper.Error.invalidColumnSize(columnIndex: 1))
+        assertThat(try CSVIssuesMapper.map(dataWithInvalidColumsSize), throws: CSVIssuesMapper.Error.invalidColumnSize(columnIndex: 1))
     }
     
     func test_map_throwsOnNonIntConvertibleIssueCount() {
@@ -54,7 +54,7 @@ final class CSVIssuesMapperTests: XCTestCase {
             """.utf8
         )
 
-        assertThat(try IssueMapper.map(dataWithInvalidColumsSize), throws: IssueMapper.Error.nonIntConvertable(columnIndex: 0, elementIndex: 2))
+        assertThat(try CSVIssuesMapper.map(dataWithInvalidColumsSize), throws: CSVIssuesMapper.Error.nonIntConvertable(columnIndex: 0, elementIndex: 2))
     }
     
     func test_map_validIssueDataDeliversIssues() {
@@ -73,7 +73,7 @@ final class CSVIssuesMapperTests: XCTestCase {
             Issue(firstName: "Petra", surname: "Boersma", amountOfIssues: 1, birthDate: Date(timeIntervalSince1970: 987717600)),
         ]
 
-        XCTAssertEqual(try IssueMapper.map(validDataWithIssues), expectedIssues)
+        XCTAssertEqual(try CSVIssuesMapper.map(validDataWithIssues), expectedIssues)
     }
 
     func test_map_throwsOnIncorrectBirthDateFormat() {
@@ -85,7 +85,7 @@ final class CSVIssuesMapperTests: XCTestCase {
             """.utf8
         )
 
-        assertThat(try IssueMapper.map(dateWithInvalidDateFormat), throws: IssueMapper.Error.invalidDateFormat(columnIndex: 1, elementIndex: 3))
+        assertThat(try CSVIssuesMapper.map(dateWithInvalidDateFormat), throws: CSVIssuesMapper.Error.invalidDateFormat(columnIndex: 1, elementIndex: 3))
     }
 
     // MARK: Helpers
