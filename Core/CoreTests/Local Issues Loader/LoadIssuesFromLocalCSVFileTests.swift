@@ -32,6 +32,18 @@ final class LocalIssueLoader: IssuesLoader {
 
 final class LoadIssuesFromLocalCSVFileTests: XCTestCase {
     
+    override func setUp() {
+        super.setUp()
+        
+        setupEmptyState()
+    }
+    
+    override func tearDown() {
+        super.tearDown()
+
+        undoSideEffects()
+    }
+
     func test_loadIssue_deliversIssuesOnSuccessMapping() {
         let sut = makeSUT()
         
@@ -48,8 +60,6 @@ final class LoadIssuesFromLocalCSVFileTests: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
         
         XCTAssertEqual(receivedIssues, sampleIssues().issues)
-        
-        try? FileManager.default.removeItem(at: testSpecificFileURL())
     }
 
     func test_loadIssue_deliversErrorOnMissingFile() {
@@ -66,8 +76,6 @@ final class LoadIssuesFromLocalCSVFileTests: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
         
         XCTAssertNotNil(loadError, "Expected load to fail")
-        
-        try? FileManager.default.removeItem(at: testSpecificFileURL())
     }
 
     func test_loadIssue_deliversErrorOnMappingError() {
@@ -86,8 +94,6 @@ final class LoadIssuesFromLocalCSVFileTests: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
         
         XCTAssertNotNil(mapperError, "Expected load to fail")
-        
-        try? FileManager.default.removeItem(at: testSpecificFileURL())
     }
     
     // MARK: Helpers
@@ -125,5 +131,17 @@ final class LoadIssuesFromLocalCSVFileTests: XCTestCase {
     
     private func invalidData() -> Data {
         Data(capacity: 1)
+    }
+        
+    private func setupEmptyState() {
+        deleteTestSpecificFile()
+    }
+    
+    private func undoSideEffects() {
+        deleteTestSpecificFile()
+    }
+
+    private func deleteTestSpecificFile() {
+        try? FileManager.default.removeItem(at: testSpecificFileURL())
     }
 }
