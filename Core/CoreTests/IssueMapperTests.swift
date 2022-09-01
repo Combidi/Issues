@@ -6,7 +6,8 @@ import XCTest
 import Core
 
 final class IssueMapper {
-
+    private typealias Column = [String]
+    
     enum Error: Swift.Error, Equatable {
         case invalidData
         case invalidHeaders
@@ -54,20 +55,20 @@ final class IssueMapper {
         return date
     }
     
-    private static func columns(from dataString: String) -> [[String]] {
+    private static func columns(from dataString: String) -> [Column] {
         dataString
             .replacingOccurrences(of: "\"", with: "")
             .split(separator: "\n")
             .map { $0.split(separator: ",").map(String.init) }
     }
     
-    private static func validateHeaders(colums: inout [[String]]) throws {
+    private static func validateHeaders(colums: inout [Column]) throws {
         guard colums.removeFirst() == ["First name", "Sur name", "Issue count", "Date of birth"] else {
             throw Error.invalidHeaders
         }
     }
     
-    private static func validateColumnSize(column: [String], atIndex index: Int) throws {
+    private static func validateColumnSize(column: Column, atIndex index: Int) throws {
         guard column.count == 4 else { throw Error.invalidColumnSize(columnIndex: index) }
     }
 }
