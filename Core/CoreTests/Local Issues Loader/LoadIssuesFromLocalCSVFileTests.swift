@@ -27,14 +27,9 @@ final class LocalIssueLoader: IssuesLoader {
 final class LoadIssuesFromLocalCSVFileTests: XCTestCase {
     
     func test_loadIssue_deliversIssuesOnSuccessMapping() {
-        let timeZone = TimeZone(identifier: "Europe/Amsterdam")!
-        let fileURL = testSpecificFileURL()
-        let csvMapper = { data in
-            try CSVIssuesMapper.map(data, timeZone: timeZone)
-        }
-        let sut = LocalIssueLoader(fileURL: testSpecificFileURL(), mapper: csvMapper)
+        let sut = makeSUT()
         
-        try! sampleIssues().data.write(to: fileURL)
+        try! sampleIssues().data.write(to: testSpecificFileURL())
 
         let expectation = expectation(description: "wait for load completion")
         var receivedIssues: [Issue]?
@@ -48,16 +43,11 @@ final class LoadIssuesFromLocalCSVFileTests: XCTestCase {
         
         XCTAssertEqual(receivedIssues, sampleIssues().issues)
         
-        try? FileManager.default.removeItem(at: fileURL)
+        try? FileManager.default.removeItem(at: testSpecificFileURL())
     }
 
     func test_loadIssue_deliversErrorOnMissingFile() {
-        let fileURL = testSpecificFileURL()
-        let timeZone = TimeZone(identifier: "Europe/Amsterdam")!
-        let csvMapper = { data in
-            try CSVIssuesMapper.map(data, timeZone: timeZone)
-        }
-        let sut = LocalIssueLoader(fileURL: fileURL, mapper: csvMapper)
+        let sut = makeSUT()
         
         let expectation = expectation(description: "wait for load completion")
         var loadError: Error?
@@ -71,11 +61,21 @@ final class LoadIssuesFromLocalCSVFileTests: XCTestCase {
         
         XCTAssertNotNil(loadError, "Expected load to fail")
         
-        try? FileManager.default.removeItem(at: fileURL)
+        try? FileManager.default.removeItem(at: testSpecificFileURL())
     }
     
     // MARK: Helpers
     
+    private func makeSUT() -> LocalIssueLoader {
+        let timeZone = TimeZone(identifier: "Europe/Amsterdam")!
+        let fileURL = testSpecificFileURL()
+        let csvMapper = { data in
+            try CSVIssuesMapper.map(data, timeZone: timeZone)
+        }
+        let sut = LocalIssueLoader(fileURL: fileURL, mapper: csvMapper)
+        return sut
+    }
+
     private func testSpecificFileURL() -> URL {
         return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("\(type(of: self)).csv")
     }
