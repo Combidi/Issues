@@ -5,7 +5,7 @@
 import XCTest
 import Core
 
-final class CSVIssueParserTests: XCTestCase {
+final class CSVIssuesMapperTests: XCTestCase {
     
     func test_map_throwsOnInvalidData() {
         let invalidData = Data(capacity: 1)

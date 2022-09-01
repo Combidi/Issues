@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D01984D528BE92DF00930C71 /* IssueMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01984D428BE92DF00930C71 /* IssueMapperTests.swift */; };
+		D01984D528BE92DF00930C71 /* CSVIssuesMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01984D428BE92DF00930C71 /* CSVIssuesMapperTests.swift */; };
 		D0AC698128BD30E00073363F /* Core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0AC697828BD30E00073363F /* Core.framework */; };
 		D0AC699228BD31760073363F /* Issue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AC699128BD31760073363F /* Issue.swift */; };
 		D0AC699428BD31930073363F /* IssuesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AC699328BD31930073363F /* IssuesLoader.swift */; };
@@ -31,7 +31,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		D01984D428BE92DF00930C71 /* IssueMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueMapperTests.swift; sourceTree = "<group>"; };
+		D01984D428BE92DF00930C71 /* CSVIssuesMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVIssuesMapperTests.swift; sourceTree = "<group>"; };
 		D0AC697828BD30E00073363F /* Core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0AC698028BD30E00073363F /* CoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0AC699128BD31760073363F /* Issue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Issue.swift; sourceTree = "<group>"; };
@@ -142,7 +142,7 @@
 		D0F0F99728C0C1380030ED02 /* Local Issues Loader */ = {
 			isa = PBXGroup;
 			children = (
-				D01984D428BE92DF00930C71 /* IssueMapperTests.swift */,
+				D01984D428BE92DF00930C71 /* CSVIssuesMapperTests.swift */,
 			);
 			path = "Local Issues Loader";
 			sourceTree = "<group>";
@@ -273,7 +273,7 @@
 			files = (
 				D0AC69B028BD580C0073363F /* IssuesLocalizationTests.swift in Sources */,
 				D0AC699D28BD32280073363F /* IssuesPresenterTests.swift in Sources */,
-				D01984D528BE92DF00930C71 /* IssueMapperTests.swift in Sources */,
+				D01984D528BE92DF00930C71 /* CSVIssuesMapperTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
