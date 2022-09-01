@@ -15,7 +15,7 @@ public final class CSVIssuesMapper {
         case invalidDateFormat(columnIndex: Int, elementIndex: Int)
     }
     
-    public static func map(_ data: Data) throws -> [Issue] {
+    public static func map(_ data: Data, timeZone: TimeZone = .current) throws -> [Issue] {
         let dataString = try dataString(from: data)
         var columns = columns(from: dataString)
         try validateHeaders(colums: &columns)
@@ -27,7 +27,7 @@ public final class CSVIssuesMapper {
                 firstName: column[0],
                 surname: column[1],
                 amountOfIssues: try int(from: column[2], columnIndex: index, elementIndex: 2),
-                birthDate: try date(from: column[3], columnIndex: index, elementIndex: 3)
+                birthDate: try date(from: column[3], forTimeZone: timeZone, columnIndex: index, elementIndex: 3)
             )
         }
 
@@ -44,9 +44,10 @@ public final class CSVIssuesMapper {
         return intValue
     }
     
-    private static func date(from string: String, columnIndex: Int, elementIndex: Int) throws -> Date {
+    private static func date(from string: String, forTimeZone timeZone: TimeZone, columnIndex: Int, elementIndex: Int) throws -> Date {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        formatter.timeZone = timeZone
         
         guard let date = formatter.date(from: string) else {
             throw Error.invalidDateFormat(columnIndex: columnIndex, elementIndex: elementIndex)
