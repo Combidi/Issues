@@ -17,6 +17,7 @@
 		D0AC69A828BD561E0073363F /* IssuesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AC69A728BD561E0073363F /* IssuesView.swift */; };
 		D0AC69AB28BD57720073363F /* Issues.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0AC69AD28BD57720073363F /* Issues.strings */; };
 		D0AC69B028BD580C0073363F /* IssuesLocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AC69AF28BD580C0073363F /* IssuesLocalizationTests.swift */; };
+		D0F0F99528C0B8D00030ED02 /* IssueMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F0F99428C0B8D00030ED02 /* IssueMapper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +43,7 @@
 		D0AC69AC28BD57720073363F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Issues.strings; sourceTree = "<group>"; };
 		D0AC69AE28BD57C70073363F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Issues.strings; sourceTree = "<group>"; };
 		D0AC69AF28BD580C0073363F /* IssuesLocalizationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesLocalizationTests.swift; sourceTree = "<group>"; };
+		D0F0F99428C0B8D00030ED02 /* IssueMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueMapper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +88,7 @@
 			children = (
 				D0AC699E28BD364C0073363F /* Issues Presentation */,
 				D0AC699028BD315D0073363F /* Issues Feature */,
+				D0F0F99428C0B8D00030ED02 /* IssueMapper.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -243,6 +246,7 @@
 				D0AC69A828BD561E0073363F /* IssuesView.swift in Sources */,
 				D0AC699428BD31930073363F /* IssuesLoader.swift in Sources */,
 				D0AC69A028BD365E0073363F /* IssueViewModel.swift in Sources */,
+				D0F0F99528C0B8D00030ED02 /* IssueMapper.swift in Sources */,
 				D0AC699228BD31760073363F /* Issue.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
