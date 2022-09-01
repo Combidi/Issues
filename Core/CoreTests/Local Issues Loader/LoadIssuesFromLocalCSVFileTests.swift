@@ -17,7 +17,7 @@ final class LocalIssueLoader: IssuesLoader {
     func loadIssues(completion: @escaping Completion) {
         do {
             let data = try Data(contentsOf: fileURL)
-            completion(.success(try! mapper(data)))
+            completion(.success(try mapper(data)))
         } catch {
             completion(.failure(error))
         }
@@ -63,6 +63,26 @@ final class LoadIssuesFromLocalCSVFileTests: XCTestCase {
         
         try? FileManager.default.removeItem(at: testSpecificFileURL())
     }
+
+    func test_loadIssue_deliversErrorOnMappingError() {
+        let sut = makeSUT()
+        
+        try! invalidData().write(to: testSpecificFileURL())
+
+        let expectation = expectation(description: "wait for load completion")
+        var mapperError: Error?
+        sut.loadIssues { result in
+            if case let .failure(error) = result {
+                mapperError = error
+            }
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 1.0)
+        
+        XCTAssertNotNil(mapperError, "Expected load to fail")
+        
+        try? FileManager.default.removeItem(at: testSpecificFileURL())
+    }
     
     // MARK: Helpers
     
@@ -75,11 +95,11 @@ final class LoadIssuesFromLocalCSVFileTests: XCTestCase {
         let sut = LocalIssueLoader(fileURL: fileURL, mapper: csvMapper)
         return sut
     }
-
+    
     private func testSpecificFileURL() -> URL {
         return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("\(type(of: self)).csv")
     }
-
+    
     private func sampleIssues() -> (data: Data, issues: [Issue]) {
         let issuesData = Data(
             """
@@ -95,5 +115,9 @@ final class LoadIssuesFromLocalCSVFileTests: XCTestCase {
             Issue(firstName: "Petra", surname: "Boersma", amountOfIssues: 1, birthDate: Date(timeIntervalSince1970: 987717600)),
         ]
         return (issuesData, issues)
+    }
+    
+    private func invalidData() -> Data {
+        Data(capacity: 1)
     }
 }
