@@ -7,10 +7,10 @@ import Core
 
 final class IssueMapper {
 
-    enum Error: Swift.Error {
+    enum Error: Swift.Error, Equatable {
         case invalidData
         case invalidHeaders
-        case invalidColumnSize
+        case invalidColumnSize(columnIndex: Int)
         case nonIntConvertable
         case invalidDateFormat
     }
@@ -25,12 +25,9 @@ final class IssueMapper {
         guard colums.removeFirst() == ["First name", "Sur name", "Issue count", "Date of birth"] else {
             throw Error.invalidHeaders
         }
-                
-        guard colums.allSatisfy({ $0.count == 4 }) else {
-            throw Error.invalidColumnSize
-        }
-        
-        let issues: [Issue] = try colums.map { column in
+                        
+        let issues: [Issue] = try colums.enumerated().map { index, column in
+            guard column.count == 4 else { throw Error.invalidColumnSize(columnIndex: index) }
             guard let amountOfIssues = Int(column[2]) else { throw Error.nonIntConvertable }
                         
             let formatter = DateFormatter()
@@ -80,11 +77,12 @@ final class CSVIssueParserTests: XCTestCase {
         let dataWithInvalidColumsSize = Data(
             """
             "First name","Sur name","Issue count","Date of birth"
-            "Theo","Jansen",5
+            "Theo","Jansen",5,"1978-01-02T00:00:00"
+            "Fiona","de Vries",7
             """.utf8
         )
 
-        assertThat(try IssueMapper.map(dataWithInvalidColumsSize), throws: IssueMapper.Error.invalidColumnSize)
+        assertThat(try IssueMapper.map(dataWithInvalidColumsSize), throws: IssueMapper.Error.invalidColumnSize(columnIndex: 1))
     }
     
     func test_map_throwsOnNonIntConvertibleIssueCount() {
