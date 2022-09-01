@@ -11,7 +11,7 @@ final class IssueMapper {
         case invalidData
         case invalidHeaders
         case invalidColumnSize(columnIndex: Int)
-        case nonIntConvertable
+        case nonIntConvertable(columnIndex: Int, elementIndex: Int)
         case invalidDateFormat
     }
     
@@ -28,7 +28,7 @@ final class IssueMapper {
                         
         let issues: [Issue] = try colums.enumerated().map { index, column in
             guard column.count == 4 else { throw Error.invalidColumnSize(columnIndex: index) }
-            guard let amountOfIssues = Int(column[2]) else { throw Error.nonIntConvertable }
+            guard let amountOfIssues = Int(column[2]) else { throw Error.nonIntConvertable(columnIndex: index, elementIndex: 2) }
                         
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
@@ -93,7 +93,7 @@ final class CSVIssueParserTests: XCTestCase {
             """.utf8
         )
 
-        assertThat(try IssueMapper.map(dataWithInvalidColumsSize), throws: IssueMapper.Error.nonIntConvertable)
+        assertThat(try IssueMapper.map(dataWithInvalidColumsSize), throws: IssueMapper.Error.nonIntConvertable(columnIndex: 0, elementIndex: 2))
     }
     
     func test_map_validIssueDataDeliversIssues() {
