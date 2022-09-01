@@ -14,12 +14,18 @@ final class LocalIssueLoader: IssuesLoader {
         self.mapper = mapper
     }
     
+    private let queue = DispatchQueue(label: "\(LocalIssueLoader.self)Queue", qos: .userInitiated)
+
     func loadIssues(completion: @escaping Completion) {
-        do {
-            let data = try Data(contentsOf: fileURL)
-            completion(.success(try mapper(data)))
-        } catch {
-            completion(.failure(error))
+        let fileURL = fileURL
+        let mapper = mapper
+        queue.async {
+            do {
+                let data = try Data(contentsOf: fileURL)
+                completion(.success(try mapper(data)))
+            } catch {
+                completion(.failure(error))
+            }
         }
     }
 }
