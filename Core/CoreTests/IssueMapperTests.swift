@@ -16,31 +16,59 @@ final class IssueMapper {
     }
     
     static func map(_ data: Data) throws -> [Issue] {
+        let dataString = try dataString(from: data)
+        var columns = columns(from: dataString)
+        try validateHeaders(colums: &columns)
         
-        guard let dataString = String(data: data, encoding: .utf8), !dataString.isEmpty else { throw Error.invalidData }
-        let stripped = dataString.replacingOccurrences(of: "\"", with: "")
-        let lines = stripped.split(separator: "\n")
-        var colums = lines.map { $0.split(separator: ",").map(String.init) }
-        
-        guard colums.removeFirst() == ["First name", "Sur name", "Issue count", "Date of birth"] else {
-            throw Error.invalidHeaders
-        }
-                        
-        let issues: [Issue] = try colums.enumerated().map { index, column in
-            guard column.count == 4 else { throw Error.invalidColumnSize(columnIndex: index) }
-            guard let amountOfIssues = Int(column[2]) else { throw Error.nonIntConvertable(columnIndex: index, elementIndex: 2) }
-                        
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        let issues: [Issue] = try columns.enumerated().map { index, column in
+            try validateColumnSize(column: column, atIndex: index)
             
-            guard let birthDate = formatter.date(from: column[3]) else {
-                throw Error.invalidDateFormat(columnIndex: index, elementIndex: 3)
-            }
-            
-            return Issue(firstName: column[0], surname: column[1], amountOfIssues: amountOfIssues, birthDate: birthDate)
+            return Issue(
+                firstName: column[0],
+                surname: column[1],
+                amountOfIssues: try int(from: column[2], columnIndex: index, elementIndex: 2),
+                birthDate: try date(from: column[3], columnIndex: index, elementIndex: 3)
+            )
         }
 
         return issues
+    }
+
+    private static func dataString(from data: Data) throws -> String {
+        guard let dataString = String(data: data, encoding: .utf8), !dataString.isEmpty else { throw Error.invalidData }
+        return dataString
+    }
+    
+    private static func int(from string: String, columnIndex: Int, elementIndex: Int) throws -> Int {
+        guard let intValue = Int(string) else { throw Error.nonIntConvertable(columnIndex: columnIndex, elementIndex: elementIndex) }
+        return intValue
+    }
+    
+    private static func date(from string: String, columnIndex: Int, elementIndex: Int) throws -> Date {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        
+        guard let date = formatter.date(from: string) else {
+            throw Error.invalidDateFormat(columnIndex: columnIndex, elementIndex: elementIndex)
+        }
+        return date
+    }
+    
+    private static func columns(from dataString: String) -> [[String]] {
+        dataString
+            .replacingOccurrences(of: "\"", with: "")
+            .split(separator: "\n")
+            .map { $0.split(separator: ",").map(String.init) }
+    }
+    
+    private static func validateHeaders(colums: inout [[String]]) throws {
+        guard colums.removeFirst() == ["First name", "Sur name", "Issue count", "Date of birth"] else {
+            throw Error.invalidHeaders
+        }
+    }
+    
+    private static func validateColumnSize(column: [String], atIndex index: Int) throws {
+        guard column.count == 4 else { throw Error.invalidColumnSize(columnIndex: index) }
     }
 }
 
