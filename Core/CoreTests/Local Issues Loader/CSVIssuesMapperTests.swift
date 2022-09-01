@@ -66,16 +66,16 @@ final class CSVIssuesMapperTests: XCTestCase {
             "Petra","Boersma",1,"2001-04-20T00:00:00"
             """.utf8
         )
-
+        
         let expectedIssues = [
-            Issue(firstName: "Theo", surname: "Jansen", amountOfIssues: 5, birthDate: Date(timeIntervalSince1970: 252543600)),
-            Issue(firstName: "Fiona", surname: "de Vries", amountOfIssues: 7, birthDate: Date(timeIntervalSince1970: -603939600)),
-            Issue(firstName: "Petra", surname: "Boersma", amountOfIssues: 1, birthDate: Date(timeIntervalSince1970: 987717600)),
+            Issue(firstName: "Theo", surname: "Jansen", amountOfIssues: 5, birthDate: Date(timeIntervalSince1970: 252540000)),
+            Issue(firstName: "Fiona", surname: "de Vries", amountOfIssues: 7, birthDate: Date(timeIntervalSince1970: -603943200)),
+            Issue(firstName: "Petra", surname: "Boersma", amountOfIssues: 1, birthDate: Date(timeIntervalSince1970: 987714000)),
         ]
 
-        XCTAssertEqual(try CSVIssuesMapper.map(validDataWithIssues), expectedIssues)
+        let timeZone = TimeZone(identifier: "Asia/Amman")!
+        XCTAssertEqual(try CSVIssuesMapper.map(validDataWithIssues, timeZone: timeZone), expectedIssues)
     }
-
     func test_map_throwsOnIncorrectBirthDateFormat() {
         let dateWithInvalidDateFormat = Data(
             """
