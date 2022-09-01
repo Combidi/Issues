@@ -15,9 +15,12 @@ final class LocalIssueLoader: IssuesLoader {
     }
     
     func loadIssues(completion: @escaping Completion) {
-        let data = try! Data(contentsOf: fileURL)
-        completion(.success(try! mapper(data)))
-        return
+        do {
+            let data = try Data(contentsOf: fileURL)
+            completion(.success(try! mapper(data)))
+        } catch {
+            completion(.failure(error))
+        }
     }
 }
 
@@ -44,6 +47,29 @@ final class LoadIssuesFromLocalCSVFileTests: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
         
         XCTAssertEqual(receivedIssues, sampleIssues().issues)
+        
+        try? FileManager.default.removeItem(at: fileURL)
+    }
+
+    func test_loadIssue_deliversErrorOnMissingFile() {
+        let fileURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("\(type(of: self)).csv")
+        let timeZone = TimeZone(identifier: "Europe/Amsterdam")!
+        let csvMapper = { data in
+            try CSVIssuesMapper.map(data, timeZone: timeZone)
+        }
+        let sut = LocalIssueLoader(fileURL: fileURL, mapper: csvMapper)
+        
+        let expectation = expectation(description: "wait for load completion")
+        var loadError: Error?
+        sut.loadIssues { result in
+            if case let .failure(error) = result {
+                loadError = error
+            }
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 1.0)
+        
+        XCTAssertNotNil(loadError, "Expected load to fail")
         
         try? FileManager.default.removeItem(at: fileURL)
     }
