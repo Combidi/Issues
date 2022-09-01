@@ -5,7 +5,7 @@
 import XCTest
 import Core
 
-final class FeedLocalizationTests: XCTestCase {
+final class IssuesLocalizationTests: XCTestCase {
     
     func test_localizedStrings_haveKeysAndValuesForAllSupportedLocalizations() {
         let table = "Issues"
