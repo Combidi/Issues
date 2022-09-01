@@ -4,10 +4,10 @@
 
 import Foundation
 
-final class IssueMapper {
+public final class IssueMapper {
     private typealias Column = [String]
     
-    enum Error: Swift.Error, Equatable {
+    public enum Error: Swift.Error, Equatable {
         case invalidData
         case invalidHeaders
         case invalidColumnSize(columnIndex: Int)
@@ -15,7 +15,7 @@ final class IssueMapper {
         case invalidDateFormat(columnIndex: Int, elementIndex: Int)
     }
     
-    static func map(_ data: Data) throws -> [Issue] {
+    public static func map(_ data: Data) throws -> [Issue] {
         let dataString = try dataString(from: data)
         var columns = columns(from: dataString)
         try validateHeaders(colums: &columns)
