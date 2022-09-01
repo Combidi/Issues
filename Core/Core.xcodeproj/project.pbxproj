@@ -86,9 +86,9 @@
 		D0AC697A28BD30E00073363F /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				D0F0F99628C0C1030030ED02 /* Local Issues Loader */,
 				D0AC699E28BD364C0073363F /* Issues Presentation */,
 				D0AC699028BD315D0073363F /* Issues Feature */,
-				D0F0F99428C0B8D00030ED02 /* IssueMapper.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -96,8 +96,8 @@
 		D0AC698428BD30E00073363F /* CoreTests */ = {
 			isa = PBXGroup;
 			children = (
+				D0F0F99728C0C1380030ED02 /* Local Issues Loader */,
 				D0AC699B28BD321A0073363F /* Issues Presentation */,
-				D01984D428BE92DF00930C71 /* IssueMapperTests.swift */,
 			);
 			path = CoreTests;
 			sourceTree = "<group>";
@@ -129,6 +129,22 @@
 				D0AC69AD28BD57720073363F /* Issues.strings */,
 			);
 			path = "Issues Presentation";
+			sourceTree = "<group>";
+		};
+		D0F0F99628C0C1030030ED02 /* Local Issues Loader */ = {
+			isa = PBXGroup;
+			children = (
+				D0F0F99428C0B8D00030ED02 /* IssueMapper.swift */,
+			);
+			path = "Local Issues Loader";
+			sourceTree = "<group>";
+		};
+		D0F0F99728C0C1380030ED02 /* Local Issues Loader */ = {
+			isa = PBXGroup;
+			children = (
+				D01984D428BE92DF00930C71 /* IssueMapperTests.swift */,
+			);
+			path = "Local Issues Loader";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
