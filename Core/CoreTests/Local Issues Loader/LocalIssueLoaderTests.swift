@@ -22,11 +22,12 @@ final class LocalIssueLoaderTests: XCTestCase {
         assertThat(sut, completesWithError: fileNotFoundError())
     }
     
-    func test_loadIssues_deliversIssuesOnSuccessfulMapping() {
-        let issues = sampleIssues()
-        let sut = makeSUT(mapResultStub: .success(issues))
-        saveTestFileWith(data: validData())
-
+    private func assertThat(
+        _ sut: LocalIssueLoader,
+        completesWithIssues expectedIssues: [Issue],
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
         let exp = expectation(description: "wait for load completion")
         var receivedIssues: [Issue]?
         sut.loadIssues {
@@ -36,9 +37,17 @@ final class LocalIssueLoaderTests: XCTestCase {
         
         wait(for: [exp], timeout: 1.0)
 
-        XCTAssertEqual(receivedIssues, issues)
+        XCTAssertEqual(receivedIssues, expectedIssues)
         
         removeTestFile()
+    }
+    
+    func test_loadIssues_deliversIssuesOnSuccessfulMapping() {
+        let issues = sampleIssues()
+        let sut = makeSUT(mapResultStub: .success(issues))
+        saveTestFileWith(data: validData())
+
+        assertThat(sut, completesWithIssues: issues)        
     }
     
     // MARK: Helpers
