@@ -47,6 +47,32 @@ final class LocalIssueLoaderTests: XCTestCase {
         XCTAssertEqual((mapperError as? NSError)?.code, fileNotFoundError().code)
         XCTAssertEqual((mapperError as? NSError)?.domain, fileNotFoundError().domain)
     }
+
+    func test_loadIssues_deliversIssuesOnSuccessfulMapping() {
+        let fileURL = testSpecificFileURL()
+        let issues = [
+            Issue(firstName: "Theo", surname: "Jansen", amountOfIssues: 5, birthDate: Date(timeIntervalSince1970: 252543600)),
+            Issue(firstName: "Fiona", surname: "de Vries", amountOfIssues: 7, birthDate: Date(timeIntervalSince1970: -603939600)),
+            Issue(firstName: "Petra", surname: "Boersma", amountOfIssues: 1, birthDate: Date(timeIntervalSince1970: 987717600)),
+        ]
+
+        let sut = LocalIssueLoader(fileURL: fileURL, mapper: { data in
+            return issues
+        })
+        
+        try! Data("any".utf8).write(to: testSpecificFileURL())
+
+        let exp = expectation(description: "wait for load completion")
+        var receivedIssues: [Issue]?
+        sut.loadIssues {
+            if case let .success(issues) = $0 { receivedIssues = issues }
+            exp.fulfill()
+        }
+        
+        wait(for: [exp], timeout: 1.0)
+
+        XCTAssertEqual(receivedIssues, issues)
+    }
     
     // MARK: Helpers
     
