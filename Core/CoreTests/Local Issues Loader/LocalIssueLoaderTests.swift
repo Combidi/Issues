@@ -26,7 +26,7 @@ final class LocalIssueLoaderTests: XCTestCase {
 
         XCTAssertEqual(mapperError as? NSError, anyError())
         
-        try? FileManager.default.removeItem(at: testSpecificFileURL())
+        removeTestFile()
     }
 
     func test_loadIssues_deliversErrorOnMissingFile() {
@@ -35,8 +35,8 @@ final class LocalIssueLoaderTests: XCTestCase {
             throw anyError()
         })
 
-        try? FileManager.default.removeItem(at: testSpecificFileURL())
-                
+        removeTestFile()
+        
         let exp = expectation(description: "wait for load completion")
         var mapperError: Error?
         sut.loadIssues {
@@ -48,8 +48,6 @@ final class LocalIssueLoaderTests: XCTestCase {
 
         XCTAssertEqual((mapperError as? NSError)?.code, fileNotFoundError().code)
         XCTAssertEqual((mapperError as? NSError)?.domain, fileNotFoundError().domain)
-        
-        try? FileManager.default.removeItem(at: testSpecificFileURL())
     }
 
     func test_loadIssues_deliversIssuesOnSuccessfulMapping() {
@@ -72,7 +70,7 @@ final class LocalIssueLoaderTests: XCTestCase {
 
         XCTAssertEqual(receivedIssues, issues)
         
-        try? FileManager.default.removeItem(at: testSpecificFileURL())
+        removeTestFile()
     }
     
     // MARK: Helpers
@@ -95,6 +93,10 @@ final class LocalIssueLoaderTests: XCTestCase {
     
     private func fileNotFoundError() -> NSError {
         NSError(domain: "NSCocoaErrorDomain", code: 260)
+    }
+    
+    private func removeTestFile() {
+        try? FileManager.default.removeItem(at: testSpecificFileURL())
     }
 }
 
