@@ -126,6 +126,10 @@ final class LocalIssueLoaderTests: XCTestCase {
         ]
     }
     
+    private func anyError() -> NSError {
+        NSError(domain: "any", code: 1)
+    }
+
     private func invalidData() -> Data {
         Data(capacity: 1)
     }
@@ -145,10 +149,4 @@ final class LocalIssueLoaderTests: XCTestCase {
     private func removeTestFile() {
         try? FileManager.default.removeItem(at: testSpecificFileURL())
     }
-}
-
-// MARK: Helpers
-
-private func anyError() -> NSError {
-    NSError(domain: "any", code: 1)
 }
