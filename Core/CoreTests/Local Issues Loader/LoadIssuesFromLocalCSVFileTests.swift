@@ -5,31 +5,6 @@
 import XCTest
 import Core
 
-final class LocalIssueLoader: IssuesLoader {
-    private let fileURL: URL
-    private let mapper: (Data) throws -> [Issue]
-    
-    init(fileURL: URL, mapper: @escaping (Data) throws -> [Issue]) {
-        self.fileURL = fileURL
-        self.mapper = mapper
-    }
-    
-    private let queue = DispatchQueue(label: "\(LocalIssueLoader.self)Queue", qos: .userInitiated)
-
-    func loadIssues(completion: @escaping Completion) {
-        let fileURL = fileURL
-        let mapper = mapper
-        queue.async {
-            do {
-                let data = try Data(contentsOf: fileURL)
-                completion(.success(try mapper(data)))
-            } catch {
-                completion(.failure(error))
-            }
-        }
-    }
-}
-
 final class LoadIssuesFromLocalCSVFileTests: XCTestCase {
     
     override func setUp() {
