@@ -54,12 +54,7 @@ final class LocalIssueLoaderTests: XCTestCase {
 
     func test_loadIssues_deliversIssuesOnSuccessfulMapping() {
         let fileURL = testSpecificFileURL()
-        let issues = [
-            Issue(firstName: "Theo", surname: "Jansen", amountOfIssues: 5, birthDate: Date(timeIntervalSince1970: 252543600)),
-            Issue(firstName: "Fiona", surname: "de Vries", amountOfIssues: 7, birthDate: Date(timeIntervalSince1970: -603939600)),
-            Issue(firstName: "Petra", surname: "Boersma", amountOfIssues: 1, birthDate: Date(timeIntervalSince1970: 987717600)),
-        ]
-
+        let issues = sampleIssues()
         let sut = LocalIssueLoader(fileURL: fileURL, mapper: { data in
             return issues
         })
@@ -84,6 +79,14 @@ final class LocalIssueLoaderTests: XCTestCase {
     
     private func testSpecificFileURL() -> URL {
         return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("\(type(of: self)).csv")
+    }
+    
+    private func sampleIssues() -> [Issue] {
+        [
+            Issue(firstName: "Theo", surname: "Jansen", amountOfIssues: 5, birthDate: Date(timeIntervalSince1970: 252543600)),
+            Issue(firstName: "Fiona", surname: "de Vries", amountOfIssues: 7, birthDate: Date(timeIntervalSince1970: -603939600)),
+            Issue(firstName: "Petra", surname: "Boersma", amountOfIssues: 1, birthDate: Date(timeIntervalSince1970: 987717600)),
+        ]
     }
     
     private func invalidData() -> Data {
