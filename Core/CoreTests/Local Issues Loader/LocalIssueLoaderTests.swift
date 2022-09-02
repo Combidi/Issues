@@ -53,17 +53,26 @@ final class LocalIssueLoaderTests: XCTestCase {
         file: StaticString = #filePath,
         line: UInt = #line
     ) {
-        let exp = expectation(description: "wait for load completion")
-        var receivedError: Error?
-        sut.loadIssues {
-            if case let .failure(error) = $0 { receivedError = error }
-            exp.fulfill()
-        }
+        switch loadIssues(using: sut, file: file, line: line) {
+        case .none:
+            XCTFail("Expected load to complete", file: file, line: line)
+            
+        case let .failure(receivedError as NSError):
+            XCTAssertTrue(
+                receivedError.code == expectedError.code,
+                "Expected error with code \(expectedError.code), got \(receivedError.code) instead",
+                file: file, line: line
+            )
+            XCTAssertTrue(
+                receivedError.domain == expectedError.domain,
+                "Expected error with domain `\(expectedError.domain)`, got `\(receivedError.domain)` instead",
+                file: file, line: line
+            )
         
-        wait(for: [exp], timeout: 1.0)
-
-        XCTAssertEqual((receivedError as? NSError)?.code, expectedError.code)
-        XCTAssertEqual((receivedError as? NSError)?.domain, expectedError.domain)
+        case let .some(receivedResult):
+            XCTFail("Expected load to complete with error \(expectedError), got \(receivedResult) instead", file: file, line: line)
+        
+        }
 
         removeTestFile()
     }
@@ -74,18 +83,35 @@ final class LocalIssueLoaderTests: XCTestCase {
         file: StaticString = #filePath,
         line: UInt = #line
     ) {
+        switch loadIssues(using: sut, file: file, line: line) {
+        case .none:
+            XCTFail("Expected load to complete", file: file, line: line)
+            
+        case let .success(receivedIssues):
+            XCTAssertTrue(receivedIssues == expectedIssues, "Expected load to complete with \(expectedIssues), got \(receivedIssues) instead", file: file, line: line)
+
+        case let .some(receivedResult):
+            XCTFail("Expected load to complete with error \(expectedIssues), got \(receivedResult) instead", file: file, line: line)
+        }
+        
+        removeTestFile()
+    }
+    
+    private func loadIssues(
+        using sut: LocalIssueLoader,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) -> IssuesLoader.Result? {
         let exp = expectation(description: "wait for load completion")
-        var receivedIssues: [Issue]?
+        var receivedResult: IssuesLoader.Result?
         sut.loadIssues {
-            if case let .success(issues) = $0 { receivedIssues = issues }
+            receivedResult = $0
             exp.fulfill()
         }
         
-        wait(for: [exp], timeout: 1.0)
-
-        XCTAssertEqual(receivedIssues, expectedIssues)
+        wait(for: [exp], timeout: 0.1)
         
-        removeTestFile()
+        return receivedResult
     }
     
     private func testSpecificFileURL() -> URL {
