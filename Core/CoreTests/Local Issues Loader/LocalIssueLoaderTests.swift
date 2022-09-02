@@ -6,41 +6,20 @@ import XCTest
 import Core
 
 final class LocalIssueLoaderTests: XCTestCase {
-    
+        
     func test_loadIssues_deliversErrorOnMapperError() {
         let mapperError = anyError()
         let sut = makeSUT(mapResultStub: .failure(mapperError))
         saveTestFileWith(data: invalidData())
         
-        let exp = expectation(description: "wait for load completion")
-        var receivedError: Error?
-        sut.loadIssues {
-            if case let .failure(error) = $0 { receivedError = error }
-            exp.fulfill()
-        }
-        
-        wait(for: [exp], timeout: 1.0)
-
-        XCTAssertEqual(receivedError as? NSError, mapperError)
-        
-        removeTestFile()
+        assertThat(sut, completesWithError: mapperError)
     }
 
     func test_loadIssues_deliversErrorOnMissingFile() {
         let sut = makeSUT()
         removeTestFile()
         
-        let exp = expectation(description: "wait for load completion")
-        var mapperError: Error?
-        sut.loadIssues {
-            if case let .failure(error) = $0 { mapperError = error }
-            exp.fulfill()
-        }
-        
-        wait(for: [exp], timeout: 1.0)
-
-        XCTAssertEqual((mapperError as? NSError)?.code, fileNotFoundError().code)
-        XCTAssertEqual((mapperError as? NSError)?.domain, fileNotFoundError().domain)
+        assertThat(sut, completesWithError: fileNotFoundError())
     }
     
     func test_loadIssues_deliversIssuesOnSuccessfulMapping() {
@@ -79,6 +58,27 @@ final class LocalIssueLoaderTests: XCTestCase {
         return sut
     }
 
+    private func assertThat(
+        _ sut: LocalIssueLoader,
+        completesWithError expectedError: NSError,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        let exp = expectation(description: "wait for load completion")
+        var receivedError: Error?
+        sut.loadIssues {
+            if case let .failure(error) = $0 { receivedError = error }
+            exp.fulfill()
+        }
+        
+        wait(for: [exp], timeout: 1.0)
+
+        XCTAssertEqual((receivedError as? NSError)?.code, expectedError.code)
+        XCTAssertEqual((receivedError as? NSError)?.domain, expectedError.domain)
+
+        removeTestFile()
+    }
+    
     private func testSpecificFileURL() -> URL {
         return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("\(type(of: self)).csv")
     }
