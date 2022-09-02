@@ -17,7 +17,6 @@
 		D0AC69A828BD561E0073363F /* IssuesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AC69A728BD561E0073363F /* IssuesView.swift */; };
 		D0AC69AB28BD57720073363F /* Issues.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0AC69AD28BD57720073363F /* Issues.strings */; };
 		D0AC69B028BD580C0073363F /* IssuesLocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AC69AF28BD580C0073363F /* IssuesLocalizationTests.swift */; };
-		D0B9762128C13BA000BF60C3 /* LoadIssuesFromLocalCSVFileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B9762028C13BA000BF60C3 /* LoadIssuesFromLocalCSVFileTests.swift */; };
 		D0B9762328C1D45F00BF60C3 /* LocalIssueLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B9762228C1D45F00BF60C3 /* LocalIssueLoader.swift */; };
 		D0B9762528C1D49500BF60C3 /* LocalIssueLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B9762428C1D49500BF60C3 /* LocalIssueLoaderTests.swift */; };
 		D0F0F99528C0B8D00030ED02 /* CSVIssuesMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F0F99428C0B8D00030ED02 /* CSVIssuesMapper.swift */; };
@@ -46,7 +45,6 @@
 		D0AC69AC28BD57720073363F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Issues.strings; sourceTree = "<group>"; };
 		D0AC69AE28BD57C70073363F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Issues.strings; sourceTree = "<group>"; };
 		D0AC69AF28BD580C0073363F /* IssuesLocalizationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesLocalizationTests.swift; sourceTree = "<group>"; };
-		D0B9762028C13BA000BF60C3 /* LoadIssuesFromLocalCSVFileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadIssuesFromLocalCSVFileTests.swift; sourceTree = "<group>"; };
 		D0B9762228C1D45F00BF60C3 /* LocalIssueLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalIssueLoader.swift; sourceTree = "<group>"; };
 		D0B9762428C1D49500BF60C3 /* LocalIssueLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalIssueLoaderTests.swift; sourceTree = "<group>"; };
 		D0F0F99428C0B8D00030ED02 /* CSVIssuesMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVIssuesMapper.swift; sourceTree = "<group>"; };
@@ -150,7 +148,6 @@
 			isa = PBXGroup;
 			children = (
 				D01984D428BE92DF00930C71 /* CSVIssuesMapperTests.swift */,
-				D0B9762028C13BA000BF60C3 /* LoadIssuesFromLocalCSVFileTests.swift */,
 				D0B9762428C1D49500BF60C3 /* LocalIssueLoaderTests.swift */,
 			);
 			path = "Local Issues Loader";
@@ -284,7 +281,6 @@
 				D0B9762528C1D49500BF60C3 /* LocalIssueLoaderTests.swift in Sources */,
 				D0AC69B028BD580C0073363F /* IssuesLocalizationTests.swift in Sources */,
 				D0AC699D28BD32280073363F /* IssuesPresenterTests.swift in Sources */,
-				D0B9762128C13BA000BF60C3 /* LoadIssuesFromLocalCSVFileTests.swift in Sources */,
 				D01984D528BE92DF00930C71 /* CSVIssuesMapperTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
