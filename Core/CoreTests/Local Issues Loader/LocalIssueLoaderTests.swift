@@ -8,33 +8,26 @@ import Core
 final class LocalIssueLoaderTests: XCTestCase {
     
     func test_loadIssues_deliversErrorOnMapperError() {
-        let fileURL = testSpecificFileURL()
-        let sut = LocalIssueLoader(fileURL: fileURL, mapper: { data in
-            throw anyError()
-        })
-
+        let mapperError = anyError()
+        let sut = makeSUT(mapResultStub: .failure(mapperError))
         saveTestFileWith(data: invalidData())
         
         let exp = expectation(description: "wait for load completion")
-        var mapperError: Error?
+        var receivedError: Error?
         sut.loadIssues {
-            if case let .failure(error) = $0 { mapperError = error }
+            if case let .failure(error) = $0 { receivedError = error }
             exp.fulfill()
         }
         
         wait(for: [exp], timeout: 1.0)
 
-        XCTAssertEqual(mapperError as? NSError, anyError())
+        XCTAssertEqual(receivedError as? NSError, mapperError)
         
         removeTestFile()
     }
 
     func test_loadIssues_deliversErrorOnMissingFile() {
-        let fileURL = testSpecificFileURL()
-        let sut = LocalIssueLoader(fileURL: fileURL, mapper: { data in
-            throw anyError()
-        })
-
+        let sut = makeSUT()
         removeTestFile()
         
         let exp = expectation(description: "wait for load completion")
@@ -49,14 +42,10 @@ final class LocalIssueLoaderTests: XCTestCase {
         XCTAssertEqual((mapperError as? NSError)?.code, fileNotFoundError().code)
         XCTAssertEqual((mapperError as? NSError)?.domain, fileNotFoundError().domain)
     }
-
+    
     func test_loadIssues_deliversIssuesOnSuccessfulMapping() {
-        let fileURL = testSpecificFileURL()
         let issues = sampleIssues()
-        let sut = LocalIssueLoader(fileURL: fileURL, mapper: { data in
-            return issues
-        })
-        
+        let sut = makeSUT(mapResultStub: .success(issues))
         saveTestFileWith(data: Data("any".utf8))
 
         let exp = expectation(description: "wait for load completion")
@@ -75,6 +64,21 @@ final class LocalIssueLoaderTests: XCTestCase {
     
     // MARK: Helpers
     
+    private func makeSUT(mapResultStub resultStub: Result<[Issue], NSError> = .success([])) -> LocalIssueLoader {
+        let fileURL = testSpecificFileURL()
+        let sut = LocalIssueLoader(fileURL: fileURL, mapper: { data in
+            switch resultStub {
+            case .failure(let error):
+                throw error
+                
+            case .success(let issues):
+                return issues
+                
+            }
+        })
+        return sut
+    }
+
     private func testSpecificFileURL() -> URL {
         return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("\(type(of: self)).csv")
     }
