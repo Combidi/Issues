@@ -25,6 +25,8 @@ final class LocalIssueLoaderTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
 
         XCTAssertEqual(mapperError as? NSError, anyError())
+        
+        try? FileManager.default.removeItem(at: testSpecificFileURL())
     }
 
     func test_loadIssues_deliversErrorOnMissingFile() {
@@ -33,7 +35,7 @@ final class LocalIssueLoaderTests: XCTestCase {
             throw anyError()
         })
 
-        try! FileManager.default.removeItem(at: testSpecificFileURL())
+        try? FileManager.default.removeItem(at: testSpecificFileURL())
                 
         let exp = expectation(description: "wait for load completion")
         var mapperError: Error?
@@ -46,6 +48,8 @@ final class LocalIssueLoaderTests: XCTestCase {
 
         XCTAssertEqual((mapperError as? NSError)?.code, fileNotFoundError().code)
         XCTAssertEqual((mapperError as? NSError)?.domain, fileNotFoundError().domain)
+        
+        try? FileManager.default.removeItem(at: testSpecificFileURL())
     }
 
     func test_loadIssues_deliversIssuesOnSuccessfulMapping() {
@@ -72,6 +76,8 @@ final class LocalIssueLoaderTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
 
         XCTAssertEqual(receivedIssues, issues)
+        
+        try? FileManager.default.removeItem(at: testSpecificFileURL())
     }
     
     // MARK: Helpers
