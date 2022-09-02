@@ -13,7 +13,7 @@ final class LocalIssueLoaderTests: XCTestCase {
             throw anyError()
         })
 
-        try! invalidData().write(to: testSpecificFileURL())
+        saveTestFileWith(data: invalidData())
         
         let exp = expectation(description: "wait for load completion")
         var mapperError: Error?
@@ -57,7 +57,7 @@ final class LocalIssueLoaderTests: XCTestCase {
             return issues
         })
         
-        try! Data("any".utf8).write(to: testSpecificFileURL())
+        saveTestFileWith(data: Data("any".utf8))
 
         let exp = expectation(description: "wait for load completion")
         var receivedIssues: [Issue]?
@@ -93,6 +93,10 @@ final class LocalIssueLoaderTests: XCTestCase {
     
     private func fileNotFoundError() -> NSError {
         NSError(domain: "NSCocoaErrorDomain", code: 260)
+    }
+    
+    private func saveTestFileWith(data: Data) {
+        try! data.write(to: testSpecificFileURL())
     }
     
     private func removeTestFile() {
