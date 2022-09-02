@@ -12,6 +12,8 @@ final class LocalIssueLoaderTests: XCTestCase {
         let sut = LocalIssueLoader(fileURL: fileURL, mapper: { data in
             throw anyError()
         })
+
+        try! invalidData().write(to: testSpecificFileURL())
         
         let exp = expectation(description: "wait for load completion")
         var mapperError: Error?
@@ -22,7 +24,7 @@ final class LocalIssueLoaderTests: XCTestCase {
         
         wait(for: [exp], timeout: 1.0)
 
-        XCTAssertNotNil(mapperError, "Expected load to fail")
+        XCTAssertEqual(mapperError as? NSError, anyError())
     }
     
     // MARK: Helpers
@@ -30,10 +32,14 @@ final class LocalIssueLoaderTests: XCTestCase {
     private func testSpecificFileURL() -> URL {
         return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("\(type(of: self)).csv")
     }
+    
+    private func invalidData() -> Data {
+        Data(capacity: 1)
+    }
 }
 
 // MARK: Helpers
 
-private func anyError() -> Error {
+private func anyError() -> NSError {
     NSError(domain: "any", code: 1)
 }
