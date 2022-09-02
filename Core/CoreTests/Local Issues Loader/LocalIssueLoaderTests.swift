@@ -46,7 +46,7 @@ final class LocalIssueLoaderTests: XCTestCase {
     func test_loadIssues_deliversIssuesOnSuccessfulMapping() {
         let issues = sampleIssues()
         let sut = makeSUT(mapResultStub: .success(issues))
-        saveTestFileWith(data: Data("any".utf8))
+        saveTestFileWith(data: validData())
 
         let exp = expectation(description: "wait for load completion")
         var receivedIssues: [Issue]?
@@ -93,6 +93,10 @@ final class LocalIssueLoaderTests: XCTestCase {
     
     private func invalidData() -> Data {
         Data(capacity: 1)
+    }
+    
+    private func validData() -> Data {
+        Data("any".utf8)
     }
     
     private func fileNotFoundError() -> NSError {
