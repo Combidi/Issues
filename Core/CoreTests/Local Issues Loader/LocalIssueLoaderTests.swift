@@ -22,32 +22,12 @@ final class LocalIssueLoaderTests: XCTestCase {
         assertThat(sut, completesWithError: fileNotFoundError())
     }
     
-    private func assertThat(
-        _ sut: LocalIssueLoader,
-        completesWithIssues expectedIssues: [Issue],
-        file: StaticString = #filePath,
-        line: UInt = #line
-    ) {
-        let exp = expectation(description: "wait for load completion")
-        var receivedIssues: [Issue]?
-        sut.loadIssues {
-            if case let .success(issues) = $0 { receivedIssues = issues }
-            exp.fulfill()
-        }
-        
-        wait(for: [exp], timeout: 1.0)
-
-        XCTAssertEqual(receivedIssues, expectedIssues)
-        
-        removeTestFile()
-    }
-    
     func test_loadIssues_deliversIssuesOnSuccessfulMapping() {
         let issues = sampleIssues()
         let sut = makeSUT(mapResultStub: .success(issues))
         saveTestFileWith(data: validData())
 
-        assertThat(sut, completesWithIssues: issues)        
+        assertThat(sut, completesWithIssues: issues)
     }
     
     // MARK: Helpers
@@ -85,6 +65,26 @@ final class LocalIssueLoaderTests: XCTestCase {
         XCTAssertEqual((receivedError as? NSError)?.code, expectedError.code)
         XCTAssertEqual((receivedError as? NSError)?.domain, expectedError.domain)
 
+        removeTestFile()
+    }
+    
+    private func assertThat(
+        _ sut: LocalIssueLoader,
+        completesWithIssues expectedIssues: [Issue],
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        let exp = expectation(description: "wait for load completion")
+        var receivedIssues: [Issue]?
+        sut.loadIssues {
+            if case let .success(issues) = $0 { receivedIssues = issues }
+            exp.fulfill()
+        }
+        
+        wait(for: [exp], timeout: 1.0)
+
+        XCTAssertEqual(receivedIssues, expectedIssues)
+        
         removeTestFile()
     }
     
