@@ -56,7 +56,7 @@ final class CSVIssuesMapperTests: XCTestCase {
 
         assertThat(try CSVIssuesMapper.map(dataWithInvalidColumsSize), throws: CSVIssuesMapper.Error.nonIntConvertable(columnIndex: 0, elementIndex: 2))
     }
-    
+
     func test_map_validIssueDataDeliversIssues() {
         let validDataWithIssues = Data(
             """
@@ -87,7 +87,28 @@ final class CSVIssuesMapperTests: XCTestCase {
 
         assertThat(try CSVIssuesMapper.map(dateWithInvalidDateFormat), throws: CSVIssuesMapper.Error.invalidDateFormat(columnIndex: 1, elementIndex: 3))
     }
-
+    
+    func test_map_supportsCarriageReturn() {
+        let dataWithCarriageReturnNewLineCharacters = Data("\"First name\",\"Sur name\",\"Issue count\",\"Date of birth\"\r \"Petra\",\"Boersma\",1,\"2001-04-20T00:00:00\"".utf8
+        )
+        
+        XCTAssertNoThrow(try CSVIssuesMapper.map(dataWithCarriageReturnNewLineCharacters))
+    }
+    
+    func test_map_supportsLineFeed() {
+        let dataWithCarriageReturnNewLineCharacters = Data("\"First name\",\"Sur name\",\"Issue count\",\"Date of birth\"\n \"Petra\",\"Boersma\",1,\"2001-04-20T00:00:00\"".utf8
+        )
+        
+        XCTAssertNoThrow(try CSVIssuesMapper.map(dataWithCarriageReturnNewLineCharacters))
+    }
+    
+    func test_map_supportsCarriageReturnLineFeed() {
+        let dataWithCarriageReturnNewLineCharacters = Data("\"First name\",\"Sur name\",\"Issue count\",\"Date of birth\"\r\n \"Petra\",\"Boersma\",1,\"2001-04-20T00:00:00\"".utf8
+        )
+        
+        XCTAssertNoThrow(try CSVIssuesMapper.map(dataWithCarriageReturnNewLineCharacters))
+    }
+    
     // MARK: Helpers
     
     private func assertThat<T, E: Error & Equatable>(

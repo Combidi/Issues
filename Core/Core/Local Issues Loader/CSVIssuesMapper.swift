@@ -60,7 +60,8 @@ public struct CSVIssuesMapper {
     private static func columns(from dataString: String) -> [Column] {
         dataString
             .replacingOccurrences(of: "\"", with: "")
-            .split(separator: "\n")
+            .replacingOccurrences(of: "\r", with: "\n")
+            .split(separator: "\n", omittingEmptySubsequences: true)
             .map { $0.split(separator: ",").map(String.init) }
     }
     
