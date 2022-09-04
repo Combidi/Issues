@@ -20,7 +20,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     func configureWindow() {
-        let url = Bundle.main.url(forResource: "issues", withExtension: "csv")!
+        guard let url = Bundle.main.url(forResource: "issues", withExtension: "csv") else {
+            assertionFailure("File `issuses.csv` not found")
+            return
+        }
         let loader = LocalIssueLoader(fileURL: url, mapper: { try CSVIssuesMapper.map($0) })
         let issues = IssuesUIComposer.compose(withLoader: loader)
         window?.rootViewController = UINavigationController(rootViewController: issues)
