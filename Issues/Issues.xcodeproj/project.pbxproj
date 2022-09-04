@@ -106,22 +106,6 @@
 			path = "Issues UI";
 			sourceTree = "<group>";
 		};
-		D0AB950C28B56B660010B924 /* Main */ = {
-			isa = PBXGroup;
-			children = (
-				D0AB950328B55C790010B924 /* IssuesUIComposer.swift */,
-			);
-			path = Main;
-			sourceTree = "<group>";
-		};
-		D0AB950D28B56B7C0010B924 /* Main */ = {
-			isa = PBXGroup;
-			children = (
-				D08E51C928B3FE92005B4B80 /* IssuesUIIntegrationTests.swift */,
-			);
-			path = Main;
-			sourceTree = "<group>";
-		};
 		D0AC699528BD31BA0073363F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -152,8 +136,8 @@
 		D0BAC24D28B3F388001D6538 /* Issues */ = {
 			isa = PBXGroup;
 			children = (
-				D0AB950C28B56B660010B924 /* Main */,
 				D0AB94FD28B55BBC0010B924 /* Issues UI */,
+				D0AB950328B55C790010B924 /* IssuesUIComposer.swift */,
 				D0BAC24E28B3F388001D6538 /* AppDelegate.swift */,
 				D0BAC25028B3F388001D6538 /* SceneDelegate.swift */,
 				D045211D28C522F500974145 /* issues.csv */,
@@ -168,8 +152,8 @@
 			isa = PBXGroup;
 			children = (
 				D035DFDD28B69A4400003ACB /* Issues UI */,
-				D0AB950D28B56B7C0010B924 /* Main */,
 				D0B9762628C1F97C00BF60C3 /* SceneDelegateTests.swift */,
+				D08E51C928B3FE92005B4B80 /* IssuesUIIntegrationTests.swift */,
 			);
 			path = IssuesTests;
 			sourceTree = "<group>";
