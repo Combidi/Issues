@@ -5,7 +5,9 @@
 import UIKit
 import Core
 
-public enum IssuesUIComposer {
+public struct IssuesUIComposer {
+    private init() {}
+    
     public static func compose(
         withLoader loader: IssuesLoader,
         locale: Locale = .current
