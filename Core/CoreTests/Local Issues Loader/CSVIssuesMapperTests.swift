@@ -103,10 +103,10 @@ final class CSVIssuesMapperTests: XCTestCase {
     }
     
     func test_map_supportsCarriageReturnLineFeed() {
-        let dataWithCarriageReturnNewLineCharacters = Data("\"First name\",\"Sur name\",\"Issue count\",\"Date of birth\"\r\n \"Petra\",\"Boersma\",1,\"2001-04-20T00:00:00\"".utf8
+        let dataWithCarriageReturnLineFeedNewLineCharacters = Data("\"First name\",\"Sur name\",\"Issue count\",\"Date of birth\"\r\n \"Petra\",\"Boersma\",1,\"2001-04-20T00:00:00\"".utf8
         )
         
-        XCTAssertNoThrow(try CSVIssuesMapper.map(dataWithCarriageReturnNewLineCharacters))
+        XCTAssertNoThrow(try CSVIssuesMapper.map(dataWithCarriageReturnLineFeedNewLineCharacters))
     }
     
     // MARK: Helpers
