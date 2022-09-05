@@ -10,7 +10,7 @@ final class CSVIssuesMapperTests: XCTestCase {
     func test_map_throwsOnInvalidData() {
         let invalidData = Data(capacity: 1)
         
-        assertThat(try CSVIssuesMapper.map(invalidData), throws: CSVIssuesMapper.Error.invalidData)
+        assertThat(try CSVIssuesMapper.map(invalidData), throws: .invalidData)
     }
     
     func test_map_throwsOnInvalidHeaders() {
@@ -21,7 +21,7 @@ final class CSVIssuesMapperTests: XCTestCase {
             """.utf8
         )
         
-        assertThat(try CSVIssuesMapper.map(dataWithInvalidHeaders), throws: CSVIssuesMapper.Error.invalidHeaders)
+        assertThat(try CSVIssuesMapper.map(dataWithInvalidHeaders), throws: .invalidHeaders)
     }
     
     func test_map_deliversEmptyIssuesOnValidHeaderWithEmptyData() {
@@ -43,7 +43,7 @@ final class CSVIssuesMapperTests: XCTestCase {
             """.utf8
         )
 
-        assertThat(try CSVIssuesMapper.map(dataWithInvalidColumsSize), throws: CSVIssuesMapper.Error.invalidColumnSize(columnIndex: 1))
+        assertThat(try CSVIssuesMapper.map(dataWithInvalidColumsSize), throws: .invalidColumnSize(columnIndex: 1))
     }
     
     func test_map_throwsOnNonIntConvertibleIssueCount() {
@@ -54,9 +54,9 @@ final class CSVIssuesMapperTests: XCTestCase {
             """.utf8
         )
 
-        assertThat(try CSVIssuesMapper.map(dataWithInvalidColumsSize), throws: CSVIssuesMapper.Error.nonIntConvertable(columnIndex: 0, elementIndex: 2))
+        assertThat(try CSVIssuesMapper.map(dataWithInvalidColumsSize), throws: .nonIntConvertable(columnIndex: 0, elementIndex: 2))
     }
-    
+
     func test_map_validIssueDataDeliversIssues() {
         let validDataWithIssues = Data(
             """
@@ -85,20 +85,41 @@ final class CSVIssuesMapperTests: XCTestCase {
             """.utf8
         )
 
-        assertThat(try CSVIssuesMapper.map(dateWithInvalidDateFormat), throws: CSVIssuesMapper.Error.invalidDateFormat(columnIndex: 1, elementIndex: 3))
+        assertThat(try CSVIssuesMapper.map(dateWithInvalidDateFormat), throws: .invalidDateFormat(columnIndex: 1, elementIndex: 3))
     }
-
+    
+    func test_map_supportsCarriageReturn() {
+        let dataWithCarriageReturnNewLineCharacters = Data("\"First name\",\"Sur name\",\"Issue count\",\"Date of birth\"\r \"Petra\",\"Boersma\",1,\"2001-04-20T00:00:00\"".utf8
+        )
+        
+        XCTAssertNoThrow(try CSVIssuesMapper.map(dataWithCarriageReturnNewLineCharacters))
+    }
+    
+    func test_map_supportsLineFeed() {
+        let dataWithCarriageReturnNewLineCharacters = Data("\"First name\",\"Sur name\",\"Issue count\",\"Date of birth\"\n \"Petra\",\"Boersma\",1,\"2001-04-20T00:00:00\"".utf8
+        )
+        
+        XCTAssertNoThrow(try CSVIssuesMapper.map(dataWithCarriageReturnNewLineCharacters))
+    }
+    
+    func test_map_supportsCarriageReturnLineFeed() {
+        let dataWithCarriageReturnLineFeedNewLineCharacters = Data("\"First name\",\"Sur name\",\"Issue count\",\"Date of birth\"\r\n \"Petra\",\"Boersma\",1,\"2001-04-20T00:00:00\"".utf8
+        )
+        
+        XCTAssertNoThrow(try CSVIssuesMapper.map(dataWithCarriageReturnLineFeedNewLineCharacters))
+    }
+    
     // MARK: Helpers
     
-    private func assertThat<T, E: Error & Equatable>(
+    private func assertThat<T>(
         _ expression: @autoclosure () throws -> T,
-        throws error: E,
+        throws error: CSVIssuesMapper.Error,
         file: StaticString = #file,
         line: UInt = #line
     ) {
         var thrownError: Error?
         XCTAssertThrowsError(try expression(), file: file, line: line) { thrownError = $0 }
-        XCTAssertTrue(thrownError is E, "Unexpected error type: \(type(of: thrownError))", file: file, line: line)
-        XCTAssertEqual(thrownError as? E, error, file: file, line: line)
+        XCTAssertTrue(thrownError is CSVIssuesMapper.Error, "Unexpected error type: \(type(of: thrownError))", file: file, line: line)
+        XCTAssertEqual(thrownError as? CSVIssuesMapper.Error, error, file: file, line: line)
     }
 }

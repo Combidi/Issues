@@ -5,16 +5,17 @@
 import UIKit
 import Core
 
-public enum IssuesUIComposer {
+public struct IssuesUIComposer {
+    private init() {}
+    
     public static func compose(
         withLoader loader: IssuesLoader,
         locale: Locale = .current
     ) -> UIViewController {
-        let mainThreadDispatchingLoader = MainThreadDispatchingIssueLoaderDecorator(decoratee: loader)
         let viewController = IssuesViewController()
         let presenter = IssuesPresenter(
-            loader: mainThreadDispatchingLoader,
-            view: WeakRefVirtualProxy(viewController),
+            loader: loader,
+            view: MainThreadDispatchingIssueViewDecorator(decoratee: WeakRefVirtualProxy(viewController)),
             locale: locale
         )
         viewController.loadIssues = presenter.loadIssues
@@ -23,21 +24,37 @@ public enum IssuesUIComposer {
     }
 }
 
-private final class MainThreadDispatchingIssueLoaderDecorator: IssuesLoader {
-    private let decoratee: IssuesLoader
-    
-    init(decoratee: IssuesLoader) {
+private final class MainThreadDispatchingIssueViewDecorator: IssuesView {
+    private let decoratee: IssuesView
+
+    init(decoratee: IssuesView) {
         self.decoratee = decoratee
     }
+
+    func present(issues: [IssueViewModel]) {
+        dispatch {
+            self.decoratee.present(issues: issues)
+        }
+    }
+
+    func presentMessage(_ message: String?) {
+        dispatch {
+            self.decoratee.presentMessage(message)
+        }
+    }
+
+    func presentLoading(_ flag: Bool) {
+        dispatch {
+            self.decoratee.presentLoading(flag)
+        }
+    }
     
-    func loadIssues(completion: @escaping IssuesLoader.Completion) {
-        decoratee.loadIssues { result in
-            if Thread.isMainThread {
-                completion(result)
-            } else {
-                DispatchQueue.main.async {
-                    completion(result)
-                }
+    private func dispatch(_ closure: @escaping () -> Void) {
+        if Thread.isMainThread {
+            closure()
+        } else {
+            DispatchQueue.main.async {
+                closure()
             }
         }
     }

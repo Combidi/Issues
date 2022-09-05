@@ -7,12 +7,14 @@ import Foundation
 public final class IssuesPresenter {
     private let loader: IssuesLoader
     private let view: IssuesView
-    private let locale: Locale
+    private let dateFormatter: DateFormatter
     
     public init(loader: IssuesLoader, view: IssuesView, locale: Locale = .current) {
         self.loader = loader
         self.view = view
-        self.locale = locale
+        self.dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.locale = locale
     }
     
     public static var title: String {
@@ -39,11 +41,7 @@ public final class IssuesPresenter {
     }
     
     private func map(issue: Issue) -> IssueViewModel {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-        dateFormatter.locale = locale
-
-        return IssueViewModel(
+        IssueViewModel(
             name: issue.firstName + " " + issue.surname,
             amountOfIssues: String(issue.amountOfIssues),
             birthDate: dateFormatter.string(from: issue.birthDate))

@@ -3,12 +3,26 @@
 //
 
 import UIKit
+import Core
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-
     var window: UIWindow?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        guard let _ = (scene as? UIWindowScene) else { return }
+        guard let scene = (scene as? UIWindowScene) else { return }
+
+        window = UIWindow(windowScene: scene)
+        configureWindow()
+    }
+    
+    func configureWindow() {
+        guard let url = Bundle.main.url(forResource: "issues", withExtension: "csv") else {
+            assertionFailure("File `issuses.csv` not found")
+            return
+        }
+        let loader = LocalIssueLoader(fileURL: url, mapper: { try CSVIssuesMapper.map($0) })
+        let issues = IssuesUIComposer.compose(withLoader: loader)
+        window?.rootViewController = UINavigationController(rootViewController: issues)
+        window?.makeKeyAndVisible()
     }
 }

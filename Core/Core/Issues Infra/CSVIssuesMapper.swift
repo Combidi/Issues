@@ -4,7 +4,7 @@
 
 import Foundation
 
-public final class CSVIssuesMapper {
+public struct CSVIssuesMapper {
     private typealias Column = [String]
     
     public enum Error: Swift.Error, Equatable {
@@ -14,6 +14,8 @@ public final class CSVIssuesMapper {
         case nonIntConvertable(columnIndex: Int, elementIndex: Int)
         case invalidDateFormat(columnIndex: Int, elementIndex: Int)
     }
+    
+    private init() {}
     
     public static func map(_ data: Data, timeZone: TimeZone = .current) throws -> [Issue] {
         let dataString = try dataString(from: data)
@@ -58,7 +60,8 @@ public final class CSVIssuesMapper {
     private static func columns(from dataString: String) -> [Column] {
         dataString
             .replacingOccurrences(of: "\"", with: "")
-            .split(separator: "\n")
+            .replacingOccurrences(of: "\r", with: "\n")
+            .split(separator: "\n", omittingEmptySubsequences: true)
             .map { $0.split(separator: ",").map(String.init) }
     }
     
