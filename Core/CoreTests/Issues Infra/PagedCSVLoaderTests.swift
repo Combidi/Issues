@@ -23,6 +23,12 @@ final class StreamingFileReader {
 
 class StreamingFileReaderTests: XCTestCase {
 
+    override func setUp() {
+        super.setUp()
+        
+        removeTestData()
+    }
+    
     override func tearDown() {
         super.tearDown()
         
