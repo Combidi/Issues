@@ -29,16 +29,14 @@ class StreamingFileReaderTests: XCTestCase {
     }
     
     func test_readNextLine_deliverErrorOnMissingFile() {
-        let fileURL = testSpecificFileURL()
-        let sut = StreamingFileReader(fileURL: fileURL)
+        let sut = makeSUT()
 
         XCTAssertThrowsError(try sut.readNextLine())
     }
     
     func test_readNextLine_returnsFirstLine() throws {
         let testData = Data("first\nsecond\nthird\nfourth".utf8)
-        let fileURL = testSpecificFileURL()
-        let sut = StreamingFileReader(fileURL: fileURL)
+        let sut = makeSUT()
         inject(testData: testData)
         
         let result = try sut.readNextLine()
@@ -47,6 +45,11 @@ class StreamingFileReaderTests: XCTestCase {
     }
     
     // MARK: Helpers
+    private func makeSUT() -> StreamingFileReader {
+        let fileURL = testSpecificFileURL()
+        let sut = StreamingFileReader(fileURL: fileURL)
+        return sut
+    }
     
     private func testSpecificFileURL() -> URL {
         return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("\(type(of: self)).txt")
