@@ -21,7 +21,7 @@ final class StreamingFileReader {
 }
 
 class StreamingFileReaderTests: XCTestCase {
-    
+
     override func tearDown() {
         super.tearDown()
         
@@ -29,9 +29,7 @@ class StreamingFileReaderTests: XCTestCase {
     }
     
     func test_readNextLine_deliverErrorOnMissingFile() {
-        let sut = makeSUT()
-
-        XCTAssertThrowsError(try sut.readNextLine())
+        XCTAssertThrowsError(try makeSUT().readNextLine())
     }
     
     func test_readNextLine_returnsFirstLine() throws {
