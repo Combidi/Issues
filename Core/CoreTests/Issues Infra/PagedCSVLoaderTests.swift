@@ -11,8 +11,9 @@ final class StreamingFileReader {
         self.fileURL = fileURL
     }
     
-    func readNextLine() throws -> String {
+    func readNextLine() throws -> String? {
         let data = try Data(contentsOf: fileURL)
+        if data.isEmpty { return nil }
         let rangeOfDelimiter = data.range(of: "\n".data(using: .utf8)!)
         let rangeOfFirstLine = 0 ..< rangeOfDelimiter!.lowerBound
         let firstLine = String(data: data.subdata(in: rangeOfFirstLine), encoding: .utf8)
@@ -32,6 +33,13 @@ class StreamingFileReaderTests: XCTestCase {
         XCTAssertThrowsError(try makeSUT().readNextLine())
     }
     
+    func test_readNextLine_deliversNilOnEmptyData() {
+        let emptyData = Data()
+        inject(testData: emptyData)
+        
+        XCTAssertNil(try makeSUT().readNextLine())
+    }
+    
     func test_readNextLine_returnsFirstLine() throws {
         let testData = Data("first\nsecond\nthird\nfourth".utf8)
         let sut = makeSUT()
@@ -43,6 +51,7 @@ class StreamingFileReaderTests: XCTestCase {
     }
     
     // MARK: Helpers
+    
     private func makeSUT() -> StreamingFileReader {
         let fileURL = testSpecificFileURL()
         let sut = StreamingFileReader(fileURL: fileURL)
