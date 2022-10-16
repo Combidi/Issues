@@ -22,6 +22,12 @@ final class StreamingFileReader {
 
 class StreamingFileReaderTests: XCTestCase {
     
+    override func tearDown() {
+        super.tearDown()
+        
+        removeTestData()
+    }
+    
     func test_readNextLine_deliverErrorOnMissingFile() {
         let fileURL = testSpecificFileURL()
         let sut = StreamingFileReader(fileURL: fileURL)
@@ -30,7 +36,6 @@ class StreamingFileReaderTests: XCTestCase {
     }
     
     func test_readNextLine_returnsFirstLine() throws {
-        
         let testData = Data("first\nsecond\nthird\nfourth".utf8)
         let fileURL = testSpecificFileURL()
         let sut = StreamingFileReader(fileURL: fileURL)
@@ -39,7 +44,6 @@ class StreamingFileReaderTests: XCTestCase {
         let result = try sut.readNextLine()
         
         XCTAssertEqual(result, "first")
-        removeTestData()
     }
     
     // MARK: Helpers
