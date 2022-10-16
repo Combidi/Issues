@@ -32,6 +32,7 @@ class StreamingFileReaderTests: XCTestCase {
         let result = sut.readNextLine()
         
         XCTAssertEqual(result, "first")
+        removeTestData()
     }
     
     // MARK: Helpers
@@ -41,6 +42,10 @@ class StreamingFileReaderTests: XCTestCase {
     }
     
     private func inject(testData: Data) {
-        try! testData.write(to: testSpecificFileURL())
+        try? testData.write(to: testSpecificFileURL())
+    }
+    
+    private func removeTestData() {
+        try? FileManager.default.removeItem(at: testSpecificFileURL())
     }
 }
