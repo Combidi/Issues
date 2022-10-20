@@ -24,18 +24,18 @@ final class StreamingFileReader {
 
     func readNextLine() -> String? {
         repeat {
-            if let range = buffer.range(of: delimiter, in: buffer.startIndex..<buffer.endIndex) {
-                let chunk = buffer.subdata(in: buffer.startIndex..<range.lowerBound)
-                let line = String(data: chunk, encoding: .utf8)
-                buffer.replaceSubrange(buffer.startIndex..<range.upperBound, with: [])
+            if let rangeOfDelimiter = buffer.range(of: delimiter, in: buffer.startIndex..<buffer.endIndex) {
+                let dataBeforeDelimiter = buffer.subdata(in: buffer.startIndex..<rangeOfDelimiter.lowerBound)
+                let line = String(data: dataBeforeDelimiter, encoding: .utf8)
+                buffer.replaceSubrange(buffer.startIndex..<rangeOfDelimiter.upperBound, with: [])
                 return line
             } else {
-                let temp = fileHandle.readData(ofLength: chunkSize)
-                if temp.count == 0 {
+                let nextChunk = fileHandle.readData(ofLength: chunkSize)
+                if nextChunk.count == 0 {
                     defer { buffer.count = 0 }
                     return (buffer.count > 0) ? String(data: buffer, encoding: .utf8) : nil
                 }
-                buffer.append(temp)
+                buffer.append(nextChunk)
             }
         } while true
     }
