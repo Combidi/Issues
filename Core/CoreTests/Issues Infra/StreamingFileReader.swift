@@ -19,31 +19,25 @@ final class StreamingFileReader {
         self.delimiter = Data(delimiter.rawValue.utf8)
     }
     
-    private let bufferSize: Int = 10
+    private let chunkSize: Int = 10
     private var buffer = Data()
 
     func readNextLine() -> String? {
-        var rangeOfDelimiter = buffer.range(of: delimiter)
-        while rangeOfDelimiter == nil {
-            let chunk = fileHandle.readData(ofLength: bufferSize)
-            if chunk.count == 0 {
-                if buffer.count > 0 {
-                    defer { buffer.count = 0 }
-                    return String(data: buffer, encoding: .utf8)
-                }
-                return nil
+        repeat {
+            if let range = buffer.range(of: delimiter, in: buffer.startIndex..<buffer.endIndex) {
+                let chunk = buffer.subdata(in: buffer.startIndex..<range.lowerBound)
+                let line = String(data: chunk, encoding: .utf8)
+                buffer.replaceSubrange(buffer.startIndex..<range.upperBound, with: [])
+                return line
             } else {
-                buffer.append(chunk)
-                rangeOfDelimiter = buffer.range(of: delimiter)
+                let temp = fileHandle.readData(ofLength: chunkSize)
+                if temp.count == 0 {
+                    defer { buffer.count = 0 }
+                    return (buffer.count > 0) ? String(data: buffer, encoding: .utf8) : nil
+                }
+                buffer.append(temp)
             }
-        }
-            
-        let rangeOfLine = 0 ..< rangeOfDelimiter!.upperBound
-        let line = String(data: buffer.subdata(in: rangeOfLine), encoding: .utf8)
-        
-        buffer.removeSubrange(rangeOfLine)
-        
-        return line?.trimmingCharacters(in: .whitespacesAndNewlines)
+        } while true
     }
 }
 
