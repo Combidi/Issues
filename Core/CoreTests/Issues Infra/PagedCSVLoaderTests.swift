@@ -77,7 +77,7 @@ class StreamingFileReaderTests: XCTestCase {
         XCTAssertEqual(result, "first")
     }
     
-    func test_readNextLineTwice_returnsFirstAndSecondLine() throws {
+    func test_readNextLine_returnsNewLineUntilReachingEndOfFile() throws {
         let testData = Data("first\nsecond\nthird\nfourth".utf8)
         inject(testData: testData)
         let sut = makeSUT()
