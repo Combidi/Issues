@@ -4,41 +4,46 @@
 
 import XCTest
 
+enum Delimiter: String {
+    case carriageReturn = "\r"
+    case lineFeed = "\n"
+    case endOfLine = "\r\n"
+}
+
 final class StreamingFileReader {
     private let fileHandle: FileHandle
+    private let delimiter: Data
 
-    let bufferSize: Int = 10
-
-    let delimiter = "\n".data(using: .utf8)!
-
-    init(fileURL: URL) throws {
+    init(fileURL: URL, delimiter: Delimiter) throws {
         self.fileHandle = try FileHandle(forReadingFrom: fileURL)
+        self.delimiter = Data(delimiter.rawValue.utf8)
     }
     
+    private let bufferSize: Int = 10
     private var buffer = Data()
 
     func readNextLine() -> String? {
         var rangeOfDelimiter = buffer.range(of: delimiter)
-            while rangeOfDelimiter == nil {
-                let chunk = fileHandle.readData(ofLength: bufferSize)
-                if chunk.count == 0 {
-                    if buffer.count > 0 {
-                        defer { buffer.count = 0 }
-                        return String(data: buffer, encoding: .utf8)
-                    }
-                    return nil
-                } else {
-                    buffer.append(chunk)
-                    rangeOfDelimiter = buffer.range(of: delimiter)
+        while rangeOfDelimiter == nil {
+            let chunk = fileHandle.readData(ofLength: bufferSize)
+            if chunk.count == 0 {
+                if buffer.count > 0 {
+                    defer { buffer.count = 0 }
+                    return String(data: buffer, encoding: .utf8)
                 }
+                return nil
+            } else {
+                buffer.append(chunk)
+                rangeOfDelimiter = buffer.range(of: delimiter)
             }
-                
-            let rangeOfLine = 0 ..< rangeOfDelimiter!.upperBound
-            let line = String(data: buffer.subdata(in: rangeOfLine), encoding: .utf8)
+        }
             
-            buffer.removeSubrange(rangeOfLine)
-            
-            return line?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let rangeOfLine = 0 ..< rangeOfDelimiter!.upperBound
+        let line = String(data: buffer.subdata(in: rangeOfLine), encoding: .utf8)
+        
+        buffer.removeSubrange(rangeOfLine)
+        
+        return line?.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }
 
@@ -57,7 +62,7 @@ class StreamingFileReaderTests: XCTestCase {
     }
     
     func test_throwsOnMissingFile_deliverErrorOnMissingFile() {
-        XCTAssertThrowsError(try StreamingFileReader(fileURL: testSpecificFileURL()))
+        XCTAssertThrowsError(try StreamingFileReader(fileURL: testSpecificFileURL(), delimiter: .lineFeed))
     }
     
     func test_readNextLine_deliversNilOnEmptyData() {
@@ -77,6 +82,22 @@ class StreamingFileReaderTests: XCTestCase {
         XCTAssertEqual(result, "first")
     }
     
+    func test_readNextLine_worksWithAllNewLineCharacters() throws {
+        
+        let delimiters: [Delimiter] = [.carriageReturn, .lineFeed, .endOfLine]
+                
+        delimiters.forEach { delimiter in
+
+            let testData = Data(["first", "second"].joined(separator: delimiter.rawValue).utf8)
+            inject(testData: testData)
+            let sut = makeSUT(delimiter: delimiter)
+
+            let result = sut.readNextLine()
+
+            XCTAssertEqual(result, "first")
+        }
+    }
+    
     func test_readNextLine_returnsNewLineUntilReachingEndOfFile() throws {
         let testData = Data("first\nsecond\nthird\nfourth".utf8)
         inject(testData: testData)
@@ -92,9 +113,9 @@ class StreamingFileReaderTests: XCTestCase {
     
     // MARK: Helpers
     
-    private func makeSUT() -> StreamingFileReader {
+    private func makeSUT(delimiter: Delimiter = .lineFeed) -> StreamingFileReader {
         let fileURL = testSpecificFileURL()
-        let sut = try! StreamingFileReader(fileURL: fileURL)
+        let sut = try! StreamingFileReader(fileURL: fileURL, delimiter: delimiter)
         return sut
     }
     
