@@ -4,13 +4,13 @@
 
 import XCTest
 
-enum Delimiter: String {
-    case carriageReturn = "\r"
-    case lineFeed = "\n"
-    case endOfLine = "\r\n"
-}
-
 final class StreamingFileReader {
+    enum Delimiter: String {
+        case carriageReturn = "\r"
+        case lineFeed = "\n"
+        case endOfLine = "\r\n"
+    }
+
     private let fileHandle: FileHandle
     private let delimiter: Data
 
@@ -83,11 +83,9 @@ class StreamingFileReaderTests: XCTestCase {
     }
     
     func test_readNextLine_worksWithAllNewLineCharacters() throws {
-        
-        let delimiters: [Delimiter] = [.carriageReturn, .lineFeed, .endOfLine]
+        let delimiters: [StreamingFileReader.Delimiter] = [.carriageReturn, .lineFeed, .endOfLine]
                 
         delimiters.forEach { delimiter in
-
             let testData = Data(["first", "second"].joined(separator: delimiter.rawValue).utf8)
             inject(testData: testData)
             let sut = makeSUT(delimiter: delimiter)
@@ -113,7 +111,7 @@ class StreamingFileReaderTests: XCTestCase {
     
     // MARK: Helpers
     
-    private func makeSUT(delimiter: Delimiter = .lineFeed) -> StreamingFileReader {
+    private func makeSUT(delimiter: StreamingFileReader.Delimiter = .lineFeed) -> StreamingFileReader {
         let fileURL = testSpecificFileURL()
         let sut = try! StreamingFileReader(fileURL: fileURL, delimiter: delimiter)
         return sut
