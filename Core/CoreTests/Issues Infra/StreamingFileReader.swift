@@ -3,43 +3,7 @@
 //
 
 import XCTest
-
-final class StreamingFileReader {
-    enum Delimiter: String {
-        case carriageReturn = "\r"
-        case lineFeed = "\n"
-        case endOfLine = "\r\n"
-    }
-
-    private let fileHandle: FileHandle
-    private let delimiter: Data
-
-    init(fileURL: URL, delimiter: Delimiter) throws {
-        self.fileHandle = try FileHandle(forReadingFrom: fileURL)
-        self.delimiter = Data(delimiter.rawValue.utf8)
-    }
-    
-    private let chunkSize: Int = 10
-    private var buffer = Data()
-
-    func readNextLine() -> String? {
-        repeat {
-            if let rangeOfDelimiter = buffer.range(of: delimiter, in: buffer.startIndex..<buffer.endIndex) {
-                let dataBeforeDelimiter = buffer.subdata(in: buffer.startIndex..<rangeOfDelimiter.lowerBound)
-                let line = String(data: dataBeforeDelimiter, encoding: .utf8)
-                buffer.replaceSubrange(buffer.startIndex..<rangeOfDelimiter.upperBound, with: [])
-                return line
-            } else {
-                let nextChunk = fileHandle.readData(ofLength: chunkSize)
-                if nextChunk.count == 0 {
-                    defer { buffer.count = 0 }
-                    return (buffer.count > 0) ? String(data: buffer, encoding: .utf8) : nil
-                }
-                buffer.append(nextChunk)
-            }
-        } while true
-    }
-}
+import Core
 
 class StreamingFileReaderTests: XCTestCase {
 
