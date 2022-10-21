@@ -13,9 +13,9 @@ final class IssuesSnapshotTests: XCTestCase {
         
         sut.present(issues: issuesWithContent())
     
-        assert(snapshot: sut.snapshot(for: .iPhone13(style: .light)), named: "ISSUES_WITH_CONTENT_light")
-        assert(snapshot: sut.snapshot(for: .iPhone13(style: .dark)), named: "ISSUES_WITH_CONTENT_dark")
-        assert(snapshot: sut.snapshot(for: .iPhone13(style: .light, contentSize: .extraExtraExtraLarge)), named: "ISSUES_WITH_CONTENT_light_extraExtraExtraLarge")
+        assert(snapshot: sut.snapshot(for: .iPhone14(style: .light)), named: "ISSUES_WITH_CONTENT_light")
+        assert(snapshot: sut.snapshot(for: .iPhone14(style: .dark)), named: "ISSUES_WITH_CONTENT_dark")
+        assert(snapshot: sut.snapshot(for: .iPhone14(style: .light, contentSize: .extraExtraExtraLarge)), named: "ISSUES_WITH_CONTENT_light_extraExtraExtraLarge")
     }
     
     func test_loading() {
@@ -23,8 +23,8 @@ final class IssuesSnapshotTests: XCTestCase {
         
         sut.presentLoading(true)
     
-        assert(snapshot: sut.snapshot(for: .iPhone13(style: .light)), named: "ISSUES_LOADING_light")
-        assert(snapshot: sut.snapshot(for: .iPhone13(style: .dark)), named: "ISSUES_LOADING_dark")
+        assert(snapshot: sut.snapshot(for: .iPhone14(style: .light)), named: "ISSUES_LOADING_light")
+        assert(snapshot: sut.snapshot(for: .iPhone14(style: .dark)), named: "ISSUES_LOADING_dark")
     }
 
     func test_withError() {
@@ -32,9 +32,9 @@ final class IssuesSnapshotTests: XCTestCase {
         
         sut.presentMessage("A message")
         
-        assert(snapshot: sut.snapshot(for: .iPhone13(style: .light)), named: "ISSUES_WITH_ERROR_light")
-        assert(snapshot: sut.snapshot(for: .iPhone13(style: .dark)), named: "ISSUES_WITH_ERROR_dark")
-        assert(snapshot: sut.snapshot(for: .iPhone13(style: .light, contentSize: .extraSmall)), named: "ISSUES_WITH_ERROR_light_extraSmall")
+        assert(snapshot: sut.snapshot(for: .iPhone14(style: .light)), named: "ISSUES_WITH_ERROR_light")
+        assert(snapshot: sut.snapshot(for: .iPhone14(style: .dark)), named: "ISSUES_WITH_ERROR_dark")
+        assert(snapshot: sut.snapshot(for: .iPhone14(style: .light, contentSize: .extraSmall)), named: "ISSUES_WITH_ERROR_light_extraSmall")
     }
     
     // MARK: Helpers
@@ -122,7 +122,7 @@ struct SnapshotConfiguration {
     let layoutMargins: UIEdgeInsets
     let traitCollection: UITraitCollection
     
-    static func iPhone13(style: UIUserInterfaceStyle, contentSize: UIContentSizeCategory = .medium) -> SnapshotConfiguration {
+    static func iPhone14(style: UIUserInterfaceStyle, contentSize: UIContentSizeCategory = .medium) -> SnapshotConfiguration {
         return SnapshotConfiguration(
             size: CGSize(width: 390, height: 844),
             safeAreaInsets: UIEdgeInsets(top: 47, left: 0, bottom: 34, right: 0),
@@ -144,7 +144,7 @@ struct SnapshotConfiguration {
 }
 
 private final class SnapshotWindow: UIWindow {
-    private var configuration: SnapshotConfiguration = .iPhone13(style: .light)
+    private var configuration: SnapshotConfiguration = .iPhone14(style: .light)
 
     convenience init(configuration: SnapshotConfiguration, root: UIViewController) {
         self.init(frame: CGRect(origin: .zero, size: configuration.size))
