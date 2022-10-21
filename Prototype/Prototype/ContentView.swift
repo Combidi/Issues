@@ -5,38 +5,30 @@
 import SwiftUI
 
 struct ContentView: View {
-    
-    @State private var sheetPresented = false
-    
+        
     var body: some View {
         NavigationView {
             List {
-                ForEach(sampleFiles, id: \.self) { file in
-                    NavigationLink(destination: IssuesView(filename: file)) {
-                        Text(file)
-                            .foregroundColor(.secondary)
+                NavigationLink(destination: IssuesView(filename: "exampls.cvs")) {
+                    HStack {
+                        Image(systemName: "folder.fill")
+                        Text("Local")
                     }
+                    .foregroundColor(.primary)
+                }
+                NavigationLink(destination: IssuesView(filename: "http://example.issues.com")) {
+                    HStack {
+                        Image(systemName: "network")
+                        Text("From API")
+                    }
+                    .foregroundColor(.primary)
                 }
             }
-            .toolbar {
-                Button(action: { sheetPresented = true }) {
-                    Text("Add")
-                }
-            }
-            .navigationTitle("Files")
+            .navigationTitle("Issues")
             .navigationBarTitleDisplayMode(.inline)
-            
-            .sheet(isPresented: $sheetPresented) {
-                NavigationView {
-                    Text("Document picker")
-                        .navigationTitle("Files")
-                        .navigationBarTitleDisplayMode(.inline)
-                }
-            }
+            .listStyle(.grouped)
         }
     }
-    
-    private let sampleFiles = ["exampls.cvs", "another.csv", "random.scv"]
 }
 
 struct IssuesView: View {
@@ -51,30 +43,53 @@ struct IssuesView: View {
                         Text(issue.firstName + " " + issue.surname).font(.headline)
                             .foregroundColor(.primary)
                         Spacer()
-                        Text(issue.birthDate)
+                        Text(issue.date)
                             .foregroundColor(.secondary)
                     }
-                    Text("Issues: " + issue.issueCount)
-                        .font(.subheadline)
-                    
+                    Text(issue.message)
                 }
+                .foregroundColor(.secondary)
+                .font(.subheadline)
                 .padding(.vertical, 10)
             }
         }
+        .listStyle(.grouped)
         .navigationTitle(filename)
     }
-    
+        
     private let sampleIssues = [
-        Issue(firstName: "Peter", surname: "Combee", issueCount: "12", birthDate: "24 dec. 1990"),
-        Issue(firstName: "Luna", surname: "Combee", issueCount: "1", birthDate: "2 dec. 2010")
+        Issue(
+            firstName: "Peter",
+            surname: "Combee",
+            message: "TV does not work anymore",
+            date: "24 dec"
+        ),
+        Issue(
+            firstName: "Luna",
+            surname: "Combee",
+            message: "Dropped my phone",
+            date: "03 apr"
+        ),
+        Issue(
+            firstName: "Anke",
+            surname: "Combee",
+            message: "Crashed my car",
+            date: "02 jan"
+        )
     ]
+}
+
+enum Status: String {
+    case new
+    case pending
+    case closed
 }
 
 struct Issue {
     let firstName: String
     let surname: String
-    let issueCount: String
-    let birthDate: String
+    let message: String
+    let date: String
 }
 
 struct ContentView_Previews: PreviewProvider {
