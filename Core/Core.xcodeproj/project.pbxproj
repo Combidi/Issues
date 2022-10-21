@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D004B55B28FBFE2C00AAACE3 /* StreamingFileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D004B55A28FBFE2C00AAACE3 /* StreamingFileReader.swift */; };
+		D004B55D2901DBC800AAACE3 /* StreamingFileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D004B55C2901DBC800AAACE3 /* StreamingFileReader.swift */; };
 		D01984D528BE92DF00930C71 /* CSVIssuesMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01984D428BE92DF00930C71 /* CSVIssuesMapperTests.swift */; };
 		D0AC698128BD30E00073363F /* Core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0AC697828BD30E00073363F /* Core.framework */; };
 		D0AC699228BD31760073363F /* Issue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AC699128BD31760073363F /* Issue.swift */; };
@@ -33,6 +35,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D004B55A28FBFE2C00AAACE3 /* StreamingFileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingFileReader.swift; sourceTree = "<group>"; };
+		D004B55C2901DBC800AAACE3 /* StreamingFileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingFileReader.swift; sourceTree = "<group>"; };
 		D01984D428BE92DF00930C71 /* CSVIssuesMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVIssuesMapperTests.swift; sourceTree = "<group>"; };
 		D0AC697828BD30E00073363F /* Core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0AC698028BD30E00073363F /* CoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -140,6 +144,7 @@
 			children = (
 				D0F0F99428C0B8D00030ED02 /* CSVIssuesMapper.swift */,
 				D0B9762228C1D45F00BF60C3 /* LocalIssueLoader.swift */,
+				D004B55C2901DBC800AAACE3 /* StreamingFileReader.swift */,
 			);
 			path = "Issues Infra";
 			sourceTree = "<group>";
@@ -149,6 +154,7 @@
 			children = (
 				D01984D428BE92DF00930C71 /* CSVIssuesMapperTests.swift */,
 				D0B9762428C1D49500BF60C3 /* LocalIssueLoaderTests.swift */,
+				D004B55A28FBFE2C00AAACE3 /* StreamingFileReader.swift */,
 			);
 			path = "Issues Infra";
 			sourceTree = "<group>";
@@ -265,6 +271,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0AC69A628BD55BA0073363F /* IssuesPresenter.swift in Sources */,
+				D004B55D2901DBC800AAACE3 /* StreamingFileReader.swift in Sources */,
 				D0AC69A828BD561E0073363F /* IssuesView.swift in Sources */,
 				D0AC699428BD31930073363F /* IssuesLoader.swift in Sources */,
 				D0AC69A028BD365E0073363F /* IssueViewModel.swift in Sources */,
@@ -279,6 +286,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0B9762528C1D49500BF60C3 /* LocalIssueLoaderTests.swift in Sources */,
+				D004B55B28FBFE2C00AAACE3 /* StreamingFileReader.swift in Sources */,
 				D0AC69B028BD580C0073363F /* IssuesLocalizationTests.swift in Sources */,
 				D0AC699D28BD32280073363F /* IssuesPresenterTests.swift in Sources */,
 				D01984D528BE92DF00930C71 /* CSVIssuesMapperTests.swift in Sources */,
