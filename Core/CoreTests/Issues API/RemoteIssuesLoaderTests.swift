@@ -33,7 +33,8 @@ final class RemoteIssuesLoader {
         
     private struct Issues: Decodable {
         struct Customer: Decodable {
-            let name: String
+            let first_name: String
+            let last_name: String
         }
         
         struct Message: Decodable {
@@ -50,10 +51,9 @@ final class RemoteIssuesLoader {
         
         func toDomain() -> [Issue] {
             issues.map {
-                let nameComponents = $0.customer.name.components(separatedBy: .whitespaces)
                 return Issue(
-                    firstName: nameComponents.first!,
-                    surname: nameComponents.last!,
+                    firstName: $0.customer.first_name,
+                    surname: $0.customer.last_name,
                     submissionDate: $0.created_at,
                     subject: $0.message.subject
                 )
@@ -147,7 +147,8 @@ class RemoteIssuesLoaderTests: XCTestCase {
             "issues": [
                 {
                     "customer": {
-                        "name": "Peter Combee"
+                        "first_name": "Peter",
+                        "last_name": "Combee"
                     },
                     "created_at": "2020-08-28T15:07:02+00:00",
                     "message": {
@@ -156,7 +157,8 @@ class RemoteIssuesLoaderTests: XCTestCase {
                 },
                 {
                     "customer": {
-                        "name": "Luna Combee"
+                        "first_name": "Luna",
+                        "last_name": "Combee"
                     },
                     "created_at": "2020-01-01T12:31:22+00:00",
                     "message": {
@@ -177,7 +179,7 @@ class RemoteIssuesLoaderTests: XCTestCase {
         
         XCTAssertEqual(try sut.loadIssues(), expected)
     }
-    
+
     // MARK: Helpers
     
     private func makeSUT(url: URL? = nil) -> (sut: RemoteIssuesLoader, client: Client) {
