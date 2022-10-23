@@ -23,6 +23,7 @@
 		D0B9762528C1D49500BF60C3 /* LocalIssueLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B9762428C1D49500BF60C3 /* LocalIssueLoaderTests.swift */; };
 		D0EF8DD229050E2A00661505 /* RemoteIssuesLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EF8DD129050E2A00661505 /* RemoteIssuesLoaderTests.swift */; };
 		D0EF8DD92905AF5700661505 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EF8DD82905AF5700661505 /* HTTPClient.swift */; };
+		D0EF8DDB2905AF9300661505 /* RemoteIssuesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EF8DDA2905AF9300661505 /* RemoteIssuesLoader.swift */; };
 		D0F0F99528C0B8D00030ED02 /* CSVIssuesMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F0F99428C0B8D00030ED02 /* CSVIssuesMapper.swift */; };
 /* End PBXBuildFile section */
 
@@ -55,6 +56,7 @@
 		D0B9762428C1D49500BF60C3 /* LocalIssueLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalIssueLoaderTests.swift; sourceTree = "<group>"; };
 		D0EF8DD129050E2A00661505 /* RemoteIssuesLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteIssuesLoaderTests.swift; sourceTree = "<group>"; };
 		D0EF8DD82905AF5700661505 /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
+		D0EF8DDA2905AF9300661505 /* RemoteIssuesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteIssuesLoader.swift; sourceTree = "<group>"; };
 		D0F0F99428C0B8D00030ED02 /* CSVIssuesMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVIssuesMapper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -157,6 +159,7 @@
 			isa = PBXGroup;
 			children = (
 				D0EF8DD82905AF5700661505 /* HTTPClient.swift */,
+				D0EF8DDA2905AF9300661505 /* RemoteIssuesLoader.swift */,
 			);
 			path = "Issues API";
 			sourceTree = "<group>";
@@ -298,6 +301,7 @@
 				D0AC699428BD31930073363F /* IssuesLoader.swift in Sources */,
 				D0AC69A028BD365E0073363F /* IssueViewModel.swift in Sources */,
 				D0EF8DD92905AF5700661505 /* HTTPClient.swift in Sources */,
+				D0EF8DDB2905AF9300661505 /* RemoteIssuesLoader.swift in Sources */,
 				D0F0F99528C0B8D00030ED02 /* CSVIssuesMapper.swift in Sources */,
 				D0AC699228BD31760073363F /* Issue.swift in Sources */,
 				D0B9762328C1D45F00BF60C3 /* LocalIssueLoader.swift in Sources */,
