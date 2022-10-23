@@ -6,6 +6,6 @@ import UIKit
 
 public final class IssueCell: UITableViewCell {
     @IBOutlet public private(set) var nameLabel: UILabel!
-    @IBOutlet public private(set) var issueCountLabel: UILabel!
-    @IBOutlet public private(set) var birthDateLabel: UILabel!
+    @IBOutlet public private(set) var subjectLabel: UILabel!
+    @IBOutlet public private(set) var submissionDateLabel: UILabel!
 }

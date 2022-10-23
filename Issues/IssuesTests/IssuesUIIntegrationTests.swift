@@ -26,8 +26,8 @@ final class IssuesUIIntegrationTests: XCTestCase {
     }
     
     func test_loadIssuesCompletion_rendersSuccessfullyLoadedIssues() {
-        let issue0 = Issue(firstName: "Peter", surname: "Combee", amountOfIssues: 2, birthDate: Date(timeIntervalSince1970: 662072400))
-        let issue1 = Issue(firstName: "Luna", surname: "Combee", amountOfIssues: 1, birthDate: Date(timeIntervalSince1970: 720220087))
+        let issue0 = Issue(firstName: "Peter", surname: "Combee", submissionDate: Date(timeIntervalSince1970: 662072400), subject: "Phone charger is missing")
+        let issue1 = Issue(firstName: "Luna", surname: "Combee", submissionDate: Date(timeIntervalSince1970: 720220087), subject: "My game controller is broken")
         let (sut, loader) = makeSUT(locale: Locale(identifier: "NL"))
         
         sut.loadViewIfNeeded()
@@ -39,12 +39,12 @@ final class IssuesUIIntegrationTests: XCTestCase {
         XCTAssertEqual(sut.numberOfRenderedIssueViews(), 2)
         
         XCTAssertEqual(sut.renderedName(atIndex: 0), "Peter Combee")
-        XCTAssertEqual(sut.renderedIssueCount(atIndex: 0), "2")
-        XCTAssertEqual(sut.renderedBirthDate(atIndex: 0), "24 dec. 1990")
+        XCTAssertEqual(sut.renderedSubject(atIndex: 0), "Phone charger is missing")
+        XCTAssertEqual(sut.renderedSubmissionDate(atIndex: 0), "24 dec. 1990")
 
         XCTAssertEqual(sut.renderedName(atIndex: 1), "Luna Combee")
-        XCTAssertEqual(sut.renderedIssueCount(atIndex: 1), "1")
-        XCTAssertEqual(sut.renderedBirthDate(atIndex: 1), "27 okt. 1992")
+        XCTAssertEqual(sut.renderedSubject(atIndex: 1), "My game controller is broken")
+        XCTAssertEqual(sut.renderedSubmissionDate(atIndex: 1), "27 okt. 1992")
     }
 
     func test_loadingIssuesIndicator_isVisibleWhileLoadingIssues_success() {
@@ -122,12 +122,12 @@ private extension IssuesViewController {
         issueView(atIndex: index)?.nameLabel.text
     }
     
-    func renderedIssueCount(atIndex index: Int = 0) -> String? {
-        issueView(atIndex: index)?.issueCountLabel.text
+    func renderedSubject(atIndex index: Int = 0) -> String? {
+        issueView(atIndex: index)?.subjectLabel.text
     }
 
-    func renderedBirthDate(atIndex index: Int = 0) -> String? {
-        issueView(atIndex: index)?.birthDateLabel.text
+    func renderedSubmissionDate(atIndex index: Int = 0) -> String? {
+        issueView(atIndex: index)?.submissionDateLabel.text
     }
     
     private func issueView(atIndex index: Int = 0) -> IssueCell? {

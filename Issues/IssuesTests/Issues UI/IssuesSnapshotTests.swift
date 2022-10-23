@@ -43,13 +43,13 @@ final class IssuesSnapshotTests: XCTestCase {
         [
             IssueViewModel(
                 name: "a name",
-                amountOfIssues: "10",
-                birthDate: "24-12-1990"
+                submissionDate: "24-12-1990",
+                subject: "a subject"
             ),
             IssueViewModel(
                 name: "a realy realy realy realy long name",
-                amountOfIssues: "11",
-                birthDate: "23-11-1991"
+                submissionDate: "23-11-1991",
+                subject: "a multi-line\nsubject"
             )
         ]
     }

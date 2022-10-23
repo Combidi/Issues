@@ -14,7 +14,7 @@ final class LocalIssueLoaderTests: XCTestCase {
         
         assertThat(sut, completesWithError: mapperError)
     }
-
+    
     func test_loadIssues_deliversErrorOnMissingFile() {
         let sut = makeSUT()
         removeTestFile()
@@ -120,9 +120,9 @@ final class LocalIssueLoaderTests: XCTestCase {
     
     private func sampleIssues() -> [Issue] {
         [
-            Issue(firstName: "Theo", surname: "Jansen", amountOfIssues: 5, birthDate: Date(timeIntervalSince1970: 252543600)),
-            Issue(firstName: "Fiona", surname: "de Vries", amountOfIssues: 7, birthDate: Date(timeIntervalSince1970: -603939600)),
-            Issue(firstName: "Petra", surname: "Boersma", amountOfIssues: 1, birthDate: Date(timeIntervalSince1970: 987717600)),
+            Issue(firstName: "Theo", surname: "Jansen", submissionDate: Date(timeIntervalSince1970: 252543600), subject: "My television is broken"),
+            Issue(firstName: "Fiona", surname: "de Vries", submissionDate: Date(timeIntervalSince1970: -603939600), subject: "Can't find my shoes"),
+            Issue(firstName: "Petra", surname: "Boersma", submissionDate: Date(timeIntervalSince1970: 987717600), subject: "Dropped my phone"),
         ]
     }
     
