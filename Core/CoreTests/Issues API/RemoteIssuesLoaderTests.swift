@@ -13,39 +13,56 @@ final class RemoteIssuesLoader {
         self.url = url
     }
     
-    func loadIssues() {
-        client.get(from: url)
+    func loadIssues() throws {
+        try client.get(from: url)
     }
 }
 
 final class Client {
     var loadedURLs = [URL]()
+    var stub: Error?
     
-    func get(from url: URL) {
+    init(stub: Error? = nil) {
+        self.stub = stub
+    }
+    
+    func get(from url: URL) throws {
         loadedURLs.append(url)
+        if let stub {
+            throw stub
+        }
     }
 }
 
 class RemoteIssuesLoaderTests: XCTestCase {
     
-    func test_loadIssues_requestsIssuesFromClient() {
+    func test_loadIssues_requestsIssuesFromClient() throws {
         let url = URL(string: "https://a-url.com")!
         let client = Client()
         let sut = RemoteIssuesLoader(client: client, url: url)
         
-        sut.loadIssues()
+        try sut.loadIssues()
         
         XCTAssertEqual(client.loadedURLs, [url])
     }
     
-    func test_loadIssuesTwice_requestsIssuesFromClientTwice() {
+    func test_loadIssuesTwice_requestsIssuesFromClientTwice() throws {
         let url = URL(string: "https://a-url.com")!
         let client = Client()
         let sut = RemoteIssuesLoader(client: client, url: url)
         
-        sut.loadIssues()
-        sut.loadIssues()
+        try sut.loadIssues()
+        try sut.loadIssues()
         
         XCTAssertEqual(client.loadedURLs, [url, url])
+    }
+    
+    func test_loadIssues_deliversErrorOnClientError() {
+        let anyURL = URL(string: "https://a-url.com")!
+        let clientError = NSError(domain: "any", code: 1)
+        let client = Client(stub: clientError)
+        let sut = RemoteIssuesLoader(client: client, url: anyURL)
+    
+        XCTAssertThrowsError(try sut.loadIssues())
     }
 }
