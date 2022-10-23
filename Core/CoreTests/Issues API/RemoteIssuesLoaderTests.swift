@@ -37,4 +37,15 @@ class RemoteIssuesLoaderTests: XCTestCase {
         
         XCTAssertEqual(client.loadedURLs, [url])
     }
+    
+    func test_loadIssuesTwice_requestsIssuesFromClientTwice() {
+        let url = URL(string: "https://a-url.com")!
+        let client = Client()
+        let sut = RemoteIssuesLoader(client: client, url: url)
+        
+        sut.loadIssues()
+        sut.loadIssues()
+        
+        XCTAssertEqual(client.loadedURLs, [url, url])
+    }
 }
