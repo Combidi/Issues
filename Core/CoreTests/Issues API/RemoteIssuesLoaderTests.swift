@@ -8,10 +8,10 @@ import Core
 final class RemoteIssuesLoader {
     struct InvalidDataError: Swift.Error {}
         
-    private let client: Client
+    private let client: ClientSpy
     private let url: URL
     
-    init(client: Client, url: URL) {
+    init(client: ClientSpy, url: URL) {
         self.client = client
         self.url = url
     }
@@ -68,7 +68,7 @@ final class RemoteIssuesLoader {
     }
 }
 
-final class Client {
+final class ClientSpy {
     typealias Result = Swift.Result<(Data, HTTPURLResponse), Error>
     
     private var messages = [(URL, (Result) -> Void)]()
@@ -258,8 +258,8 @@ class RemoteIssuesLoaderTests: XCTestCase {
 
     // MARK: Helpers
     
-    private func makeSUT(url: URL? = nil) -> (sut: RemoteIssuesLoader, client: Client) {
-        let client = Client()
+    private func makeSUT(url: URL? = nil) -> (sut: RemoteIssuesLoader, client: ClientSpy) {
+        let client = ClientSpy()
         let sut = RemoteIssuesLoader(client: client, url: url ?? anyURL())
         return (sut, client)
     }
