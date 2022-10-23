@@ -5,27 +5,6 @@
 import XCTest
 import Core
 
-final class ClientSpy: HTTPClient {
-    typealias Result = HTTPClient.Result
-    
-    private var messages = [(URL, (Result) -> Void)]()
-    private var completions: [(Result) -> Void] { messages.map(\.1) }
-    
-    var loadedURLs: [URL] { messages.map(\.0) }
-         
-    func get(from url: URL, completion: @escaping (Result) -> Void) {
-        messages.append((url, completion))
-    }
-    
-    func complete(with error: NSError, atIndex index: Int = 0) {
-        complete(with: .failure(error))
-    }
-    
-    func complete(with result: Result, atIndex index: Int = 0) {
-        completions[index](result)
-    }
-}
-
 class RemoteIssuesLoaderTests: XCTestCase {
     
     func test_loadIssues_requestsIssuesFromClient() {
@@ -194,6 +173,27 @@ class RemoteIssuesLoaderTests: XCTestCase {
     }
 
     // MARK: Helpers
+    
+    final class ClientSpy: HTTPClient {
+        typealias Result = HTTPClient.Result
+        
+        private var messages = [(URL, (Result) -> Void)]()
+        private var completions: [(Result) -> Void] { messages.map(\.1) }
+        
+        var loadedURLs: [URL] { messages.map(\.0) }
+             
+        func get(from url: URL, completion: @escaping (Result) -> Void) {
+            messages.append((url, completion))
+        }
+        
+        func complete(with error: NSError, atIndex index: Int = 0) {
+            complete(with: .failure(error))
+        }
+        
+        func complete(with result: Result, atIndex index: Int = 0) {
+            completions[index](result)
+        }
+    }
     
     private func makeSUT(url: URL? = nil) -> (sut: RemoteIssuesLoader, client: ClientSpy) {
         let client = ClientSpy()
