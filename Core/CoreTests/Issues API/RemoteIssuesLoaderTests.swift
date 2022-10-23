@@ -68,14 +68,8 @@ final class RemoteIssuesLoader {
     }
 }
 
-protocol HTTPClient {
-    typealias Result = Swift.Result<(Data, HTTPURLResponse), Error>
-
-    func get(from url: URL, completion: @escaping (Result) -> Void)
-}
-
 final class ClientSpy: HTTPClient {
-    typealias Result = Swift.Result<(Data, HTTPURLResponse), Error>
+    typealias Result = HTTPClient.Result
     
     private var messages = [(URL, (Result) -> Void)]()
     private var completions: [(Result) -> Void] { messages.map(\.1) }

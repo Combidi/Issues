@@ -22,6 +22,7 @@
 		D0B9762328C1D45F00BF60C3 /* LocalIssueLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B9762228C1D45F00BF60C3 /* LocalIssueLoader.swift */; };
 		D0B9762528C1D49500BF60C3 /* LocalIssueLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B9762428C1D49500BF60C3 /* LocalIssueLoaderTests.swift */; };
 		D0EF8DD229050E2A00661505 /* RemoteIssuesLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EF8DD129050E2A00661505 /* RemoteIssuesLoaderTests.swift */; };
+		D0EF8DD92905AF5700661505 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EF8DD82905AF5700661505 /* HTTPClient.swift */; };
 		D0F0F99528C0B8D00030ED02 /* CSVIssuesMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F0F99428C0B8D00030ED02 /* CSVIssuesMapper.swift */; };
 /* End PBXBuildFile section */
 
@@ -53,6 +54,7 @@
 		D0B9762228C1D45F00BF60C3 /* LocalIssueLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalIssueLoader.swift; sourceTree = "<group>"; };
 		D0B9762428C1D49500BF60C3 /* LocalIssueLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalIssueLoaderTests.swift; sourceTree = "<group>"; };
 		D0EF8DD129050E2A00661505 /* RemoteIssuesLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteIssuesLoaderTests.swift; sourceTree = "<group>"; };
+		D0EF8DD82905AF5700661505 /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		D0F0F99428C0B8D00030ED02 /* CSVIssuesMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVIssuesMapper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -96,6 +98,7 @@
 		D0AC697A28BD30E00073363F /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				D0EF8DD72905AF4C00661505 /* Issues API */,
 				D0F0F99628C0C1030030ED02 /* Issues Infra */,
 				D0AC699E28BD364C0073363F /* Issues Presentation */,
 				D0AC699028BD315D0073363F /* Issues Feature */,
@@ -146,6 +149,14 @@
 			isa = PBXGroup;
 			children = (
 				D0EF8DD129050E2A00661505 /* RemoteIssuesLoaderTests.swift */,
+			);
+			path = "Issues API";
+			sourceTree = "<group>";
+		};
+		D0EF8DD72905AF4C00661505 /* Issues API */ = {
+			isa = PBXGroup;
+			children = (
+				D0EF8DD82905AF5700661505 /* HTTPClient.swift */,
 			);
 			path = "Issues API";
 			sourceTree = "<group>";
@@ -286,6 +297,7 @@
 				D0AC69A828BD561E0073363F /* IssuesView.swift in Sources */,
 				D0AC699428BD31930073363F /* IssuesLoader.swift in Sources */,
 				D0AC69A028BD365E0073363F /* IssueViewModel.swift in Sources */,
+				D0EF8DD92905AF5700661505 /* HTTPClient.swift in Sources */,
 				D0F0F99528C0B8D00030ED02 /* CSVIssuesMapper.swift in Sources */,
 				D0AC699228BD31760073363F /* Issue.swift in Sources */,
 				D0B9762328C1D45F00BF60C3 /* LocalIssueLoader.swift in Sources */,
