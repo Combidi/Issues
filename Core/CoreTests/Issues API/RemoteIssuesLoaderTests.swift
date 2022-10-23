@@ -34,8 +34,7 @@ class RemoteIssuesLoaderTests: XCTestCase {
     
     func test_loadIssues_requestsIssuesFromClient() throws {
         let url = URL(string: "https://a-url.com")!
-        let client = Client()
-        let sut = RemoteIssuesLoader(client: client, url: url)
+        let (sut, client) = makeSUT(url: url)
         
         try sut.loadIssues()
         
@@ -44,8 +43,7 @@ class RemoteIssuesLoaderTests: XCTestCase {
     
     func test_loadIssuesTwice_requestsIssuesFromClientTwice() throws {
         let url = URL(string: "https://a-url.com")!
-        let client = Client()
-        let sut = RemoteIssuesLoader(client: client, url: url)
+        let (sut, client) = makeSUT(url: url)
         
         try sut.loadIssues()
         try sut.loadIssues()
@@ -54,12 +52,18 @@ class RemoteIssuesLoaderTests: XCTestCase {
     }
     
     func test_loadIssues_deliversErrorOnClientError() {
-        let anyURL = URL(string: "https://any-url.com")!
+        let (sut, client) = makeSUT()
         let clientError = NSError(domain: "any", code: 1)
-        let client = Client()
         client.stub = clientError
-        let sut = RemoteIssuesLoader(client: client, url: anyURL)
     
         XCTAssertThrowsError(try sut.loadIssues())
+    }
+    
+    // MARK: Helpers
+    
+    private func makeSUT(url: URL = URL(string: "https://any-url.com")!) -> (sut: RemoteIssuesLoader, client: Client) {
+        let client = Client()
+        let sut = RemoteIssuesLoader(client: client, url: url)
+        return (sut, client)
     }
 }
