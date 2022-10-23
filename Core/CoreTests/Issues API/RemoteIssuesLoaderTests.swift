@@ -15,10 +15,12 @@ final class RemoteIssuesLoader {
         self.url = url
     }
     
-    func loadIssues() throws {
+    func loadIssues() throws -> [String] {
         let result = try client.get(from: url)
         if result.isEmpty {
             throw InvalidDataError()
+        } else {
+            return []
         }
     }
 }
@@ -44,7 +46,7 @@ class RemoteIssuesLoaderTests: XCTestCase {
         let url = URL(string: "https://a-url.com")!
         let (sut, client) = makeSUT(url: url)
         
-        try? sut.loadIssues()
+        _ = try? sut.loadIssues()
         
         XCTAssertEqual(client.loadedURLs, [url])
     }
@@ -53,8 +55,8 @@ class RemoteIssuesLoaderTests: XCTestCase {
         let url = URL(string: "https://a-url.com")!
         let (sut, client) = makeSUT(url: url)
         
-        try? sut.loadIssues()
-        try? sut.loadIssues()
+        _ = try? sut.loadIssues()
+        _ = try? sut.loadIssues()
         
         XCTAssertEqual(client.loadedURLs, [url, url])
     }
@@ -75,6 +77,14 @@ class RemoteIssuesLoaderTests: XCTestCase {
         XCTAssertThrowsError(try sut.loadIssues())
     }
 
+    func test_loadIssues_deliverEmptyListOnValidDataWithEmptyIssuesList() {
+        let (sut, client) = makeSUT()
+        let emptyListData = Data("{ issues: {} }".utf8)
+        client.stub = .success(emptyListData)
+    
+        XCTAssertEqual(try sut.loadIssues(), [])
+    }
+    
     // MARK: Helpers
     
     private func makeSUT(url: URL = URL(string: "https://any-url.com")!) -> (sut: RemoteIssuesLoader, client: Client) {
