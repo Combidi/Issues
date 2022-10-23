@@ -3,9 +3,12 @@
 //
 
 import XCTest
+import Core
 
 final class RemoteIssuesLoader {
     struct InvalidDataError: Swift.Error {}
+    
+    private struct Item: Decodable {}
     
     private let client: Client
     private let url: URL
@@ -15,12 +18,16 @@ final class RemoteIssuesLoader {
         self.url = url
     }
     
-    func loadIssues() throws -> [String] {
+    func loadIssues() throws -> [Issue] {
         let result = try client.get(from: url)
         if result.isEmpty {
             throw InvalidDataError()
         } else {
-            return []
+            if let henk = try? JSONDecoder().decode(Item.self, from: result) {
+                return []
+            } else {
+                throw InvalidDataError()
+            }
         }
     }
 }
@@ -79,10 +86,22 @@ class RemoteIssuesLoaderTests: XCTestCase {
 
     func test_loadIssues_deliverEmptyListOnValidDataWithEmptyIssuesList() {
         let (sut, client) = makeSUT()
-        let emptyListData = Data("{ issues: {} }".utf8)
+        let emptyListData = Data("""
+        {
+            "issues": []
+        }
+        """.utf8)
         client.stub = .success(emptyListData)
     
         XCTAssertEqual(try sut.loadIssues(), [])
+    }
+    
+    func test_loadIssues_deliversErrorOnInvalidJSON() {
+        let (sut, client) = makeSUT()
+        let invalidData = Data("non json data".utf8)
+        client.stub = .success(invalidData)
+
+        XCTAssertThrowsError(try sut.loadIssues())
     }
     
     // MARK: Helpers
