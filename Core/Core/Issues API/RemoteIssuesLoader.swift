@@ -22,20 +22,16 @@ public final class RemoteIssuesLoader {
                 guard response.statusCode == 200, !data.isEmpty else {
                     return completion(.failure(InvalidDataError()))
                 }
-                completion(Result { try Self.map(data: data, response: response) })
+                completion(Result { try IssuesMapper.map(data: data, response: response) })
 
             case let .failure(error):
                 completion(.failure(error))
             }
         }
     }
+}
 
-    private static func map(data: Data, response: HTTPURLResponse) throws -> [Issue] {
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-        return try decoder.decode(Issues.self, from: data).toDomain()
-    }
-    
+private enum IssuesMapper {
     private struct Issues: Decodable {
         struct Customer: Decodable {
             let first_name: String
@@ -64,5 +60,11 @@ public final class RemoteIssuesLoader {
                 )
             }
         }
+    }
+
+    static func map(data: Data, response: HTTPURLResponse) throws -> [Issue] {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return try decoder.decode(Issues.self, from: data).toDomain()
     }
 }
