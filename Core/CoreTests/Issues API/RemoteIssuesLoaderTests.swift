@@ -100,7 +100,7 @@ class RemoteIssuesLoaderTests: XCTestCase {
     
     func test_loadIssues_deliversErrorOnClientError() {
         let (sut, client) = makeSUT()
-        let clientError = NSError(domain: "any", code: 1)
+        let clientError = NSError(domain: "a domain", code: 1)
         client.stub = .failure(clientError)
             
         XCTAssertThrowsError(try sut.loadIssues())
@@ -116,12 +116,7 @@ class RemoteIssuesLoaderTests: XCTestCase {
 
     func test_loadIssues_deliverEmptyListOnValidDataWithEmptyIssuesList() {
         let (sut, client) = makeSUT()
-        let emptyListData = Data("""
-        {
-            "issues": []
-        }
-        """.utf8)
-        client.stub = success(emptyListData)
+        client.stub = success(emptyListData())
     
         XCTAssertEqual(try sut.loadIssues(), [])
     }
@@ -136,15 +131,10 @@ class RemoteIssuesLoaderTests: XCTestCase {
     
     func test_loadIssues_throwsOnNon200HTTPStatusCodeWithValidData() throws {
         let (sut, client) = makeSUT()
-        let emptyListData = Data("""
-        {
-            "issues": []
-        }
-        """.utf8)
         let samples = [199, 201, 300, 500]
         
         try samples.forEach { statusCode in
-            client.stub = success(emptyListData, statusCode: statusCode)
+            client.stub = success(emptyListData(), statusCode: statusCode)
             
             XCTAssertThrowsError(try sut.loadIssues(), "for status code: \(statusCode)")
         }
@@ -202,5 +192,13 @@ class RemoteIssuesLoaderTests: XCTestCase {
     
     private func anyURL() -> URL {
         URL(string: "http://any-url.com")!
+    }
+    
+    private func emptyListData() -> Data {
+        Data("""
+        {
+            "issues": []
+        }
+        """.utf8)
     }
 }
