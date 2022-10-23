@@ -18,12 +18,15 @@ final class RemoteIssuesLoader {
     
     func loadIssues() throws -> [Issue] {
         let result = try client.get(from: url)
-        if result.isEmpty {
+        if result.1.statusCode != 200 {
+            throw InvalidDataError()
+        }
+        if result.0.isEmpty {
             throw InvalidDataError()
         } else {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .iso8601
-            let issues = try decoder.decode(Issues.self, from: result)
+            let issues = try decoder.decode(Issues.self, from: result.0)
             return issues.toDomain()
         }
     }
@@ -61,9 +64,9 @@ final class RemoteIssuesLoader {
 
 final class Client {
     var loadedURLs = [URL]()
-    var stub: Result<Data, Error> = .success(Data())
+    var stub: Result<(Data, HTTPURLResponse), Error> = .failure(NSError(domain: "any", code: 1))
         
-    func get(from url: URL) throws -> Data {
+    func get(from url: URL) throws -> (Data, HTTPURLResponse) {
         loadedURLs.append(url)
         switch stub {
         case let .success(data):
@@ -102,11 +105,11 @@ class RemoteIssuesLoaderTests: XCTestCase {
             
         XCTAssertThrowsError(try sut.loadIssues())
     }
-    
+        
     func test_loadIssues_deliverErrorOnEmptyData() {
         let (sut, client) = makeSUT()
         let emptyData = Data()
-        client.stub = .success(emptyData)
+        client.stub = success(emptyData)
     
         XCTAssertThrowsError(try sut.loadIssues())
     }
@@ -118,7 +121,7 @@ class RemoteIssuesLoaderTests: XCTestCase {
             "issues": []
         }
         """.utf8)
-        client.stub = .success(emptyListData)
+        client.stub = success(emptyListData)
     
         XCTAssertEqual(try sut.loadIssues(), [])
     }
@@ -126,9 +129,25 @@ class RemoteIssuesLoaderTests: XCTestCase {
     func test_loadIssues_deliversErrorOnInvalidJSON() {
         let (sut, client) = makeSUT()
         let invalidData = Data("non json data".utf8)
-        client.stub = .success(invalidData)
+        client.stub = success(invalidData)
 
         XCTAssertThrowsError(try sut.loadIssues())
+    }
+    
+    func test_loadIssues_throwsOnNon200HTTPStatusCodeWithValidData() throws {
+        let (sut, client) = makeSUT()
+        let emptyListData = Data("""
+        {
+            "issues": []
+        }
+        """.utf8)
+        let samples = [199, 201, 300, 500]
+        
+        try samples.forEach { statusCode in
+            client.stub = success(emptyListData, statusCode: statusCode)
+            
+            XCTAssertThrowsError(try sut.loadIssues(), "for status code: \(statusCode)")
+        }
     }
     
     func test_loadIssues_deliversIssuesOnValidNonEmptyIssuesList() {
@@ -164,7 +183,7 @@ class RemoteIssuesLoaderTests: XCTestCase {
         ]
         
         let (sut, client) = makeSUT()
-        client.stub = .success(validNonEmptyIssuesData)
+        client.stub = success(validNonEmptyIssuesData)
         
         XCTAssertEqual(try sut.loadIssues(), expected)
     }
@@ -175,5 +194,9 @@ class RemoteIssuesLoaderTests: XCTestCase {
         let client = Client()
         let sut = RemoteIssuesLoader(client: client, url: url)
         return (sut, client)
+    }
+    
+    private func success(_ data: Data, statusCode: Int = 200) -> Result<(Data, HTTPURLResponse), Error> {
+        return .success((data, HTTPURLResponse(url: URL(string: "http://any-url.com")!, statusCode: statusCode, httpVersion: nil, headerFields: nil)!))
     }
 }
