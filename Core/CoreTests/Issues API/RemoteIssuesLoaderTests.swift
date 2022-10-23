@@ -190,13 +190,17 @@ class RemoteIssuesLoaderTests: XCTestCase {
     
     // MARK: Helpers
     
-    private func makeSUT(url: URL = URL(string: "https://any-url.com")!) -> (sut: RemoteIssuesLoader, client: Client) {
+    private func makeSUT(url: URL? = nil) -> (sut: RemoteIssuesLoader, client: Client) {
         let client = Client()
-        let sut = RemoteIssuesLoader(client: client, url: url)
+        let sut = RemoteIssuesLoader(client: client, url: url ?? anyURL())
         return (sut, client)
     }
     
     private func success(_ data: Data, statusCode: Int = 200) -> Result<(Data, HTTPURLResponse), Error> {
-        return .success((data, HTTPURLResponse(url: URL(string: "http://any-url.com")!, statusCode: statusCode, httpVersion: nil, headerFields: nil)!))
+        return .success((data, HTTPURLResponse(url: anyURL(), statusCode: statusCode, httpVersion: nil, headerFields: nil)!))
+    }
+    
+    private func anyURL() -> URL {
+        URL(string: "http://any-url.com")!
     }
 }
