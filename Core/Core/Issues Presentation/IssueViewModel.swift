@@ -4,12 +4,12 @@
 
 public struct IssueViewModel: Equatable {
     public let name: String
-    public let amountOfIssues: String
-    public let birthDate: String
+    public let submissionDate: String
+    public let subject: String
 
-    public init(name: String, amountOfIssues: String, birthDate: String) {
+    public init(name: String, submissionDate: String, subject: String) {
         self.name = name
-        self.amountOfIssues = amountOfIssues
-        self.birthDate = birthDate
+        self.submissionDate = submissionDate
+        self.subject = subject
     }
 }

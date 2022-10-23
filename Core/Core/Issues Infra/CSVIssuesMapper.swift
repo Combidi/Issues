@@ -28,8 +28,8 @@ public struct CSVIssuesMapper {
             return Issue(
                 firstName: column[0],
                 surname: column[1],
-                amountOfIssues: try int(from: column[2], columnIndex: index, elementIndex: 2),
-                birthDate: try date(from: column[3], forTimeZone: timeZone, columnIndex: index, elementIndex: 3)
+                submissionDate: try date(from: column[3], forTimeZone: timeZone, columnIndex: index, elementIndex: 3),
+                subject: column[2]
             )
         }
 
@@ -40,12 +40,7 @@ public struct CSVIssuesMapper {
         guard let dataString = String(data: data, encoding: .utf8), !dataString.isEmpty else { throw Error.invalidData }
         return dataString
     }
-    
-    private static func int(from string: String, columnIndex: Int, elementIndex: Int) throws -> Int {
-        guard let intValue = Int(string) else { throw Error.nonIntConvertable(columnIndex: columnIndex, elementIndex: elementIndex) }
-        return intValue
-    }
-    
+        
     private static func date(from string: String, forTimeZone timeZone: TimeZone, columnIndex: Int, elementIndex: Int) throws -> Date {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
@@ -66,7 +61,7 @@ public struct CSVIssuesMapper {
     }
     
     private static func validateHeaders(colums: inout [Column]) throws {
-        guard colums.removeFirst() == ["First name", "Sur name", "Issue count", "Date of birth"] else {
+        guard colums.removeFirst() == ["First name","Sur name","Subject","Date of submission"] else {
             throw Error.invalidHeaders
         }
     }

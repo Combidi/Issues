@@ -43,7 +43,9 @@ public final class IssuesPresenter {
     private func map(issue: Issue) -> IssueViewModel {
         IssueViewModel(
             name: issue.firstName + " " + issue.surname,
-            amountOfIssues: String(issue.amountOfIssues),
-            birthDate: dateFormatter.string(from: issue.birthDate))
+            submissionDate: dateFormatter.string(from: issue.submissionDate),
+            subject: issue.subject
+        )
+        
     }
 }

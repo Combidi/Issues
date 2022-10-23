@@ -17,7 +17,7 @@ final class CSVIssuesMapperTests: XCTestCase {
         let dataWithInvalidHeaders = Data(
             """
             "first col header", "second col header", "third col header", "fourth col header",
-            "Theo","Jansen",5,"1978-01-02T00:00:00"
+            "Theo","Jansen","My television is broken","1978-01-02T00:00:00"
             """.utf8
         )
         
@@ -27,7 +27,7 @@ final class CSVIssuesMapperTests: XCTestCase {
     func test_map_deliversEmptyIssuesOnValidHeaderWithEmptyData() {
         let dataWithEmptyIssues = Data(
             """
-            "First name","Sur name","Issue count","Date of birth"
+            "First name","Sur name","Subject","Date of submission"
             """.utf8
         )
                 
@@ -37,51 +37,40 @@ final class CSVIssuesMapperTests: XCTestCase {
     func test_map_throwsOnInvalidColumnSize() {
         let dataWithInvalidColumsSize = Data(
             """
-            "First name","Sur name","Issue count","Date of birth"
-            "Theo","Jansen",5,"1978-01-02T00:00:00"
-            "Fiona","de Vries",7
+            "First name","Sur name","Subject","Date of submission"
+            "Theo","Jansen","My television is broken","1978-01-02T00:00:00"
+            "Fiona","de Vries","Can't find my shoes"
             """.utf8
         )
 
         assertThat(try CSVIssuesMapper.map(dataWithInvalidColumsSize), throws: .invalidColumnSize(columnIndex: 1))
     }
-    
-    func test_map_throwsOnNonIntConvertibleIssueCount() {
-        let dataWithInvalidColumsSize = Data(
-            """
-            "First name","Sur name","Issue count","Date of birth"
-            "Theo","Jansen","non Int convertible value","1978-01-02T00:00:00"
-            """.utf8
-        )
-
-        assertThat(try CSVIssuesMapper.map(dataWithInvalidColumsSize), throws: .nonIntConvertable(columnIndex: 0, elementIndex: 2))
-    }
 
     func test_map_validIssueDataDeliversIssues() {
         let validDataWithIssues = Data(
             """
-            "First name","Sur name","Issue count","Date of birth"
-            "Theo","Jansen",5,"1978-01-02T00:00:00"
-            "Fiona","de Vries",7,"1950-11-12T00:00:00"
-            "Petra","Boersma",1,"2001-04-20T00:00:00"
+            "First name","Sur name","Subject","Date of submission"
+            "Theo","Jansen","My television is broken","1978-01-02T00:00:00"
+            "Fiona","de Vries","Can't find my shoes","1950-11-12T00:00:00"
+            "Petra","Boersma","Dropped my phone","2001-04-20T00:00:00"
             """.utf8
         )
         
         let expectedIssues = [
-            Issue(firstName: "Theo", surname: "Jansen", amountOfIssues: 5, birthDate: Date(timeIntervalSince1970: 252540000)),
-            Issue(firstName: "Fiona", surname: "de Vries", amountOfIssues: 7, birthDate: Date(timeIntervalSince1970: -603943200)),
-            Issue(firstName: "Petra", surname: "Boersma", amountOfIssues: 1, birthDate: Date(timeIntervalSince1970: 987714000)),
+            Issue(firstName: "Theo", surname: "Jansen", submissionDate: Date(timeIntervalSince1970: 252540000), subject: "My television is broken"),
+            Issue(firstName: "Fiona", surname: "de Vries", submissionDate: Date(timeIntervalSince1970: -603943200), subject: "Can't find my shoes"),
+            Issue(firstName: "Petra", surname: "Boersma", submissionDate: Date(timeIntervalSince1970: 987714000), subject: "Dropped my phone"),
         ]
 
         let timeZone = TimeZone(identifier: "Asia/Amman")!
         XCTAssertEqual(try CSVIssuesMapper.map(validDataWithIssues, timeZone: timeZone), expectedIssues)
     }
-    func test_map_throwsOnIncorrectBirthDateFormat() {
+    func test_map_throwsOnIncorrectDateFormat() {
         let dateWithInvalidDateFormat = Data(
             """
-            "First name","Sur name","Issue count","Date of birth"
-            "Petra","Boersma",1,"2001-04-20T00:00:00"
-            "Theo","Jansen",5,"2020-08-28T15:07:02+00:00"
+            "First name","Sur name","Subject","Date of submission"
+            "Petra","Boersma","Dropped my phone","2001-04-20T00:00:00"
+            "Theo","Jansen",My television is broken,"2020-08-28T15:07:02+00:00"
             """.utf8
         )
 
@@ -89,21 +78,21 @@ final class CSVIssuesMapperTests: XCTestCase {
     }
     
     func test_map_supportsCarriageReturn() {
-        let dataWithCarriageReturnNewLineCharacters = Data("\"First name\",\"Sur name\",\"Issue count\",\"Date of birth\"\r \"Petra\",\"Boersma\",1,\"2001-04-20T00:00:00\"".utf8
+        let dataWithCarriageReturnNewLineCharacters = Data("\"First name\",\"Sur name\",\"Subject\",\"Date of submission\"\r \"Petra\",\"Boersma\",\"Dropped my phone\",\"2001-04-20T00:00:00\"".utf8
         )
         
         XCTAssertNoThrow(try CSVIssuesMapper.map(dataWithCarriageReturnNewLineCharacters))
     }
     
     func test_map_supportsLineFeed() {
-        let dataWithCarriageReturnNewLineCharacters = Data("\"First name\",\"Sur name\",\"Issue count\",\"Date of birth\"\n \"Petra\",\"Boersma\",1,\"2001-04-20T00:00:00\"".utf8
+        let dataWithCarriageReturnNewLineCharacters = Data("\"First name\",\"Sur name\",\"Subject\",\"Date of submission\"\n \"Petra\",\"Boersma\",\"Dropped my phone\",\"2001-04-20T00:00:00\"".utf8
         )
         
         XCTAssertNoThrow(try CSVIssuesMapper.map(dataWithCarriageReturnNewLineCharacters))
     }
     
     func test_map_supportsCarriageReturnLineFeed() {
-        let dataWithCarriageReturnLineFeedNewLineCharacters = Data("\"First name\",\"Sur name\",\"Issue count\",\"Date of birth\"\r\n \"Petra\",\"Boersma\",1,\"2001-04-20T00:00:00\"".utf8
+        let dataWithCarriageReturnLineFeedNewLineCharacters = Data("\"First name\",\"Sur name\",\"Subject\",\"Date of submission\"\r\n \"Petra\",\"Boersma\",\"Dropped my phone\",\"2001-04-20T00:00:00\"".utf8
         )
         
         XCTAssertNoThrow(try CSVIssuesMapper.map(dataWithCarriageReturnLineFeedNewLineCharacters))

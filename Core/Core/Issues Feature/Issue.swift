@@ -7,13 +7,13 @@ import Foundation
 public struct Issue: Equatable {
     public let firstName: String
     public let surname: String
-    public let amountOfIssues: Int
-    public let birthDate: Date
+    public let submissionDate: Date
+    public let subject: String
     
-    public init(firstName: String, surname: String, amountOfIssues: Int, birthDate: Date) {
+    public init(firstName: String, surname: String, submissionDate: Date, subject: String) {
         self.firstName = firstName
         self.surname = surname
-        self.amountOfIssues = amountOfIssues
-        self.birthDate = birthDate
+        self.submissionDate = submissionDate
+        self.subject = subject
     }
 }

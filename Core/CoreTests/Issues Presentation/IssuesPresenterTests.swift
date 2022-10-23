@@ -23,13 +23,13 @@ final class IssuesPresenterTests: XCTestCase {
         let (sut, loader, view) = makeSUT(locale: Locale(identifier: "en_US_POSIX"))
         sut.loadIssues()
 
-        let issue0 = Issue(firstName: "Peter", surname: "Combee", amountOfIssues: 2, birthDate: Date(timeIntervalSince1970: 662072400))
-        let issue1 = Issue(firstName: "Luna", surname: "Combee", amountOfIssues: 1, birthDate: Date(timeIntervalSince1970: 720220087))
+        let issue0 = Issue(firstName: "Peter", surname: "Combee", submissionDate: Date(timeIntervalSince1970: 662072400), subject: "Phone charger is missing")
+        let issue1 = Issue(firstName: "Luna", surname: "Combee", submissionDate: Date(timeIntervalSince1970: 720220087), subject: "My game controller is broken")
         loader.completeLoading(with: [issue0, issue1])
         
         let expectedViewModels = [
-            IssueViewModel(name: "Peter Combee", amountOfIssues: "2", birthDate: "Dec 24, 1990"),
-            IssueViewModel(name: "Luna Combee", amountOfIssues: "1", birthDate: "Oct 27, 1992"),
+            IssueViewModel(name: "Peter Combee", submissionDate: "Dec 24, 1990", subject: "Phone charger is missing"),
+            IssueViewModel(name: "Luna Combee", submissionDate: "Oct 27, 1992", subject: "My game controller is broken"),
         ]
         XCTAssertEqual(view.capturedIssues, [expectedViewModels])
     }

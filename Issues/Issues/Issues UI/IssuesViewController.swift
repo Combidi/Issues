@@ -66,8 +66,8 @@ public final class IssuesViewController: UIViewController, IssuesView, UITableVi
         let cell = tableView.dequeueReusableCell(withIdentifier: "IssueCell") as! IssueCell
         let issue = issues[indexPath.row]
         cell.nameLabel.text = issue.name
-        cell.issueCountLabel.text = issue.amountOfIssues
-        cell.birthDateLabel.text = issue.birthDate
+        cell.subjectLabel.text = issue.subject
+        cell.submissionDateLabel.text = issue.submissionDate
         return cell
     }
     
