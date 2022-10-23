@@ -19,77 +19,37 @@ class RemoteIssuesLoaderTests: XCTestCase {
     
     func test_loadIssues_deliversErrorOnClientError() {
         let (sut, client) = makeSUT()
-            
-        var receivedError: NSError?
-        let exp = expectation(description: "Wait for load completion")
-        sut.loadIssues { result in
-            if case let .failure(error) = result {
-                receivedError = error as NSError
-            }
-            exp.fulfill()
-        }
-        
         let clientError = NSError(domain: "a domain", code: 1)
-        client.complete(with: clientError)
 
-        wait(for: [exp], timeout: 1.0)
-        XCTAssertEqual(receivedError, clientError)
+        assertThat(sut, completesWith: .failure(clientError), when: {
+            client.complete(with: clientError)
+        })        
     }
-        
+
     func test_loadIssues_deliverErrorOnEmptyData() {
         let (sut, client) = makeSUT()
-
-        var receivedError: NSError?
-        let exp = expectation(description: "Wait for load completion")
-        sut.loadIssues { result in
-            if case let .failure(error) = result {
-                receivedError = error as NSError
-            }
-            exp.fulfill()
-        }
-        
         let emptyData = Data()
-        client.complete(with: success(emptyData))
-        
-        wait(for: [exp], timeout: 1.0)
-        XCTAssertNotNil(receivedError)
+
+        assertThat(sut, completesWithErrorWhen: {
+            client.complete(with: success(emptyData))
+        })
     }
 
     func test_loadIssues_deliverEmptyListOnValidDataWithEmptyIssuesList() {
         let (sut, client) = makeSUT()
-    
-        var receivedIssues: [Issue]?
-        let exp = expectation(description: "Wait for load completion")
-        sut.loadIssues { result in
-            if case let .success(issues) = result {
-                receivedIssues = issues
-            }
-            exp.fulfill()
-        }
         
-        client.complete(with: success(emptyListData()))
-        
-        wait(for: [exp], timeout: 1.0)
-        XCTAssertEqual(receivedIssues, [])
+        assertThat(sut, completesWith: .success([]), when: {
+            client.complete(with: success(emptyListData()))
+        })
     }
     
     func test_loadIssues_deliversErrorOnInvalidJSON() {
         let (sut, client) = makeSUT()
         let invalidData = Data("non json data".utf8)
 
-        var receivedError: NSError?
-        let exp = expectation(description: "Wait for load completion")
-        sut.loadIssues { result in
-            if case let .failure(error) = result {
-                receivedError = error as NSError
-            }
-            exp.fulfill()
-        }
-        
-        client.complete(with: success(invalidData))
-        
-        wait(for: [exp], timeout: 1.0)
-        XCTAssertNotNil(receivedError)
+        assertThat(sut, completesWithErrorWhen: {
+            client.complete(with: success(invalidData))
+        })
     }
     
     func test_loadIssues_deliversErrorOnNon200HTTPStatusCodeWithValidData() {
@@ -98,69 +58,51 @@ class RemoteIssuesLoaderTests: XCTestCase {
         let samples = [199, 201, 300, 500]
         samples.enumerated().forEach { index, statusCode in
             
-            var receivedError: NSError?
-            let exp = expectation(description: "Wait for load completion")
-            sut.loadIssues { result in
-                if case let .failure(error) = result {
-                    receivedError = error as NSError
-                }
-                exp.fulfill()
-            }
-
-            client.complete(with: success(emptyListData(), statusCode: statusCode), atIndex: index)
-            
-            wait(for: [exp], timeout: 1.0)
-            XCTAssertNotNil(receivedError, "for status code: \(statusCode)")
+            assertThat(sut, completesWithErrorWhen: {
+                client.complete(with: success(emptyListData(), statusCode: statusCode), atIndex: index)
+            })
         }
     }
     
     func test_loadIssues_deliversIssuesOnValidNonEmptyIssuesList() {
         let (sut, client) = makeSUT()
         
-        var receivedIssues: [Issue]?
-        let exp = expectation(description: "Wait for load completion")
-        sut.loadIssues { result in
-            if case let .success(issues) = result {
-                receivedIssues = issues
-            }
-            exp.fulfill()
-        }
-        
-        let validNonEmptyIssuesData = Data("""
-        {
-            "issues": [
-                {
-                    "customer": {
-                        "first_name": "Peter",
-                        "last_name": "Combee"
-                    },
-                    "created_at": "2020-08-28T15:07:02+00:00",
-                    "message": {
-                        "subject": "A subject"
-                    }
-                },
-                {
-                    "customer": {
-                        "first_name": "Luna",
-                        "last_name": "Combee"
-                    },
-                    "created_at": "2020-01-01T12:31:22+00:00",
-                    "message": {
-                        "subject": "Another subject"
-                    }
-                }
-            ]
-        }
-        """.utf8)
-
-        client.complete(with: success(validNonEmptyIssuesData))
-
-        wait(for: [exp], timeout: 1.0)
         let expected = [
             Issue(firstName: "Peter", surname: "Combee", submissionDate: Date(timeIntervalSince1970: 1598627222), subject: "A subject"),
-            Issue(firstName: "Luna", surname: "Combee", submissionDate: Date(timeIntervalSince1970: 1577881882), subject: "Another subject"),
+            Issue(firstName: "Luna", surname: "Combee", submissionDate: Date(timeIntervalSince1970: 1577881882), subject: "Another subject")
         ]
-        XCTAssertEqual(receivedIssues, expected)
+
+        assertThat(sut, completesWith: .success(expected), when: {
+            
+            let validNonEmptyIssuesData = Data("""
+            {
+                "issues": [
+                    {
+                        "customer": {
+                            "first_name": "Peter",
+                            "last_name": "Combee"
+                        },
+                        "created_at": "2020-08-28T15:07:02+00:00",
+                        "message": {
+                            "subject": "A subject"
+                        }
+                    },
+                    {
+                        "customer": {
+                            "first_name": "Luna",
+                            "last_name": "Combee"
+                        },
+                        "created_at": "2020-01-01T12:31:22+00:00",
+                        "message": {
+                            "subject": "Another subject"
+                        }
+                    }
+                ]
+            }
+            """.utf8)
+
+            client.complete(with: success(validNonEmptyIssuesData))
+        })
     }
 
     // MARK: Helpers
@@ -190,6 +132,63 @@ class RemoteIssuesLoaderTests: XCTestCase {
         let client = ClientSpy()
         let sut = RemoteIssuesLoader(client: client, url: url ?? anyURL())
         return (sut, client)
+    }
+    
+    private func assertThat(
+        _ sut: RemoteIssuesLoader,
+        completesWith expectedResult: Result<[Issue], Error>,
+        when action: () -> Void,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        let receivedResult = loadResult(sut, action, file: file, line: line)
+        
+        switch (receivedResult, expectedResult) {
+        case let (.success(receivedIssues), .success(expectedIssues)):
+            XCTAssertEqual(receivedIssues, expectedIssues, file: file, line: line)
+        
+        case let (.failure(receivedError as NSError), .failure(expectedError as NSError)):
+            XCTAssertEqual(receivedError, expectedError, file: file, line: line)
+        
+        default:
+            XCTFail("Expected \(expectedResult), got \(String(describing: receivedResult)) instead", file: file, line: line)
+            
+        }
+    }
+    
+    private func assertThat(
+        _ sut: RemoteIssuesLoader,
+        completesWithErrorWhen action: () -> Void,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        let receivedResult = loadResult(sut, action, file: file, line: line)
+
+        switch receivedResult {
+        case .failure:
+            return
+            
+        default:
+            XCTFail("Expected to throw an error, got: \(String(describing: receivedResult)) instead", file: file, line: line)
+        }
+    }
+    
+    private func loadResult(
+        _ sut: RemoteIssuesLoader,
+        _ action: () -> Void,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) -> Result<[Issue], Error>? {
+        var receivedResult: Result<[Issue], Error>?
+        let exp = expectation(description: "Wait for load completion")
+        sut.loadIssues { result in
+            receivedResult = result
+            exp.fulfill()
+        }
+        
+        action()
+        wait(for: [exp], timeout: 1.0)
+        return receivedResult
     }
     
     private func success(_ data: Data, statusCode: Int = 200) -> Result<(Data, HTTPURLResponse), Error> {
