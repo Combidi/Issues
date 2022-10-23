@@ -6,16 +6,7 @@ import XCTest
 import Core
 
 class RemoteIssuesLoaderTests: XCTestCase {
-    
-    func test_loadIssues_requestsIssuesFromClient() {
-        let url = URL(string: "https://a-url.com")!
-        let (sut, client) = makeSUT(url: url)
         
-        sut.loadIssues { _ in }
-        
-        XCTAssertEqual(client.loadedURLs, [url])
-    }
-    
     func test_loadIssuesTwice_requestsIssuesFromClientTwice() {
         let url = URL(string: "https://a-url.com")!
         let (sut, client) = makeSUT(url: url)
