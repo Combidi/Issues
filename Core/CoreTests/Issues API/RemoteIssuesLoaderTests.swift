@@ -67,41 +67,24 @@ class RemoteIssuesLoaderTests: XCTestCase {
     func test_loadIssues_deliversIssuesOnValidNonEmptyIssuesList() {
         let (sut, client) = makeSUT()
         
-        let expected = [
-            Issue(firstName: "Peter", surname: "Combee", submissionDate: Date(timeIntervalSince1970: 1598627222), subject: "A subject"),
-            Issue(firstName: "Luna", surname: "Combee", submissionDate: Date(timeIntervalSince1970: 1577881882), subject: "Another subject")
-        ]
+        let issue1 = makeIssue(
+            firstName: "Peter",
+            surname: "Combee",
+            submissionDate: (date: Date(timeIntervalSince1970: 1598627222), iso8601String: "2020-08-28T15:07:02+00:00"),
+            subject: "A subject"
+        )
+        
+        let issue2 = makeIssue(
+            firstName: "Luna",
+            surname: "Combee",
+            submissionDate: (date: Date(timeIntervalSince1970: 1577881882), iso8601String: "2020-01-01T12:31:22+00:00"),
+            subject: "Another subject"
+        )
+        
+        let jsonData = makeIssuesJSON(issues: [issue1.json, issue2.json])
 
-        assertThat(sut, completesWith: .success(expected), when: {
-            
-            let validNonEmptyIssuesData = Data("""
-            {
-                "issues": [
-                    {
-                        "customer": {
-                            "first_name": "Peter",
-                            "last_name": "Combee"
-                        },
-                        "created_at": "2020-08-28T15:07:02+00:00",
-                        "message": {
-                            "subject": "A subject"
-                        }
-                    },
-                    {
-                        "customer": {
-                            "first_name": "Luna",
-                            "last_name": "Combee"
-                        },
-                        "created_at": "2020-01-01T12:31:22+00:00",
-                        "message": {
-                            "subject": "Another subject"
-                        }
-                    }
-                ]
-            }
-            """.utf8)
-
-            client.complete(with: success(validNonEmptyIssuesData))
+        assertThat(sut, completesWith: .success([issue1.model, issue2.model]), when: {
+            client.complete(with: success(jsonData))
         })
     }
 
@@ -191,6 +174,38 @@ class RemoteIssuesLoaderTests: XCTestCase {
         return receivedResult
     }
     
+    private func makeIssuesJSON(issues: [[String: Any]]) -> Data {
+        let json = ["issues": issues]
+        return try! JSONSerialization.data(withJSONObject: json)
+    }
+    
+    private func makeIssue(
+        firstName: String,
+        surname: String,
+        submissionDate: (date: Date, iso8601String: String),
+        subject: String
+    ) -> (model: Issue, json: [String: Any]) {
+        let model = Issue(
+            firstName: firstName,
+            surname: surname,
+            submissionDate: submissionDate.date,
+            subject: subject
+        )
+        
+        let json: [String: Any] = [
+            "customer": [
+                "first_name": firstName,
+                "last_name": surname
+            ],
+            "created_at": submissionDate.iso8601String,
+            "message": [
+                "subject": subject
+            ]
+        ]
+        
+        return (model, json)
+    }
+    
     private func success(_ data: Data, statusCode: Int = 200) -> Result<(Data, HTTPURLResponse), Error> {
         return .success((data, HTTPURLResponse(url: anyURL(), statusCode: statusCode, httpVersion: nil, headerFields: nil)!))
     }
@@ -200,10 +215,6 @@ class RemoteIssuesLoaderTests: XCTestCase {
     }
     
     private func emptyListData() -> Data {
-        Data("""
-        {
-            "issues": []
-        }
-        """.utf8)
+        makeIssuesJSON(issues: [])
     }
 }
