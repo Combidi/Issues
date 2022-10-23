@@ -23,21 +23,20 @@ final class RemoteIssuesLoader {
                 guard response.statusCode == 200, !data.isEmpty else {
                     return completion(.failure(InvalidDataError()))
                 }
-                do {
-                    let decoder = JSONDecoder()
-                    decoder.dateDecodingStrategy = .iso8601
-                    let issues = try decoder.decode(Issues.self, from: data)
-                    completion(.success(issues.toDomain()))
-                } catch {
-                    completion(.failure(error))
-                }
+                completion(Result { try Self.map(data: data, response: response) })
 
             case let .failure(error):
                 completion(.failure(error))
             }
         }
     }
-        
+
+    private static func map(data: Data, response: HTTPURLResponse) throws -> [Issue] {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return try decoder.decode(Issues.self, from: data).toDomain()
+    }
+    
     private struct Issues: Decodable {
         struct Customer: Decodable {
             let first_name: String
@@ -58,7 +57,7 @@ final class RemoteIssuesLoader {
         
         func toDomain() -> [Issue] {
             issues.map {
-                return Issue(
+                Issue(
                     firstName: $0.customer.first_name,
                     surname: $0.customer.last_name,
                     submissionDate: $0.created_at,
