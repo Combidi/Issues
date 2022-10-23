@@ -19,7 +19,7 @@ class RemoteIssuesLoaderTests: XCTestCase {
     
     func test_loadIssues_deliversErrorOnClientError() {
         let (sut, client) = makeSUT()
-        let clientError = NSError(domain: "a domain", code: 1)
+        let clientError = anyNSError()
 
         assertThat(sut, completesWith: .failure(clientError), when: {
             client.complete(with: clientError)
@@ -216,5 +216,9 @@ class RemoteIssuesLoaderTests: XCTestCase {
     
     private func emptyListData() -> Data {
         makeIssuesJSON(issues: [])
+    }
+    
+    private func anyNSError() -> NSError {
+        NSError(domain: "a domain", code: 1)
     }
 }
