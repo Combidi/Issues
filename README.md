@@ -15,7 +15,8 @@ GET *url* (TBD)
             "id": "60741806-5294-11ed-bdc3-0242ac120002",
             "customer": {
                 "email": "combeepeter@gmail.com",
-                "name": "Peter Combee"
+                "first_name": "Peter",
+                "last_name": "Combee"
             },
             "message": {
                 "subject": "Issues with my phone",
