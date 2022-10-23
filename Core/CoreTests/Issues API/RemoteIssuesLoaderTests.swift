@@ -5,6 +5,8 @@
 import XCTest
 
 final class RemoteIssuesLoader {
+    struct InvalidDataError: Swift.Error {}
+    
     private let client: Client
     private let url: URL
     
@@ -14,39 +16,45 @@ final class RemoteIssuesLoader {
     }
     
     func loadIssues() throws {
-        try client.get(from: url)
+        let result = try client.get(from: url)
+        if result.isEmpty {
+            throw InvalidDataError()
+        }
     }
 }
 
 final class Client {
     var loadedURLs = [URL]()
-    var stub: Error?
+    var stub: Result<Data, Error> = .success(Data())
         
-    func get(from url: URL) throws {
+    func get(from url: URL) throws -> Data {
         loadedURLs.append(url)
-        if let stub {
-            throw stub
+        switch stub {
+        case let .success(data):
+            return data
+        case let .failure(error):
+            throw error
         }
     }
 }
 
 class RemoteIssuesLoaderTests: XCTestCase {
     
-    func test_loadIssues_requestsIssuesFromClient() throws {
+    func test_loadIssues_requestsIssuesFromClient() {
         let url = URL(string: "https://a-url.com")!
         let (sut, client) = makeSUT(url: url)
         
-        try sut.loadIssues()
+        try? sut.loadIssues()
         
         XCTAssertEqual(client.loadedURLs, [url])
     }
     
-    func test_loadIssuesTwice_requestsIssuesFromClientTwice() throws {
+    func test_loadIssuesTwice_requestsIssuesFromClientTwice() {
         let url = URL(string: "https://a-url.com")!
         let (sut, client) = makeSUT(url: url)
         
-        try sut.loadIssues()
-        try sut.loadIssues()
+        try? sut.loadIssues()
+        try? sut.loadIssues()
         
         XCTAssertEqual(client.loadedURLs, [url, url])
     }
@@ -54,11 +62,19 @@ class RemoteIssuesLoaderTests: XCTestCase {
     func test_loadIssues_deliversErrorOnClientError() {
         let (sut, client) = makeSUT()
         let clientError = NSError(domain: "any", code: 1)
-        client.stub = clientError
+        client.stub = .failure(clientError)
     
         XCTAssertThrowsError(try sut.loadIssues())
     }
     
+    func test_loadIssues_deliverErrorOnEmptyData() {
+        let (sut, client) = makeSUT()
+        let emptyData = Data()
+        client.stub = .success(emptyData)
+    
+        XCTAssertThrowsError(try sut.loadIssues())
+    }
+
     // MARK: Helpers
     
     private func makeSUT(url: URL = URL(string: "https://any-url.com")!) -> (sut: RemoteIssuesLoader, client: Client) {
