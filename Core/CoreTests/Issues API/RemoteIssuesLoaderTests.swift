@@ -21,11 +21,7 @@ final class RemoteIssuesLoader {
 final class Client {
     var loadedURLs = [URL]()
     var stub: Error?
-    
-    init(stub: Error? = nil) {
-        self.stub = stub
-    }
-    
+        
     func get(from url: URL) throws {
         loadedURLs.append(url)
         if let stub {
@@ -58,9 +54,10 @@ class RemoteIssuesLoaderTests: XCTestCase {
     }
     
     func test_loadIssues_deliversErrorOnClientError() {
-        let anyURL = URL(string: "https://a-url.com")!
+        let anyURL = URL(string: "https://any-url.com")!
         let clientError = NSError(domain: "any", code: 1)
-        let client = Client(stub: clientError)
+        let client = Client()
+        client.stub = clientError
         let sut = RemoteIssuesLoader(client: client, url: anyURL)
     
         XCTAssertThrowsError(try sut.loadIssues())
