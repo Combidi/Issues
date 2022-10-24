@@ -27,7 +27,7 @@ final class URLSessionHTTPClient {
 class URLSessionHTTPClientTests: XCTestCase {
     
     func test_getFromUrl_performsGETRequestWithURL() {
-        let url = URL(string: "http://a-url.com")!
+        let url = anyURL()
         let sut = makeSUT()
             
         let exp = expectation(description: "Wait for equest")
@@ -79,13 +79,12 @@ class URLSessionHTTPClientTests: XCTestCase {
         line: UInt = #line
     ) -> Error? {
         let sut = makeSUT()
-        let url = URL(string: "http://any-url.com")!
 
         values.map { URLProtocolStub.stub(values: $0) }
 
         let exp = expectation(description: "Wait for equest")
         var receivedError: NSError?
-        sut.get(from: url) { error in
+        sut.get(from: anyURL()) { error in
             receivedError = error as? NSError
             exp.fulfill()
         }
