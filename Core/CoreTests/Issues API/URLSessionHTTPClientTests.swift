@@ -11,9 +11,15 @@ final class URLSessionHTTPClient {
         self.session = session
     }
     
-    func get(from url: URL, completion: @escaping (Error?) -> Void) {
-        session.dataTask(with: url) { _, _, error in
-            completion(error)
+    private struct UnexpectedValuesRepresentation: Error {}
+    
+    func get(from url: URL, completion: @escaping (Swift.Error?) -> Void) {
+        session.dataTask(with: url) { data, response, error in
+            if let error {
+                completion(error)
+            } else {
+                completion(UnexpectedValuesRepresentation())
+            }
         }.resume()
     }
 }
@@ -37,22 +43,28 @@ class URLSessionHTTPClientTests: XCTestCase {
     }
     
     func test_getFromURL_failsOnRequestError() {
-        let url = URL(string: "http://a-url.com")!
-        let sut = makeSUT()
-        
         let error = NSError(domain: "any", code: 1)
-        URLProtocolStub.stub(error: error)
-        
-        let exp = expectation(description: "Wait for equest")
-        var receivedError: NSError?
-        sut.get(from: url) { error in
-            receivedError = error as? NSError
-            exp.fulfill()
-        }
-        
-        wait(for: [exp], timeout: 1.0)
-        XCTAssertEqual(receivedError?.domain, error.domain)
+
+        let receivedError = resultErrorFor((data: nil, response: nil, error: error)) as? NSError
         XCTAssertEqual(receivedError?.code, error.code)
+        XCTAssertEqual(receivedError?.domain, error.domain)
+    }
+    
+    func test_getFromURL_failsOnAllInvalidRepresentationCases() {
+        let anyURL = URL(string: "http://any-url.com")!
+        let nonHTTPURLResponse = URLResponse(url: anyURL, mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
+        let anyData = Data("any".utf8)
+        let anyNSError = NSError(domain: "any", code: 0)
+        let anyHTTPURLResponse = HTTPURLResponse(url: anyURL, mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
+        XCTAssertNotNil(resultErrorFor((data: nil, response: nil, error: nil)))
+        XCTAssertNotNil(resultErrorFor((data: nil, response: nonHTTPURLResponse, error: nil)))
+        XCTAssertNotNil(resultErrorFor((data: anyData, response: nil, error: nil)))
+        XCTAssertNotNil(resultErrorFor((data: anyData, response: nil, error: anyNSError)))
+        XCTAssertNotNil(resultErrorFor((data: nil, response: nonHTTPURLResponse, error: anyNSError)))
+        XCTAssertNotNil(resultErrorFor((data: nil, response: anyHTTPURLResponse, error: anyNSError)))
+        XCTAssertNotNil(resultErrorFor((data: anyData, response: nonHTTPURLResponse, error: anyNSError)))
+        XCTAssertNotNil(resultErrorFor((data: anyData, response: anyHTTPURLResponse, error: anyNSError)))
+        XCTAssertNotNil(resultErrorFor((data: anyData, response: nonHTTPURLResponse, error: nil)))
     }
     
     // MARK: Helpers
@@ -65,6 +77,28 @@ class URLSessionHTTPClientTests: XCTestCase {
         trackForMemoryLeaks(sut)
         return sut
     }
+    
+    private func resultErrorFor(
+        _ values: (data: Data?, response: URLResponse?, error: Error?)? = nil,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) -> Error? {
+        let sut = makeSUT()
+        let url = URL(string: "http://any-url.com")!
+
+        values.map { URLProtocolStub.stub(values: $0) }
+
+        let exp = expectation(description: "Wait for equest")
+        var receivedError: NSError?
+        sut.get(from: url) { error in
+            receivedError = error as? NSError
+            exp.fulfill()
+        }
+        
+        wait(for: [exp], timeout: 1.0)
+
+        return receivedError
+    }
 }
 
 // MARK: Helpers
@@ -72,16 +106,17 @@ class URLSessionHTTPClientTests: XCTestCase {
 private class URLProtocolStub: URLProtocol {
     private struct Stub {
         let error: Error?
+        let data: Data?
         let requestObserver: ((URLRequest) -> Void)?
     }
     private static var stub: Stub?
     
     static func observeRequests(observer: @escaping (URLRequest) -> Void) {
-        stub = Stub(error: nil, requestObserver: observer)
+        stub = Stub(error: nil, data: nil, requestObserver: observer)
     }
     
-    static func stub(error: Error?) {
-        stub = Stub(error: error, requestObserver: nil)
+    static func stub(values: (data: Data?, response: URLResponse?, error: Error?)) {
+        stub = Stub(error: values.error, data: values.data, requestObserver: nil)
     }
     
     override class func canInit(with request: URLRequest) -> Bool {
@@ -97,6 +132,8 @@ private class URLProtocolStub: URLProtocol {
         
         if let error = stub.error {
             client?.urlProtocol(self, didFailWithError: error)
+        } else {
+            client?.urlProtocolDidFinishLoading(self)
         }
                 
         URLProtocolStub.stub?.requestObserver?(request)
