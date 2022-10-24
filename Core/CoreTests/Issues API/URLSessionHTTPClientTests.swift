@@ -21,13 +21,9 @@ final class URLSessionHTTPClient {
 class URLSessionHTTPClientTests: XCTestCase {
     
     func test_getFromUrl_performsGETRequestWithURL() {
-        
         let url = URL(string: "http://a-url.com")!
-        let configuration = URLSessionConfiguration.ephemeral
-        configuration.protocolClasses = [URLProtocolStub.self]
-        let session = URLSession(configuration: configuration)
-        let sut = URLSessionHTTPClient(session: session)
-        
+        let sut = makeSUT()
+            
         let exp = expectation(description: "Wait for equest")
         URLProtocolStub.observeRequests { request in
             XCTAssertEqual(request.url, url)
@@ -42,10 +38,7 @@ class URLSessionHTTPClientTests: XCTestCase {
     
     func test_getFromURL_failsOnRequestError() {
         let url = URL(string: "http://a-url.com")!
-        let configuration = URLSessionConfiguration.ephemeral
-        configuration.protocolClasses = [URLProtocolStub.self]
-        let session = URLSession(configuration: configuration)
-        let sut = URLSessionHTTPClient(session: session)
+        let sut = makeSUT()
         
         let error = NSError(domain: "any", code: 1)
         URLProtocolStub.stub(error: error)
@@ -60,6 +53,16 @@ class URLSessionHTTPClientTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
         XCTAssertEqual(receivedError?.domain, error.domain)
         XCTAssertEqual(receivedError?.code, error.code)
+    }
+    
+    // MARK: Helpers
+    
+    private func makeSUT() -> URLSessionHTTPClient {
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [URLProtocolStub.self]
+        let session = URLSession(configuration: configuration)
+        let sut = URLSessionHTTPClient(session: session)
+        return sut
     }
 }
 
