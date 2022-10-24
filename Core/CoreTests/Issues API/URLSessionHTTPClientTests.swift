@@ -62,9 +62,12 @@ class URLSessionHTTPClientTests: XCTestCase {
         configuration.protocolClasses = [URLProtocolStub.self]
         let session = URLSession(configuration: configuration)
         let sut = URLSessionHTTPClient(session: session)
+        trackForMemoryLeaks(sut)
         return sut
     }
 }
+
+// MARK: Helpers
 
 private class URLProtocolStub: URLProtocol {
     private struct Stub {
@@ -100,4 +103,12 @@ private class URLProtocolStub: URLProtocol {
     }
     
     override func stopLoading() {}
+}
+
+private extension XCTestCase {
+    func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
+        addTeardownBlock { [weak instance] in
+            XCTAssertNil(instance, "Instance should have been deallocated. Potential memory leak", file: file, line: line)
+        }
+    }
 }
