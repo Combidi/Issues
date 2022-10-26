@@ -17,13 +17,13 @@ final class URLSessionHTTPClient {
     
     func get(from url: URL, completion: @escaping (Result) -> Void) {
         session.dataTask(with: url) { data, response, error in
-            if let error {
-                return completion(.failure(error))
-            }
-            if let data = data, let response = response as? HTTPURLResponse {
-                return completion(.success((data: data, response: response)))
-            }
-            completion(.failure(UnexpectedValuesRepresentation()))
+            completion(Result {
+                if let error { throw error }
+                if let data = data, let response = response as? HTTPURLResponse {
+                    return (data, response)
+                }
+                throw UnexpectedValuesRepresentation()
+            })
         }.resume()
     }
 }
