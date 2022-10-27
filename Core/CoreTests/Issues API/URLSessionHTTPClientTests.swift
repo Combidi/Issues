@@ -3,30 +3,7 @@
 //
 
 import XCTest
-
-final class URLSessionHTTPClient {
-    typealias Result = Swift.Result<(data: Data, response: HTTPURLResponse), Error>
-    
-    private let session: URLSession
-    
-    init(session: URLSession) {
-        self.session = session
-    }
-    
-    private struct UnexpectedValuesRepresentation: Error {}
-    
-    func get(from url: URL, completion: @escaping (Result) -> Void) {
-        session.dataTask(with: url) { data, response, error in
-            completion(Result {
-                if let error { throw error }
-                if let data = data, let response = response as? HTTPURLResponse {
-                    return (data, response)
-                }
-                throw UnexpectedValuesRepresentation()
-            })
-        }.resume()
-    }
-}
+import Core
 
 class URLSessionHTTPClientTests: XCTestCase {
     
