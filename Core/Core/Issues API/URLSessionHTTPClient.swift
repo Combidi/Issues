@@ -4,9 +4,7 @@
 
 import Foundation
 
-public final class URLSessionHTTPClient {
-    public typealias Result = Swift.Result<(data: Data, response: HTTPURLResponse), Error>
-    
+public final class URLSessionHTTPClient: HTTPClient {
     private let session: URLSession
     
     public init(session: URLSession) {
@@ -15,7 +13,7 @@ public final class URLSessionHTTPClient {
     
     private struct UnexpectedValuesRepresentation: Error {}
     
-    public func get(from url: URL, completion: @escaping (Result) -> Void) {
+    public func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) {
         session.dataTask(with: url) { data, response, error in
             completion(Result {
                 if let error { throw error }
