@@ -4,7 +4,7 @@
 
 import Foundation
 
-public final class RemoteIssuesLoader {
+public final class RemoteIssuesLoader: IssuesLoader {
     struct InvalidDataError: Swift.Error {}
         
     private let client: HTTPClient
@@ -15,7 +15,7 @@ public final class RemoteIssuesLoader {
         self.url = url
     }
     
-    public func loadIssues(completion: @escaping (Result<[Issue], Error>) -> Void) {
+    public func loadIssues(completion: @escaping Completion) {
         client.get(from: url) { result in
             switch result {
             case let .success((data, response)):
