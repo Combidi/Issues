@@ -4,6 +4,13 @@
 
 import Foundation
 
+struct RemoteIssue {
+    let firstName: String
+    let surname: String
+    let submissionDate: Date
+    let subject: String
+}
+
 public final class RemoteIssuesLoader: IssuesLoader {
     struct InvalidDataError: Swift.Error {}
         
@@ -22,11 +29,24 @@ public final class RemoteIssuesLoader: IssuesLoader {
                 guard response.statusCode == 200, !data.isEmpty else {
                     return completion(.failure(InvalidDataError()))
                 }
-                completion(Result { try IssuesMapper.map(data: data, response: response) })
+                completion(Result { try IssuesMapper.map(data: data, response: response).toDomain() })
 
             case let .failure(error):
                 completion(.failure(error))
             }
+        }
+    }
+}
+
+private extension Array where Element == RemoteIssue {
+    func toDomain() -> [Issue] {
+        map {
+            Issue(
+                firstName: $0.firstName,
+                surname: $0.surname,
+                submissionDate: $0.submissionDate,
+                subject: $0.subject
+            )
         }
     }
 }
