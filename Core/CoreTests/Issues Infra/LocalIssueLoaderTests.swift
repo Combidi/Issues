@@ -101,9 +101,9 @@ final class LocalIssueLoaderTests: XCTestCase {
         using sut: LocalIssueLoader,
         file: StaticString = #filePath,
         line: UInt = #line
-    ) -> IssuesLoader.Result? {
+    ) -> IssuesLoader.LoadIssuesResult? {
         let exp = expectation(description: "wait for load completion")
-        var receivedResult: IssuesLoader.Result?
+        var receivedResult: IssuesLoader.LoadIssuesResult?
         sut.loadIssues {
             receivedResult = $0
             exp.fulfill()
