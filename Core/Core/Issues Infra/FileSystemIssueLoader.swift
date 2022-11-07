@@ -4,7 +4,7 @@
 
 import Foundation
 
-public final class LocalIssueLoader: IssuesLoader {
+public final class FileSystemIssueLoader: IssuesLoader {
     private let fileURL: URL
     private let mapper: (Data) throws -> [Issue]
     
@@ -13,7 +13,7 @@ public final class LocalIssueLoader: IssuesLoader {
         self.mapper = mapper
     }
     
-    private let queue = DispatchQueue(label: "\(LocalIssueLoader.self)Queue", qos: .userInitiated)
+    private let queue = DispatchQueue(label: "\(FileSystemIssueLoader.self)Queue", qos: .userInitiated)
 
     public func loadIssues(completion: @escaping Completion) {
         let fileURL = fileURL

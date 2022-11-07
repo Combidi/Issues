@@ -5,7 +5,7 @@
 import XCTest
 import Core
 
-final class LocalIssueLoaderTests: XCTestCase {
+final class FileSystemIssueLoaderTests: XCTestCase {
         
     func test_loadIssues_deliversErrorOnMapperError() {
         let mapperError = anyError()
@@ -34,7 +34,7 @@ final class LocalIssueLoaderTests: XCTestCase {
     
     private func makeSUT(mapResultStub resultStub: Result<[Issue], NSError> = .success([])) -> LocalIssueLoader {
         let fileURL = testSpecificFileURL()
-        let sut = LocalIssueLoader(fileURL: fileURL, mapper: { data in
+        let sut = FileSystemIssueLoader(fileURL: fileURL, mapper: { data in
             switch resultStub {
             case .failure(let error):
                 throw error
@@ -48,7 +48,7 @@ final class LocalIssueLoaderTests: XCTestCase {
     }
 
     private func assertThat(
-        _ sut: LocalIssueLoader,
+        _ sut: FileSystemIssueLoader,
         completesWithError expectedError: NSError,
         file: StaticString = #filePath,
         line: UInt = #line
@@ -78,8 +78,8 @@ final class LocalIssueLoaderTests: XCTestCase {
     }
     
     private func assertThat(
-        _ sut: LocalIssueLoader,
-        completesWithIssues expectedIssues: [Issue],
+        _ sut: FileSystemIssueLoader,
+        completesWith expectedIssues: [Issue],
         file: StaticString = #filePath,
         line: UInt = #line
     ) {
@@ -98,7 +98,7 @@ final class LocalIssueLoaderTests: XCTestCase {
     }
     
     private func loadIssues(
-        using sut: LocalIssueLoader,
+        using sut: FileSystemIssueLoader,
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> IssuesLoader.LoadIssuesResult? {
