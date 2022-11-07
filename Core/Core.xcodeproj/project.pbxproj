@@ -21,8 +21,8 @@
 		D0AC69A828BD561E0073363F /* IssuesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AC69A728BD561E0073363F /* IssuesView.swift */; };
 		D0AC69AB28BD57720073363F /* Issues.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0AC69AD28BD57720073363F /* Issues.strings */; };
 		D0AC69B028BD580C0073363F /* IssuesLocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AC69AF28BD580C0073363F /* IssuesLocalizationTests.swift */; };
-		D0B9762328C1D45F00BF60C3 /* LocalIssueLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B9762228C1D45F00BF60C3 /* LocalIssueLoader.swift */; };
-		D0B9762528C1D49500BF60C3 /* LocalIssueLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B9762428C1D49500BF60C3 /* LocalIssueLoaderTests.swift */; };
+		D0B9762328C1D45F00BF60C3 /* FileSystemIssueLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B9762228C1D45F00BF60C3 /* FileSystemIssueLoader.swift */; };
+		D0B9762528C1D49500BF60C3 /* FileSystemIssueLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B9762428C1D49500BF60C3 /* FileSystemIssueLoaderTests.swift */; };
 		D0EF8DD229050E2A00661505 /* RemoteIssuesLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EF8DD129050E2A00661505 /* RemoteIssuesLoaderTests.swift */; };
 		D0EF8DD92905AF5700661505 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EF8DD82905AF5700661505 /* HTTPClient.swift */; };
 		D0EF8DDB2905AF9300661505 /* RemoteIssuesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EF8DDA2905AF9300661505 /* RemoteIssuesLoader.swift */; };
@@ -57,8 +57,8 @@
 		D0AC69AC28BD57720073363F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Issues.strings; sourceTree = "<group>"; };
 		D0AC69AE28BD57C70073363F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Issues.strings; sourceTree = "<group>"; };
 		D0AC69AF28BD580C0073363F /* IssuesLocalizationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesLocalizationTests.swift; sourceTree = "<group>"; };
-		D0B9762228C1D45F00BF60C3 /* LocalIssueLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalIssueLoader.swift; sourceTree = "<group>"; };
-		D0B9762428C1D49500BF60C3 /* LocalIssueLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalIssueLoaderTests.swift; sourceTree = "<group>"; };
+		D0B9762228C1D45F00BF60C3 /* FileSystemIssueLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemIssueLoader.swift; sourceTree = "<group>"; };
+		D0B9762428C1D49500BF60C3 /* FileSystemIssueLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemIssueLoaderTests.swift; sourceTree = "<group>"; };
 		D0EF8DD129050E2A00661505 /* RemoteIssuesLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteIssuesLoaderTests.swift; sourceTree = "<group>"; };
 		D0EF8DD82905AF5700661505 /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		D0EF8DDA2905AF9300661505 /* RemoteIssuesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteIssuesLoader.swift; sourceTree = "<group>"; };
@@ -177,7 +177,7 @@
 			isa = PBXGroup;
 			children = (
 				D0F0F99428C0B8D00030ED02 /* CSVIssuesMapper.swift */,
-				D0B9762228C1D45F00BF60C3 /* LocalIssueLoader.swift */,
+				D0B9762228C1D45F00BF60C3 /* FileSystemIssueLoader.swift */,
 				D004B55C2901DBC800AAACE3 /* StreamingFileReader.swift */,
 			);
 			path = "Issues Infra";
@@ -187,7 +187,7 @@
 			isa = PBXGroup;
 			children = (
 				D01984D428BE92DF00930C71 /* CSVIssuesMapperTests.swift */,
-				D0B9762428C1D49500BF60C3 /* LocalIssueLoaderTests.swift */,
+				D0B9762428C1D49500BF60C3 /* FileSystemIssueLoaderTests.swift */,
 				D004B55A28FBFE2C00AAACE3 /* StreamingFileReader.swift */,
 			);
 			path = "Issues Infra";
@@ -314,7 +314,7 @@
 				D0EF8DDB2905AF9300661505 /* RemoteIssuesLoader.swift in Sources */,
 				D0F0F99528C0B8D00030ED02 /* CSVIssuesMapper.swift in Sources */,
 				D0AC699228BD31760073363F /* Issue.swift in Sources */,
-				D0B9762328C1D45F00BF60C3 /* LocalIssueLoader.swift in Sources */,
+				D0B9762328C1D45F00BF60C3 /* FileSystemIssueLoader.swift in Sources */,
 				D06275F5290AC9720014F27A /* URLSessionHTTPClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -325,7 +325,7 @@
 			files = (
 				D0A67F272905C52400CD7178 /* URLSessionHTTPClientTests.swift in Sources */,
 				D0EF8DD229050E2A00661505 /* RemoteIssuesLoaderTests.swift in Sources */,
-				D0B9762528C1D49500BF60C3 /* LocalIssueLoaderTests.swift in Sources */,
+				D0B9762528C1D49500BF60C3 /* FileSystemIssueLoaderTests.swift in Sources */,
 				D004B55B28FBFE2C00AAACE3 /* StreamingFileReader.swift in Sources */,
 				D0AC69B028BD580C0073363F /* IssuesLocalizationTests.swift in Sources */,
 				D0AC699D28BD32280073363F /* IssuesPresenterTests.swift in Sources */,

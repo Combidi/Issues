@@ -5,21 +5,21 @@
 import XCTest
 import Core
 
-final class LocalIssueLoaderTests: XCTestCase {
+final class FileSystemIssueLoaderTests: XCTestCase {
         
     func test_loadIssues_deliversErrorOnMapperError() {
         let mapperError = anyError()
         let sut = makeSUT(mapResultStub: .failure(mapperError))
         saveTestFileWith(data: invalidData())
         
-        assertThat(sut, completesWithError: mapperError)
+        assertThat(sut, completesWith: mapperError)
     }
     
     func test_loadIssues_deliversErrorOnMissingFile() {
         let sut = makeSUT()
         removeTestFile()
         
-        assertThat(sut, completesWithError: fileNotFoundError())
+        assertThat(sut, completesWith: fileNotFoundError())
     }
     
     func test_loadIssues_deliversIssuesOnSuccessfulMapping() {
@@ -27,14 +27,14 @@ final class LocalIssueLoaderTests: XCTestCase {
         let sut = makeSUT(mapResultStub: .success(issues))
         saveTestFileWith(data: validData())
 
-        assertThat(sut, completesWithIssues: issues)
+        assertThat(sut, completesWith: issues)
     }
     
     // MARK: Helpers
     
-    private func makeSUT(mapResultStub resultStub: Result<[Issue], NSError> = .success([])) -> LocalIssueLoader {
+    private func makeSUT(mapResultStub resultStub: Result<[Issue], NSError> = .success([])) -> FileSystemIssueLoader {
         let fileURL = testSpecificFileURL()
-        let sut = LocalIssueLoader(fileURL: fileURL, mapper: { data in
+        let sut = FileSystemIssueLoader(fileURL: fileURL, mapper: { data in
             switch resultStub {
             case .failure(let error):
                 throw error
@@ -48,8 +48,8 @@ final class LocalIssueLoaderTests: XCTestCase {
     }
 
     private func assertThat(
-        _ sut: LocalIssueLoader,
-        completesWithError expectedError: NSError,
+        _ sut: FileSystemIssueLoader,
+        completesWith expectedError: NSError,
         file: StaticString = #filePath,
         line: UInt = #line
     ) {
@@ -78,8 +78,8 @@ final class LocalIssueLoaderTests: XCTestCase {
     }
     
     private func assertThat(
-        _ sut: LocalIssueLoader,
-        completesWithIssues expectedIssues: [Issue],
+        _ sut: FileSystemIssueLoader,
+        completesWith expectedIssues: [Issue],
         file: StaticString = #filePath,
         line: UInt = #line
     ) {
@@ -98,12 +98,12 @@ final class LocalIssueLoaderTests: XCTestCase {
     }
     
     private func loadIssues(
-        using sut: LocalIssueLoader,
+        using sut: FileSystemIssueLoader,
         file: StaticString = #filePath,
         line: UInt = #line
-    ) -> IssuesLoader.Result? {
+    ) -> IssuesLoader.LoadIssuesResult? {
         let exp = expectation(description: "wait for load completion")
-        var receivedResult: IssuesLoader.Result?
+        var receivedResult: IssuesLoader.LoadIssuesResult?
         sut.loadIssues {
             receivedResult = $0
             exp.fulfill()

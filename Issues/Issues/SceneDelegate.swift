@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             assertionFailure("File `issuses.csv` not found")
             return
         }
-        let loader = LocalIssueLoader(fileURL: url, mapper: { try CSVIssuesMapper.map($0) })
+        let loader = FileSystemIssueLoader(fileURL: url, mapper: { try CSVIssuesMapper.map($0) })
         let issues = IssuesUIComposer.compose(withLoader: loader)
         window?.rootViewController = UINavigationController(rootViewController: issues)
         window?.makeKeyAndVisible()

@@ -5,8 +5,8 @@
 import Foundation
 
 public protocol IssuesLoader {
-    typealias Result = Swift.Result<[Issue], Error>
-    typealias Completion = (Result) -> Void
+    typealias LoadIssuesResult = Swift.Result<[Issue], Error>
+    typealias Completion = (LoadIssuesResult) -> Void
     
     /// The completion handler can be invoked in any thread.
     /// Clients are responsible to dispatch to appropriate threads, if needed.

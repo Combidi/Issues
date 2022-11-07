@@ -12,6 +12,7 @@ struct RemoteIssue {
 }
 
 public final class RemoteIssuesLoader: IssuesLoader {
+    
     struct InvalidDataError: Swift.Error {}
         
     private let client: HTTPClient
@@ -22,19 +23,25 @@ public final class RemoteIssuesLoader: IssuesLoader {
         self.url = url
     }
     
+    typealias Result = LoadIssuesResult
+    
     public func loadIssues(completion: @escaping Completion) {
         client.get(from: url) { result in
             switch result {
             case let .success((data, response)):
-                guard response.statusCode == 200, !data.isEmpty else {
-                    return completion(.failure(InvalidDataError()))
-                }
-                completion(Result { try IssuesMapper.map(data: data, response: response).toDomain() })
+                completion(Self.map(data, from: response))
 
             case let .failure(error):
                 completion(.failure(error))
             }
         }
+    }
+    
+    static private func map(_ data: Data, from response: HTTPURLResponse) -> Result {
+        guard response.statusCode == 200, !data.isEmpty else {
+            return .failure(InvalidDataError())
+        }
+        return Result { try IssuesMapper.map(data: data, response: response).toDomain() }
     }
 }
 
