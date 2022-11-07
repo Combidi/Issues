@@ -12,14 +12,14 @@ final class FileSystemIssueLoaderTests: XCTestCase {
         let sut = makeSUT(mapResultStub: .failure(mapperError))
         saveTestFileWith(data: invalidData())
         
-        assertThat(sut, completesWithError: mapperError)
+        assertThat(sut, completesWith: mapperError)
     }
     
     func test_loadIssues_deliversErrorOnMissingFile() {
         let sut = makeSUT()
         removeTestFile()
         
-        assertThat(sut, completesWithError: fileNotFoundError())
+        assertThat(sut, completesWith: fileNotFoundError())
     }
     
     func test_loadIssues_deliversIssuesOnSuccessfulMapping() {
@@ -27,12 +27,12 @@ final class FileSystemIssueLoaderTests: XCTestCase {
         let sut = makeSUT(mapResultStub: .success(issues))
         saveTestFileWith(data: validData())
 
-        assertThat(sut, completesWithIssues: issues)
+        assertThat(sut, completesWith: issues)
     }
     
     // MARK: Helpers
     
-    private func makeSUT(mapResultStub resultStub: Result<[Issue], NSError> = .success([])) -> LocalIssueLoader {
+    private func makeSUT(mapResultStub resultStub: Result<[Issue], NSError> = .success([])) -> FileSystemIssueLoader {
         let fileURL = testSpecificFileURL()
         let sut = FileSystemIssueLoader(fileURL: fileURL, mapper: { data in
             switch resultStub {
@@ -49,7 +49,7 @@ final class FileSystemIssueLoaderTests: XCTestCase {
 
     private func assertThat(
         _ sut: FileSystemIssueLoader,
-        completesWithError expectedError: NSError,
+        completesWith expectedError: NSError,
         file: StaticString = #filePath,
         line: UInt = #line
     ) {
