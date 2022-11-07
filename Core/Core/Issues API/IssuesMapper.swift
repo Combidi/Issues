@@ -5,10 +5,10 @@
 import Foundation
 
 enum IssuesMapper {
-    static func map(data: Data, response: HTTPURLResponse) throws -> [Issue] {
+    static func map(data: Data, response: HTTPURLResponse) throws -> [RemoteIssue] {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
-        return try decoder.decode(Issues.self, from: data).toDomain()
+        return try decoder.decode(Issues.self, from: data).issues.toRemote()
     }
 }
 
@@ -22,17 +22,19 @@ private struct Issues: Decodable {
         let subject: String
     }
 
-    struct Item: Decodable {
+    struct Issue: Decodable {
         let customer: Customer
         let created_at: Date
         let message: Message
     }
     
-    let issues: [Item]
-    
-    func toDomain() -> [Issue] {
-        issues.map {
-            Issue(
+    let issues: [Issue]
+}
+
+private extension Array where Element == Issues.Issue {
+    func toRemote() -> [RemoteIssue] {
+        map {
+            RemoteIssue(
                 firstName: $0.customer.first_name,
                 surname: $0.customer.last_name,
                 submissionDate: $0.created_at,
