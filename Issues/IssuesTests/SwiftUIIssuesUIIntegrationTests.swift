@@ -99,7 +99,7 @@ final class SwiftUIIssuesUIIntegrationTests: XCTestCase {
         line: UInt = #line
     ) -> (sut: IssuesViewController, loader: IssuesLoaderSpy) {
         let loader = IssuesLoaderSpy()
-        let sut = IssuesUIComposer.compose(withLoader: loader, locale: locale) as! IssuesViewController
+        let sut = SwiftUIIssuesUIComposer.compose(withLoader: loader, locale: locale) as! IssuesViewController
         trackForMemoryLeaks(loader, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, loader)

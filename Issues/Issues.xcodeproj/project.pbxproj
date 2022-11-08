@@ -12,6 +12,7 @@
 		D045211E28C522F500974145 /* issues.csv in Resources */ = {isa = PBXBuildFile; fileRef = D045211D28C522F500974145 /* issues.csv */; };
 		D05842DF28B7B44700450ACA /* IssueCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D05842DE28B7B44700450ACA /* IssueCell.xib */; };
 		D06275F7291AAFFD0014F27A /* SwiftUIIssuesUIIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06275F6291AAFFD0014F27A /* SwiftUIIssuesUIIntegrationTests.swift */; };
+		D06275F9291AB0450014F27A /* SwiftUIIssuesUIComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06275F8291AB0450014F27A /* SwiftUIIssuesUIComposer.swift */; };
 		D08E51CB28B3FEB7005B4B80 /* IssuesUIIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08E51C928B3FE92005B4B80 /* IssuesUIIntegrationTests.swift */; };
 		D0AB94FC28B55B470010B924 /* IssuesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AB94FB28B55B470010B924 /* IssuesViewController.swift */; };
 		D0AB94FF28B55BCB0010B924 /* IssueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AB94FE28B55BCB0010B924 /* IssueCell.swift */; };
@@ -55,6 +56,7 @@
 		D045211D28C522F500974145 /* issues.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = issues.csv; sourceTree = "<group>"; };
 		D05842DE28B7B44700450ACA /* IssueCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IssueCell.xib; sourceTree = "<group>"; };
 		D06275F6291AAFFD0014F27A /* SwiftUIIssuesUIIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIIssuesUIIntegrationTests.swift; sourceTree = "<group>"; };
+		D06275F8291AB0450014F27A /* SwiftUIIssuesUIComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIIssuesUIComposer.swift; sourceTree = "<group>"; };
 		D08E51C928B3FE92005B4B80 /* IssuesUIIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesUIIntegrationTests.swift; sourceTree = "<group>"; };
 		D0AB94FB28B55B470010B924 /* IssuesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesViewController.swift; sourceTree = "<group>"; };
 		D0AB94FE28B55BCB0010B924 /* IssueCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueCell.swift; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 			children = (
 				D0AB94FD28B55BBC0010B924 /* Issues UI */,
 				D0AB950328B55C790010B924 /* IssuesUIComposer.swift */,
+				D06275F8291AB0450014F27A /* SwiftUIIssuesUIComposer.swift */,
 				D0BAC24E28B3F388001D6538 /* AppDelegate.swift */,
 				D0BAC25028B3F388001D6538 /* SceneDelegate.swift */,
 				D045211D28C522F500974145 /* issues.csv */,
@@ -268,6 +271,7 @@
 				D0AB94FC28B55B470010B924 /* IssuesViewController.swift in Sources */,
 				D0AB950428B55C790010B924 /* IssuesUIComposer.swift in Sources */,
 				D0BAC24F28B3F388001D6538 /* AppDelegate.swift in Sources */,
+				D06275F9291AB0450014F27A /* SwiftUIIssuesUIComposer.swift in Sources */,
 				D0BAC25128B3F388001D6538 /* SceneDelegate.swift in Sources */,
 				D0AB94FF28B55BCB0010B924 /* IssueCell.swift in Sources */,
 			);
