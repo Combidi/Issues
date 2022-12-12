@@ -3,6 +3,7 @@
 //
 
 import UIKit
+import SwiftUI
 import Core
 
 public struct SwiftUIIssuesUIComposer {
@@ -11,16 +12,16 @@ public struct SwiftUIIssuesUIComposer {
     public static func compose(
         withLoader loader: IssuesLoader,
         locale: Locale = .current
-    ) -> UIViewController {
-        let viewController = IssuesViewController()
+    ) -> IssuesListView {
+        let model = IssuesListViewModel()
+        let view = IssuesListView(model: model)
         let presenter = IssuesPresenter(
             loader: loader,
-            view: MainThreadDispatchingIssueViewDecorator(decoratee: WeakRefVirtualProxy(viewController)),
+            view: MainThreadDispatchingIssueViewDecorator(decoratee: WeakRefVirtualProxy(model)),
             locale: locale
         )
-        viewController.loadIssues = presenter.loadIssues
-        viewController.title = IssuesPresenter.title
-        return viewController
+        model.loadIssues = presenter.loadIssues
+        return view
     }
 }
 

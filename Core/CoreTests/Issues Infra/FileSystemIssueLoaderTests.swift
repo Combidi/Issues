@@ -6,7 +6,7 @@ import XCTest
 import Core
 
 final class FileSystemIssueLoaderTests: XCTestCase {
-        
+    
     func test_loadIssues_deliversErrorOnMapperError() {
         let mapperError = anyError()
         let sut = makeSUT(mapResultStub: .failure(mapperError))
@@ -34,7 +34,7 @@ final class FileSystemIssueLoaderTests: XCTestCase {
     
     private func makeSUT(mapResultStub resultStub: Result<[Issue], NSError> = .success([])) -> FileSystemIssueLoader {
         let fileURL = testSpecificFileURL()
-        let sut = FileSystemIssueLoader(fileURL: fileURL, mapper: { data in
+        let sut = FileSystemIssueLoader(fileURL: fileURL, mapper: { _ in
             switch resultStub {
             case .failure(let error):
                 throw error

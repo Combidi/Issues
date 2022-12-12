@@ -8,14 +8,6 @@ import Core
 
 final class SwiftUIIssuesUIIntegrationTests: XCTestCase {
     
-    func test_issuesView_hasTitle() {
-        let (sut, _) = makeSUT()
-    
-        sut.loadViewIfNeeded()
-
-        XCTAssertEqual(sut.title, "Issues")
-    }
-    
     func test_loadsIssuesActionLoadsIssuesFromLoader() {
         let (sut, loader) = makeSUT()
         
@@ -32,41 +24,41 @@ final class SwiftUIIssuesUIIntegrationTests: XCTestCase {
         
         sut.loadViewIfNeeded()
         
-        XCTAssertEqual(sut.numberOfRenderedIssueViews(), 0)
+        XCTAssertEqual(try sut.numberOfRenderedIssueViews(), 0)
     
         loader.completeIssuesLoading(with: [issue0, issue1], at: 0)
         
-        XCTAssertEqual(sut.numberOfRenderedIssueViews(), 2)
+        XCTAssertEqual(try sut.numberOfRenderedIssueViews(), 2)
         
-        XCTAssertEqual(sut.renderedName(atIndex: 0), "Peter Combee")
-        XCTAssertEqual(sut.renderedSubject(atIndex: 0), "Phone charger is missing")
-        XCTAssertEqual(sut.renderedSubmissionDate(atIndex: 0), "24 dec. 1990")
+        XCTAssertEqual(try sut.renderedName(atIndex: 0), "Peter Combee")
+        XCTAssertEqual(try sut.renderedSubject(atIndex: 0), "Phone charger is missing")
+        XCTAssertEqual(try sut.renderedSubmissionDate(atIndex: 0), "24 dec. 1990")
 
-        XCTAssertEqual(sut.renderedName(atIndex: 1), "Luna Combee")
-        XCTAssertEqual(sut.renderedSubject(atIndex: 1), "My game controller is broken")
-        XCTAssertEqual(sut.renderedSubmissionDate(atIndex: 1), "27 okt. 1992")
+        XCTAssertEqual(try sut.renderedName(atIndex: 1), "Luna Combee")
+        XCTAssertEqual(try sut.renderedSubject(atIndex: 1), "My game controller is broken")
+        XCTAssertEqual(try sut.renderedSubmissionDate(atIndex: 1), "27 okt. 1992")
     }
 
     func test_loadingIssuesIndicator_isVisibleWhileLoadingIssues_success() {
         let (sut, loader) = makeSUT()
 
         sut.loadViewIfNeeded()
-        XCTAssertTrue(sut.isShowingLoadingIndicator, "Expected loading indicator once view is loaded")
+        XCTAssertTrue(try sut.isShowingLoadingIndicator(), "Expected loading indicator once view is loaded")
     
         loader.completeIssuesLoading(at: 0)
         
-        XCTAssertFalse(sut.isShowingLoadingIndicator, "Expected no loading indicator once loading completes successfully")
+        XCTAssertFalse(try sut.isShowingLoadingIndicator(), "Expected no loading indicator once loading completes successfully")
     }
 
     func test_loadingIssuesIndicator_isVisibleWhileLoadingIssues_failure() {
         let (sut, loader) = makeSUT()
 
         sut.loadViewIfNeeded()
-        XCTAssertTrue(sut.isShowingLoadingIndicator, "Expected loading indicator once view is loaded")
+        XCTAssertTrue(try sut.isShowingLoadingIndicator(), "Expected loading indicator once view is loaded")
     
         loader.completeIssuesLoadingWithError()
         
-        XCTAssertFalse(sut.isShowingLoadingIndicator, "Expected no loading indicator once loading completes with error")
+        XCTAssertFalse(try sut.isShowingLoadingIndicator(), "Expected no loading indicator once loading completes with error")
     }
     
     func test_loadIssuesCompletion_dispatchesFromBackgroundToMainThread() {
@@ -90,58 +82,69 @@ final class SwiftUIIssuesUIIntegrationTests: XCTestCase {
         loader.completeIssuesLoadingWithError(at: 0)
         XCTAssertEqual(sut.renderedErrorMessage(), "Invalid data")
     }
-
+    
     // MARK: Helpers
     
     private func makeSUT(
         locale: Locale = .current,
         file: StaticString = #filePath,
         line: UInt = #line
-    ) -> (sut: IssuesViewController, loader: IssuesLoaderSpy) {
+    ) -> (sut: IssuesListView, loader: IssuesLoaderSpy) {
         let loader = IssuesLoaderSpy()
-        let sut = SwiftUIIssuesUIComposer.compose(withLoader: loader, locale: locale) as! IssuesViewController
+        let sut = SwiftUIIssuesUIComposer.compose(withLoader: loader, locale: locale)
         trackForMemoryLeaks(loader, file: file, line: line)
-        trackForMemoryLeaks(sut, file: file, line: line)
+        trackForMemoryLeaks(sut.model, file: file, line: line)
         return (sut, loader)
     }
 }
 
 // MARK: Helpers
 
-private extension IssuesViewController {
-    
-    private var issuesSection: Int {
-        return 0
-    }
+import ViewInspector
 
-    func numberOfRenderedIssueViews() -> Int {
-        tableView.numberOfRows(inSection: issuesSection)
-    }
-
-    func renderedName(atIndex index: Int = 0) -> String? {
-        issueView(atIndex: index)?.nameLabel.text
+extension IssuesListView: Inspectable {
+    private typealias IssueViewType = InspectableView<ViewType.VStack>
+    
+    private func issueViews() throws -> [IssueViewType] {
+        try inspect().findAll(ViewType.VStack.self)
     }
     
-    func renderedSubject(atIndex index: Int = 0) -> String? {
-        issueView(atIndex: index)?.subjectLabel.text
-    }
-
-    func renderedSubmissionDate(atIndex index: Int = 0) -> String? {
-        issueView(atIndex: index)?.submissionDateLabel.text
+    func numberOfRenderedIssueViews() throws -> Int {
+        try issueViews().count
     }
     
-    private func issueView(atIndex index: Int = 0) -> IssueCell? {
-        let dataSource = tableView.dataSource
-        let index = IndexPath(row: index, section: issuesSection)
-        return dataSource?.tableView(tableView, cellForRowAt: index) as? IssueCell
+    func renderedName(atIndex index: Int = 0) throws -> String? {
+        try issueView(atIndex: index)?.findAll(ViewType.Text.self)[0].string()
     }
     
-    var isShowingLoadingIndicator: Bool {
-        activityIndicator.isAnimating
+    func renderedSubject(atIndex index: Int = 0) throws -> String? {
+        try issueView(atIndex: index)?.findAll(ViewType.Text.self)[1].string()
+    }
+    
+    func renderedSubmissionDate(atIndex index: Int = 0) throws -> String? {
+        try issueView(atIndex: index)?.findAll(ViewType.Text.self)[2].string()
+    }
+    
+    private func issueView(atIndex index: Int = 0) throws -> IssueViewType? {
+        try issueViews()[safe: index]
+    }
+    
+    func isShowingLoadingIndicator() throws -> Bool {
+        try !inspect().findAll(ViewType.ProgressView.self).isEmpty
     }
     
     func renderedErrorMessage() -> String? {
-        errorLabel.text
+        try? inspect().find(ViewType.Text.self).string()
+    }
+    
+    func loadViewIfNeeded() {
+        ViewHosting.host(view: self, function: "dop")
+    }
+}
+
+private extension Collection {
+    subscript (safe index: Index) -> Element? {
+        return indices.contains(index) ? self[index] : nil
     }
 }
 

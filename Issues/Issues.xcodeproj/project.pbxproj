@@ -13,6 +13,8 @@
 		D05842DF28B7B44700450ACA /* IssueCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D05842DE28B7B44700450ACA /* IssueCell.xib */; };
 		D06275F7291AAFFD0014F27A /* SwiftUIIssuesUIIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06275F6291AAFFD0014F27A /* SwiftUIIssuesUIIntegrationTests.swift */; };
 		D06275F9291AB0450014F27A /* SwiftUIIssuesUIComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06275F8291AB0450014F27A /* SwiftUIIssuesUIComposer.swift */; };
+		D06275FD291AB0A20014F27A /* IssuesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06275FC291AB0A20014F27A /* IssuesListView.swift */; };
+		D0627603291AB5A70014F27A /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = D0627602291AB5A70014F27A /* ViewInspector */; };
 		D08E51CB28B3FEB7005B4B80 /* IssuesUIIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08E51C928B3FE92005B4B80 /* IssuesUIIntegrationTests.swift */; };
 		D0AB94FC28B55B470010B924 /* IssuesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AB94FB28B55B470010B924 /* IssuesViewController.swift */; };
 		D0AB94FF28B55BCB0010B924 /* IssueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AB94FE28B55BCB0010B924 /* IssueCell.swift */; };
@@ -57,6 +59,7 @@
 		D05842DE28B7B44700450ACA /* IssueCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IssueCell.xib; sourceTree = "<group>"; };
 		D06275F6291AAFFD0014F27A /* SwiftUIIssuesUIIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIIssuesUIIntegrationTests.swift; sourceTree = "<group>"; };
 		D06275F8291AB0450014F27A /* SwiftUIIssuesUIComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIIssuesUIComposer.swift; sourceTree = "<group>"; };
+		D06275FC291AB0A20014F27A /* IssuesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesListView.swift; sourceTree = "<group>"; };
 		D08E51C928B3FE92005B4B80 /* IssuesUIIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesUIIntegrationTests.swift; sourceTree = "<group>"; };
 		D0AB94FB28B55B470010B924 /* IssuesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesViewController.swift; sourceTree = "<group>"; };
 		D0AB94FE28B55BCB0010B924 /* IssueCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueCell.swift; sourceTree = "<group>"; };
@@ -85,6 +88,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0627603291AB5A70014F27A /* ViewInspector in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -100,12 +104,29 @@
 			path = "Issues UI";
 			sourceTree = "<group>";
 		};
-		D0AB94FD28B55BBC0010B924 /* Issues UI */ = {
+		D06275FA291AB0810014F27A /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
 				D0AB94FB28B55B470010B924 /* IssuesViewController.swift */,
 				D0AB94FE28B55BCB0010B924 /* IssueCell.swift */,
 				D05842DE28B7B44700450ACA /* IssueCell.xib */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
+		D06275FB291AB0880014F27A /* SwiftUI */ = {
+			isa = PBXGroup;
+			children = (
+				D06275FC291AB0A20014F27A /* IssuesListView.swift */,
+			);
+			path = SwiftUI;
+			sourceTree = "<group>";
+		};
+		D0AB94FD28B55BBC0010B924 /* Issues UI */ = {
+			isa = PBXGroup;
+			children = (
+				D06275FB291AB0880014F27A /* SwiftUI */,
+				D06275FA291AB0810014F27A /* UIKit */,
 			);
 			path = "Issues UI";
 			sourceTree = "<group>";
@@ -181,6 +202,8 @@
 			dependencies = (
 			);
 			name = Issues;
+			packageProductDependencies = (
+			);
 			productName = Issues;
 			productReference = D0BAC24B28B3F388001D6538 /* Issues.app */;
 			productType = "com.apple.product-type.application";
@@ -199,6 +222,9 @@
 				D0BAC26328B3F38B001D6538 /* PBXTargetDependency */,
 			);
 			name = IssuesTests;
+			packageProductDependencies = (
+				D0627602291AB5A70014F27A /* ViewInspector */,
+			);
 			productName = IssuesTests;
 			productReference = D0BAC26128B3F38B001D6538 /* IssuesTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -231,6 +257,9 @@
 				Base,
 			);
 			mainGroup = D0BAC24228B3F387001D6538;
+			packageReferences = (
+				D0627601291AB5A70014F27A /* XCRemoteSwiftPackageReference "ViewInspector" */,
+			);
 			productRefGroup = D0BAC24C28B3F388001D6538 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -271,6 +300,7 @@
 				D0AB94FC28B55B470010B924 /* IssuesViewController.swift in Sources */,
 				D0AB950428B55C790010B924 /* IssuesUIComposer.swift in Sources */,
 				D0BAC24F28B3F388001D6538 /* AppDelegate.swift in Sources */,
+				D06275FD291AB0A20014F27A /* IssuesListView.swift in Sources */,
 				D06275F9291AB0450014F27A /* SwiftUIIssuesUIComposer.swift in Sources */,
 				D0BAC25128B3F388001D6538 /* SceneDelegate.swift in Sources */,
 				D0AB94FF28B55BCB0010B924 /* IssueCell.swift in Sources */,
@@ -549,6 +579,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D0627601291AB5A70014F27A /* XCRemoteSwiftPackageReference "ViewInspector" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nalexn/ViewInspector";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D0627602291AB5A70014F27A /* ViewInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D0627601291AB5A70014F27A /* XCRemoteSwiftPackageReference "ViewInspector" */;
+			productName = ViewInspector;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D0BAC24328B3F388001D6538 /* Project object */;
 }
