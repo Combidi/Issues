@@ -81,23 +81,3 @@ public final class IssuesViewController: UIViewController, IssuesLoadingView, Is
         errorLabel.isHidden = message == nil
     }
 }
-
-public final class IssueCellController: NSObject, UITableViewDataSource {
-    private let issue: IssueViewModel
-    
-    public init(issue: IssueViewModel) {
-        self.issue = issue
-    }
-    
-    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        1
-    }
-    
-    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "IssueCell") as! IssueCell
-        cell.nameLabel.text = issue.name
-        cell.subjectLabel.text = issue.subject
-        cell.submissionDateLabel.text = issue.submissionDate
-        return cell
-    }
-}
