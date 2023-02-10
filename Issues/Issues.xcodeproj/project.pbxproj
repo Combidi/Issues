@@ -104,16 +104,32 @@
 			path = "Issues UI";
 			sourceTree = "<group>";
 		};
-		D0AB94FD28B55BBC0010B924 /* Issues UI */ = {
+		D057CFB129965A56003246B4 /* Load More Cell */ = {
 			isa = PBXGroup;
 			children = (
-				D0AB94FB28B55B470010B924 /* IssuesViewController.swift */,
-				D0AB94FE28B55BCB0010B924 /* IssueCell.swift */,
-				D05842DE28B7B44700450ACA /* IssueCell.xib */,
-				D0ED3ABF29964EE00097CAB6 /* IssueCellController.swift */,
 				D057CFAB29965504003246B4 /* LoadMoreCell.xib */,
 				D057CFAD29965A13003246B4 /* LoadMoreCellController.swift */,
 				D057CFAF29965A36003246B4 /* LoadMoreCell.swift */,
+			);
+			path = "Load More Cell";
+			sourceTree = "<group>";
+		};
+		D057CFB229965A61003246B4 /* Issues Cell */ = {
+			isa = PBXGroup;
+			children = (
+				D0AB94FE28B55BCB0010B924 /* IssueCell.swift */,
+				D05842DE28B7B44700450ACA /* IssueCell.xib */,
+				D0ED3ABF29964EE00097CAB6 /* IssueCellController.swift */,
+			);
+			path = "Issues Cell";
+			sourceTree = "<group>";
+		};
+		D0AB94FD28B55BBC0010B924 /* Issues UI */ = {
+			isa = PBXGroup;
+			children = (
+				D057CFB229965A61003246B4 /* Issues Cell */,
+				D057CFB129965A56003246B4 /* Load More Cell */,
+				D0AB94FB28B55B470010B924 /* IssuesViewController.swift */,
 			);
 			path = "Issues UI";
 			sourceTree = "<group>";
