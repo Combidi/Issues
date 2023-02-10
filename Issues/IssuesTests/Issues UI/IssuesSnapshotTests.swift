@@ -17,6 +17,16 @@ final class IssuesSnapshotTests: XCTestCase {
         assert(snapshot: sut.snapshot(for: .iPhone14(style: .dark)), named: "ISSUES_WITH_CONTENT_dark")
         assert(snapshot: sut.snapshot(for: .iPhone14(style: .light, contentSize: .extraExtraExtraLarge)), named: "ISSUES_WITH_CONTENT_light_extraExtraExtraLarge")
     }
+
+    func test_issuesWithLoadMore() {
+        let sut = IssuesViewController()
+        
+        sut.present(issuesWithLoadMore())
+    
+        assert(snapshot: sut.snapshot(for: .iPhone14(style: .light)), named: "ISSUES_WITH_LOAD_MORE_light")
+        assert(snapshot: sut.snapshot(for: .iPhone14(style: .dark)), named: "ISSUES_WITH_LOAD_MORE_dark")
+        assert(snapshot: sut.snapshot(for: .iPhone14(style: .light, contentSize: .extraExtraExtraLarge)), named: "ISSUES_WITH_LOAD_MORE_light_extraExtraExtraLarge")
+    }
     
     func test_loading() {
         let sut = IssuesViewController()
@@ -39,7 +49,7 @@ final class IssuesSnapshotTests: XCTestCase {
     
     // MARK: Helpers
     
-    private func issues() -> [IssueCellController] {
+    private func issues() -> [UITableViewDataSource] {
         [
             IssueViewModel(
                 name: "a name",
@@ -52,6 +62,10 @@ final class IssuesSnapshotTests: XCTestCase {
                 subject: "a multi-line\nsubject"
             )
         ].map(IssueCellController.init(issue:))
+    }
+    
+    private func issuesWithLoadMore() -> [UITableViewDataSource] {
+        issues() + [LoadMoreCellController()]
     }
 }
 
