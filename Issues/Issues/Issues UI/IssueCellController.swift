@@ -24,5 +24,3 @@ public final class IssueCellController: NSObject, UITableViewDataSource {
         return cell
     }
 }
-
-private final class LoadMoreCell: UITableViewCell {}
