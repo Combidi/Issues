@@ -5,7 +5,7 @@
 import UIKit
 import Core
 
-public final class IssuesViewController: UIViewController, IssuesView, UITableViewDataSource {
+public final class IssuesViewController: UIViewController, IssuesView, IssuesLoadingView, IssuesErrorView, UITableViewDataSource {
     var loadIssues: (() -> Void)?
     
     public private(set) lazy var activityIndicator: UIActivityIndicatorView = {

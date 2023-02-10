@@ -5,11 +5,13 @@
 import Foundation
 
 public final class IssuesPresenter {
+    public typealias View = IssuesView & IssuesLoadingView & IssuesErrorView
+    
     private let loader: IssuesLoader
-    private let view: IssuesView
+    private let view: View
     private let dateFormatter: DateFormatter
     
-    public init(loader: IssuesLoader, view: IssuesView, locale: Locale = .current) {
+    public init(loader: IssuesLoader, view: View, locale: Locale = .current) {
         self.loader = loader
         self.view = view
         self.dateFormatter = DateFormatter()

@@ -24,29 +24,11 @@ public struct IssuesUIComposer {
     }
 }
 
-private final class MainThreadDispatchingIssueViewDecorator: IssuesView {
-    private let decoratee: IssuesView
-
-    init(decoratee: IssuesView) {
+private final class MainThreadDispatchingIssueViewDecorator<Decoratee> {
+    private let decoratee: Decoratee
+    
+    init(decoratee: Decoratee) {
         self.decoratee = decoratee
-    }
-
-    func present(issues: [IssueViewModel]) {
-        dispatch {
-            self.decoratee.present(issues: issues)
-        }
-    }
-
-    func presentMessage(_ message: String?) {
-        dispatch {
-            self.decoratee.presentMessage(message)
-        }
-    }
-
-    func presentLoading(_ flag: Bool) {
-        dispatch {
-            self.decoratee.presentLoading(flag)
-        }
     }
     
     private func dispatch(_ closure: @escaping () -> Void) {
@@ -56,6 +38,30 @@ private final class MainThreadDispatchingIssueViewDecorator: IssuesView {
             DispatchQueue.main.async {
                 closure()
             }
+        }
+    }
+}
+
+extension MainThreadDispatchingIssueViewDecorator: IssuesView where Decoratee: IssuesView {
+    func present(issues: [IssueViewModel]) {
+        dispatch {
+            self.decoratee.present(issues: issues)
+        }
+    }
+}
+
+extension MainThreadDispatchingIssueViewDecorator: IssuesLoadingView where Decoratee: IssuesLoadingView {
+    func presentLoading(_ flag: Bool) {
+        dispatch {
+            self.decoratee.presentLoading(flag)
+        }
+    }
+}
+
+extension MainThreadDispatchingIssueViewDecorator: IssuesErrorView where Decoratee: IssuesErrorView {
+    func presentMessage(_ message: String?) {
+        dispatch {
+            self.decoratee.presentMessage(message)
         }
     }
 }
@@ -72,11 +78,15 @@ extension WeakRefVirtualProxy: IssuesView where T: IssuesView {
     func present(issues: [IssueViewModel]) {
         object?.present(issues: issues)
     }
-    
+}
+
+extension WeakRefVirtualProxy: IssuesLoadingView where T: IssuesLoadingView {
     func presentLoading(_ isLoading: Bool) {
         object?.presentLoading(isLoading)
     }
-    
+}
+
+extension WeakRefVirtualProxy: IssuesErrorView where T: IssuesErrorView {
     func presentMessage(_ message: String?) {
         object?.presentMessage(message)
     }
