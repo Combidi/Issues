@@ -24,6 +24,7 @@
 		D0B9762328C1D45F00BF60C3 /* FileSystemIssueLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B9762228C1D45F00BF60C3 /* FileSystemIssueLoader.swift */; };
 		D0B9762528C1D49500BF60C3 /* FileSystemIssueLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B9762428C1D49500BF60C3 /* FileSystemIssueLoaderTests.swift */; };
 		D0ED3ABC299648C90097CAB6 /* IssuesErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED3ABB299648C90097CAB6 /* IssuesErrorView.swift */; };
+		D0ED3ABE299648E90097CAB6 /* IssuesLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED3ABD299648E90097CAB6 /* IssuesLoadingView.swift */; };
 		D0EF8DD229050E2A00661505 /* RemoteIssuesLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EF8DD129050E2A00661505 /* RemoteIssuesLoaderTests.swift */; };
 		D0EF8DD92905AF5700661505 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EF8DD82905AF5700661505 /* HTTPClient.swift */; };
 		D0EF8DDB2905AF9300661505 /* RemoteIssuesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EF8DDA2905AF9300661505 /* RemoteIssuesLoader.swift */; };
@@ -61,6 +62,7 @@
 		D0B9762228C1D45F00BF60C3 /* FileSystemIssueLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemIssueLoader.swift; sourceTree = "<group>"; };
 		D0B9762428C1D49500BF60C3 /* FileSystemIssueLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemIssueLoaderTests.swift; sourceTree = "<group>"; };
 		D0ED3ABB299648C90097CAB6 /* IssuesErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesErrorView.swift; sourceTree = "<group>"; };
+		D0ED3ABD299648E90097CAB6 /* IssuesLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesLoadingView.swift; sourceTree = "<group>"; };
 		D0EF8DD129050E2A00661505 /* RemoteIssuesLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteIssuesLoaderTests.swift; sourceTree = "<group>"; };
 		D0EF8DD82905AF5700661505 /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		D0EF8DDA2905AF9300661505 /* RemoteIssuesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteIssuesLoader.swift; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 				D0AC69A728BD561E0073363F /* IssuesView.swift */,
 				D0AC69AD28BD57720073363F /* Issues.strings */,
 				D0ED3ABB299648C90097CAB6 /* IssuesErrorView.swift */,
+				D0ED3ABD299648E90097CAB6 /* IssuesLoadingView.swift */,
 			);
 			path = "Issues Presentation";
 			sourceTree = "<group>";
@@ -308,6 +311,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0AC69A628BD55BA0073363F /* IssuesPresenter.swift in Sources */,
+				D0ED3ABE299648E90097CAB6 /* IssuesLoadingView.swift in Sources */,
 				D004B55D2901DBC800AAACE3 /* StreamingFileReader.swift in Sources */,
 				D0AC69A828BD561E0073363F /* IssuesView.swift in Sources */,
 				D0EF8DDD2905B05700661505 /* IssuesMapper.swift in Sources */,
