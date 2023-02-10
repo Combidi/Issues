@@ -17,12 +17,25 @@ public struct IssuesUIComposer {
             loader: loader,
             loadingView: MainThreadDispatchingIssueViewDecorator(decoratee: WeakRefVirtualProxy(viewController)),
             errorView: MainThreadDispatchingIssueViewDecorator(decoratee: WeakRefVirtualProxy(viewController)),
-            view: MainThreadDispatchingIssueViewDecorator(decoratee: WeakRefVirtualProxy(viewController)),
+            view: MainThreadDispatchingIssueViewDecorator(decoratee: IssuesViewControllerAdapter(viewController)),
             locale: locale
         )
         viewController.loadIssues = presenter.loadIssues
         viewController.title = IssuesPresenter.title
         return viewController
+    }
+}
+
+private final class IssuesViewControllerAdapter: IssuesView {
+    private weak var viewController: IssuesViewController?
+    
+    init(_ viewController: IssuesViewController) {
+        self.viewController = viewController
+    }
+    
+    func present(issues: [IssueViewModel]) {
+        let cellControllers = issues.map(IssueCellController.init(issue:))
+        viewController?.present(cellControllers)
     }
 }
 

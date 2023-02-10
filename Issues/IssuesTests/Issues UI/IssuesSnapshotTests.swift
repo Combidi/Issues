@@ -11,7 +11,7 @@ final class IssuesSnapshotTests: XCTestCase {
     func test_withContent() {
         let sut = IssuesViewController()
         
-        sut.present(issues: issuesWithContent())
+        sut.present(issuesWithContent())
     
         assert(snapshot: sut.snapshot(for: .iPhone14(style: .light)), named: "ISSUES_WITH_CONTENT_light")
         assert(snapshot: sut.snapshot(for: .iPhone14(style: .dark)), named: "ISSUES_WITH_CONTENT_dark")
@@ -39,7 +39,7 @@ final class IssuesSnapshotTests: XCTestCase {
     
     // MARK: Helpers
     
-    private func issuesWithContent() -> [IssueViewModel] {
+    private func issuesWithContent() -> [IssueCellController] {
         [
             IssueViewModel(
                 name: "a name",
@@ -51,7 +51,7 @@ final class IssuesSnapshotTests: XCTestCase {
                 submissionDate: "23-11-1991",
                 subject: "a multi-line\nsubject"
             )
-        ]
+        ].map(IssueCellController.init(issue:))
     }
 }
 

@@ -5,7 +5,9 @@
 import UIKit
 import Core
 
-public final class IssuesViewController: UIViewController, IssuesView, IssuesLoadingView, IssuesErrorView, UITableViewDataSource {
+public final class IssuesViewController: UIViewController, IssuesLoadingView, IssuesErrorView, UITableViewDataSource {
+    public typealias CellController = UITableViewDataSource
+    
     var loadIssues: (() -> Void)?
     
     public private(set) lazy var activityIndicator: UIActivityIndicatorView = {
@@ -54,27 +56,22 @@ public final class IssuesViewController: UIViewController, IssuesView, IssuesLoa
         loadIssues?()
     }
     
-    private var issues = [IssueViewModel]() {
+    private var cellControllers = [CellController]() {
         didSet { tableView.reloadData() }
     }
 
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        issues.count
+        cellControllers.count
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "IssueCell") as! IssueCell
-        let issue = issues[indexPath.row]
-        cell.nameLabel.text = issue.name
-        cell.subjectLabel.text = issue.subject
-        cell.submissionDateLabel.text = issue.submissionDate
-        return cell
+        cellControllers[indexPath.row].tableView(tableView, cellForRowAt: indexPath)
     }
     
-    public func present(issues: [IssueViewModel]) {
-        self.issues = issues
+    public func present(_ cellControllers: [CellController]) {
+        self.cellControllers = cellControllers
     }
-    
+
     public func presentLoading(_ isLoading: Bool) {
         isLoading ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
     }
@@ -82,5 +79,25 @@ public final class IssuesViewController: UIViewController, IssuesView, IssuesLoa
     public func presentMessage(_ message: String?) {
         errorLabel.text = message
         errorLabel.isHidden = message == nil
+    }
+}
+
+public final class IssueCellController: NSObject, UITableViewDataSource {
+    private let issue: IssueViewModel
+    
+    public init(issue: IssueViewModel) {
+        self.issue = issue
+    }
+    
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        1
+    }
+    
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "IssueCell") as! IssueCell
+        cell.nameLabel.text = issue.name
+        cell.subjectLabel.text = issue.subject
+        cell.submissionDateLabel.text = issue.submissionDate
+        return cell
     }
 }
