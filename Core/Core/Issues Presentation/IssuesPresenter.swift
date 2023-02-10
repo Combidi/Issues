@@ -5,14 +5,23 @@
 import Foundation
 
 public final class IssuesPresenter {
-    public typealias View = IssuesView & IssuesLoadingView & IssuesErrorView
     
     private let loader: IssuesLoader
-    private let view: View
+    private let loadingView: IssuesLoadingView
+    private let errorView: IssuesErrorView
+    private let view: IssuesView
     private let dateFormatter: DateFormatter
     
-    public init(loader: IssuesLoader, view: View, locale: Locale = .current) {
+    public init(
+        loader: IssuesLoader,
+        loadingView: IssuesLoadingView,
+        errorView: IssuesErrorView,
+        view: IssuesView,
+        locale: Locale = .current
+    ) {
         self.loader = loader
+        self.loadingView = loadingView
+        self.errorView = errorView
         self.view = view
         self.dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
@@ -27,17 +36,17 @@ public final class IssuesPresenter {
     }
 
     public func loadIssues() {
-        view.presentLoading(true)
+        loadingView.presentLoading(true)
         loader.loadIssues { [weak self] result in
             guard let self = self else { return }
-            self.view.presentLoading(false)
+            self.loadingView.presentLoading(false)
             switch result {
             case .success(let issues):
                 self.view.present(issues: issues.map(self.map(issue:)))
-                self.view.presentMessage(nil)
+                self.errorView.presentMessage(nil)
                 
             case .failure:
-                self.view.presentMessage("Invalid data")
+                self.errorView.presentMessage("Invalid data")
             }
         }
     }

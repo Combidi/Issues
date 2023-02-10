@@ -15,6 +15,8 @@ public struct IssuesUIComposer {
         let viewController = IssuesViewController()
         let presenter = IssuesPresenter(
             loader: loader,
+            loadingView: MainThreadDispatchingIssueViewDecorator(decoratee: WeakRefVirtualProxy(viewController)),
+            errorView: MainThreadDispatchingIssueViewDecorator(decoratee: WeakRefVirtualProxy(viewController)),
             view: MainThreadDispatchingIssueViewDecorator(decoratee: WeakRefVirtualProxy(viewController)),
             locale: locale
         )
