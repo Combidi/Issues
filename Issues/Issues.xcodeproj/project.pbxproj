@@ -124,6 +124,19 @@
 			path = "Issues Cell";
 			sourceTree = "<group>";
 		};
+		D057CFB329965ABA003246B4 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				D0AB950328B55C790010B924 /* IssuesUIComposer.swift */,
+				D0BAC24E28B3F388001D6538 /* AppDelegate.swift */,
+				D0BAC25028B3F388001D6538 /* SceneDelegate.swift */,
+				D045211D28C522F500974145 /* issues.csv */,
+				D0BAC25728B3F38A001D6538 /* Assets.xcassets */,
+				D0BAC25928B3F38A001D6538 /* LaunchScreen.storyboard */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
 		D0AB94FD28B55BBC0010B924 /* Issues UI */ = {
 			isa = PBXGroup;
 			children = (
@@ -164,13 +177,8 @@
 		D0BAC24D28B3F388001D6538 /* Issues */ = {
 			isa = PBXGroup;
 			children = (
+				D057CFB329965ABA003246B4 /* Main */,
 				D0AB94FD28B55BBC0010B924 /* Issues UI */,
-				D0AB950328B55C790010B924 /* IssuesUIComposer.swift */,
-				D0BAC24E28B3F388001D6538 /* AppDelegate.swift */,
-				D0BAC25028B3F388001D6538 /* SceneDelegate.swift */,
-				D045211D28C522F500974145 /* issues.csv */,
-				D0BAC25728B3F38A001D6538 /* Assets.xcassets */,
-				D0BAC25928B3F38A001D6538 /* LaunchScreen.storyboard */,
 				D0BAC25C28B3F38A001D6538 /* Info.plist */,
 			);
 			path = Issues;
