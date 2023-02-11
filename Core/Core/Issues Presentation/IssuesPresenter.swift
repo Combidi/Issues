@@ -57,6 +57,5 @@ public final class IssuesPresenter {
             submissionDate: dateFormatter.string(from: issue.submissionDate),
             subject: issue.subject
         )
-        
     }
 }

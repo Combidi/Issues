@@ -80,7 +80,7 @@ final class IssuesPresenterTests: XCTestCase {
     ) -> (sut: IssuesPresenter, loader: LoaderSpy, view: ViewSpy) {
         let loader = LoaderSpy()
         let view = ViewSpy()
-        let sut = IssuesPresenter(loader: loader, view: view, locale: locale)
+        let sut = IssuesPresenter(loader: loader, loadingView: view, errorView: view, view: view, locale: locale)
         trackForMemoryLeaks(loader, file: file, line: line)
         trackForMemoryLeaks(view, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
@@ -120,7 +120,7 @@ final private class LoaderSpy: IssuesLoader {
     }
 }
 
-final class ViewSpy: IssuesView {
+final class ViewSpy: IssuesView, IssuesLoadingView, IssuesErrorView {
     private(set) var capturedIssues = [[IssueViewModel]]()
     func present(issues: [IssueViewModel]) {
         capturedIssues.append(issues)
