@@ -17,7 +17,7 @@ public struct IssuesUIComposer {
             loader: loader,
             loadingView: MainThreadDispatchingIssueViewDecorator(decoratee: WeakRefVirtualProxy(viewController)),
             errorView: MainThreadDispatchingIssueViewDecorator(decoratee: WeakRefVirtualProxy(viewController)),
-            view: MainThreadDispatchingIssueViewDecorator(decoratee: IssuesViewControllerAdapter(viewController)),
+            view: MainThreadDispatchingIssueViewDecorator(decoratee: IssuesViewAdapter(viewController)),
             locale: locale
         )
         viewController.loadIssues = presenter.loadIssues
@@ -26,7 +26,7 @@ public struct IssuesUIComposer {
     }
 }
 
-private final class IssuesViewControllerAdapter: IssuesView {
+private final class IssuesViewAdapter: IssuesView {
     private weak var viewController: IssuesViewController?
     
     init(_ viewController: IssuesViewController) {
