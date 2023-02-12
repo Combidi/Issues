@@ -122,18 +122,18 @@ final private class LoaderSpy: IssuesLoader {
 
 final class ViewSpy: IssuesView, IssuesLoadingView, IssuesErrorView {
     private(set) var capturedIssues = [[IssueViewModel]]()
-    func present(issues: [IssueViewModel]) {
+    func display(issues: [IssueViewModel]) {
         capturedIssues.append(issues)
     }
     
     private(set) var capturedMessages = [String?]()
-    func displayMessage(_ message: String?) {
+    func display(message: String?) {
         capturedMessages.append(message)
     }
     
     private(set) var capturedLoadings = [Bool]()
-    func displayLoading(_ flag: Bool) {
-        capturedLoadings.append(flag)
+    func display(isLoading: Bool) {
+        capturedLoadings.append(isLoading)
     }
 }
 

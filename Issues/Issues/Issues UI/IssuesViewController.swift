@@ -69,7 +69,7 @@ public final class IssuesViewController: UIViewController, IssuesLoadingView, Is
         cellControllers[indexPath.row].tableView(tableView, cellForRowAt: indexPath)
     }
     
-    public func present(_ cellControllers: [CellController]) {
+    public func display(cellControllers: [CellController]) {
         self.cellControllers = cellControllers
     }
 

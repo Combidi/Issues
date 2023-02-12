@@ -35,7 +35,7 @@ private final class IssuesViewAdapter: IssuesView {
     
     func display(issues: [IssueViewModel]) {
         let cellControllers = issues.map(IssueCellController.init(issue:))
-        viewController?.present(cellControllers)
+        viewController?.display(cellControllers: cellControllers)
     }
 }
 
