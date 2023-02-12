@@ -31,7 +31,7 @@ final class IssuesSnapshotTests: XCTestCase {
     func test_loading() {
         let sut = IssuesViewController()
         
-        sut.presentLoading(true)
+        sut.display(isLoading: true)
     
         assert(snapshot: sut.snapshot(for: .iPhone14(style: .light)), named: "ISSUES_LOADING_light")
         assert(snapshot: sut.snapshot(for: .iPhone14(style: .dark)), named: "ISSUES_LOADING_dark")
@@ -40,7 +40,7 @@ final class IssuesSnapshotTests: XCTestCase {
     func test_withError() {
         let sut = IssuesViewController()
         
-        sut.presentMessage("A message")
+        sut.display(message: "A message")
         
         assert(snapshot: sut.snapshot(for: .iPhone14(style: .light)), named: "ISSUES_WITH_ERROR_light")
         assert(snapshot: sut.snapshot(for: .iPhone14(style: .dark)), named: "ISSUES_WITH_ERROR_dark")

@@ -127,12 +127,12 @@ final class ViewSpy: IssuesView, IssuesLoadingView, IssuesErrorView {
     }
     
     private(set) var capturedMessages = [String?]()
-    func presentMessage(_ message: String?) {
+    func displayMessage(_ message: String?) {
         capturedMessages.append(message)
     }
     
     private(set) var capturedLoadings = [Bool]()
-    func presentLoading(_ flag: Bool) {
+    func displayLoading(_ flag: Bool) {
         capturedLoadings.append(flag)
     }
 }

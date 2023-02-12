@@ -3,5 +3,5 @@
 //
 
 public protocol IssuesView {
-    func present(issues: [IssueViewModel])
+    func display(issues: [IssueViewModel])
 }

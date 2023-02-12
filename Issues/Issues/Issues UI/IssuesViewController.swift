@@ -73,11 +73,11 @@ public final class IssuesViewController: UIViewController, IssuesLoadingView, Is
         self.cellControllers = cellControllers
     }
 
-    public func presentLoading(_ isLoading: Bool) {
+    public func display(isLoading: Bool) {
         isLoading ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
     }
     
-    public func presentMessage(_ message: String?) {
+    public func display(message: String?) {
         errorLabel.text = message
         errorLabel.isHidden = message == nil
     }

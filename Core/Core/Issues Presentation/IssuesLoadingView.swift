@@ -3,5 +3,5 @@
 //
 
 public protocol IssuesLoadingView {
-    func presentLoading(_ flag: Bool)
+    func display(isLoading: Bool)
 }

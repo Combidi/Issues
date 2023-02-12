@@ -36,17 +36,17 @@ public final class IssuesPresenter {
     }
 
     public func loadIssues() {
-        loadingView.presentLoading(true)
+        loadingView.display(isLoading: true)
         loader.loadIssues { [weak self] result in
             guard let self = self else { return }
-            self.loadingView.presentLoading(false)
+            self.loadingView.display(isLoading: false)
             switch result {
             case .success(let issues):
-                self.view.present(issues: issues.map(self.map(issue:)))
-                self.errorView.presentMessage(nil)
+                self.view.display(issues: issues.map(self.map(issue:)))
+                self.errorView.display(message: nil)
                 
             case .failure:
-                self.errorView.presentMessage("Invalid data")
+                self.errorView.display(message: "Invalid data")
             }
         }
     }

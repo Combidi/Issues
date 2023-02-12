@@ -33,7 +33,7 @@ private final class IssuesViewAdapter: IssuesView {
         self.viewController = viewController
     }
     
-    func present(issues: [IssueViewModel]) {
+    func display(issues: [IssueViewModel]) {
         let cellControllers = issues.map(IssueCellController.init(issue:))
         viewController?.present(cellControllers)
     }
@@ -58,25 +58,25 @@ private final class MainThreadDispatchingIssueViewDecorator<Decoratee> {
 }
 
 extension MainThreadDispatchingIssueViewDecorator: IssuesView where Decoratee: IssuesView {
-    func present(issues: [IssueViewModel]) {
+    func display(issues: [IssueViewModel]) {
         dispatch {
-            self.decoratee.present(issues: issues)
+            self.decoratee.display(issues: issues)
         }
     }
 }
 
 extension MainThreadDispatchingIssueViewDecorator: IssuesLoadingView where Decoratee: IssuesLoadingView {
-    func presentLoading(_ flag: Bool) {
+    func display(isLoading: Bool) {
         dispatch {
-            self.decoratee.presentLoading(flag)
+            self.decoratee.display(isLoading: isLoading)
         }
     }
 }
 
 extension MainThreadDispatchingIssueViewDecorator: IssuesErrorView where Decoratee: IssuesErrorView {
-    func presentMessage(_ message: String?) {
+    func display(message: String?) {
         dispatch {
-            self.decoratee.presentMessage(message)
+            self.decoratee.display(message: message)
         }
     }
 }
@@ -90,19 +90,19 @@ private final class WeakRefVirtualProxy<T: AnyObject> {
 }
 
 extension WeakRefVirtualProxy: IssuesView where T: IssuesView {
-    func present(issues: [IssueViewModel]) {
-        object?.present(issues: issues)
+    func display(issues: [IssueViewModel]) {
+        object?.display(issues: issues)
     }
 }
 
 extension WeakRefVirtualProxy: IssuesLoadingView where T: IssuesLoadingView {
-    func presentLoading(_ isLoading: Bool) {
-        object?.presentLoading(isLoading)
+    func display(isLoading: Bool) {
+        object?.display(isLoading: isLoading)
     }
 }
 
 extension WeakRefVirtualProxy: IssuesErrorView where T: IssuesErrorView {
-    func presentMessage(_ message: String?) {
-        object?.presentMessage(message)
+    func display(message: String?) {
+        object?.display(message: message)
     }
 }

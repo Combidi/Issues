@@ -3,5 +3,5 @@
 //
 
 public protocol IssuesErrorView {
-    func presentMessage(_ message: String?)
+    func display(message: String?)
 }
