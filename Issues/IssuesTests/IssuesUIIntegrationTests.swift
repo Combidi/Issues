@@ -115,7 +115,7 @@ private extension IssuesViewController {
     }
 
     func numberOfRenderedIssueViews() -> Int {
-        tableView.numberOfRows(inSection: issuesSection)
+        tableView.numberOfSections > issuesSection ? tableView.numberOfRows(inSection: issuesSection) : 0
     }
 
     func renderedName(atIndex index: Int = 0) -> String? {

@@ -57,20 +57,24 @@ public final class IssuesViewController: UIViewController, IssuesLoadingView, Is
         loadIssues?()
     }
     
-    private var cellControllers = [CellController]() {
+    private var sections = [[CellController]]() {
         didSet { tableView.reloadData() }
     }
 
+    public func numberOfSections(in tableView: UITableView) -> Int {
+        sections.count
+    }
+    
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        cellControllers.count
+        sections[section].count
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        cellControllers[indexPath.row].tableView(tableView, cellForRowAt: indexPath)
+        sections[indexPath.section][indexPath.row].tableView(tableView, cellForRowAt: indexPath)
     }
     
-    public func display(cellControllers: [CellController]) {
-        self.cellControllers = cellControllers
+    public func display(sections: [[CellController]]) {
+        self.sections = sections
     }
 
     public func display(isLoading: Bool) {
