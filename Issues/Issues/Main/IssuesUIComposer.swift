@@ -13,6 +13,8 @@ public struct IssuesUIComposer {
         locale: Locale = .current
     ) -> UIViewController {
         let viewController = IssuesViewController()
+        viewController.tableView.registerNibBasedCell(IssueCell.self)
+        viewController.tableView.registerNibBasedCell(LoadMoreCell.self)
         let presenter = IssuesPresenter(
             loader: loader,
             loadingView: MainThreadDispatchingIssueViewDecorator(decoratee: WeakRefVirtualProxy(viewController)),

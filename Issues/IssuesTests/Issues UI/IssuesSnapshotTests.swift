@@ -9,8 +9,8 @@ import Core
 final class IssuesSnapshotTests: XCTestCase {
     
     func test_issues() {
-        let sut = IssuesViewController()
-        
+        let sut = makeSUT()
+
         sut.display(sections: issues())
     
         assert(snapshot: sut.snapshot(for: .iPhone14(style: .light)), named: "ISSUES_WITH_CONTENT_light")
@@ -19,8 +19,8 @@ final class IssuesSnapshotTests: XCTestCase {
     }
 
     func test_issuesWithLoadMore() {
-        let sut = IssuesViewController()
-        
+        let sut = makeSUT()
+
         sut.display(sections: issuesWithLoadMore())
     
         assert(snapshot: sut.snapshot(for: .iPhone14(style: .light)), named: "ISSUES_WITH_LOAD_MORE_light")
@@ -29,8 +29,8 @@ final class IssuesSnapshotTests: XCTestCase {
     }
     
     func test_loading() {
-        let sut = IssuesViewController()
-        
+        let sut = makeSUT()
+
         sut.display(isLoading: true)
     
         assert(snapshot: sut.snapshot(for: .iPhone14(style: .light)), named: "ISSUES_LOADING_light")
@@ -38,7 +38,7 @@ final class IssuesSnapshotTests: XCTestCase {
     }
 
     func test_withError() {
-        let sut = IssuesViewController()
+        let sut = makeSUT()
         
         sut.display(message: "A message")
         
@@ -48,6 +48,13 @@ final class IssuesSnapshotTests: XCTestCase {
     }
     
     // MARK: Helpers
+    
+    private func makeSUT() -> IssuesViewController {
+        let sut = IssuesViewController()
+        sut.tableView.registerNibBasedCell(IssueCell.self)
+        sut.tableView.registerNibBasedCell(LoadMoreCell.self)
+        return sut
+    }
     
     private func issues() -> [[UITableViewDataSource]] {
         let issues = [
@@ -71,7 +78,14 @@ final class IssuesSnapshotTests: XCTestCase {
     }
 }
 
-extension XCTestCase {
+private extension UITableView {
+    func registerNibBasedCell<T: UITableViewCell>(_ T: T.Type) {
+        let cellName = String(describing: T)
+        register(UINib(nibName: cellName, bundle: .main), forCellReuseIdentifier: cellName)
+    }
+}
+
+private extension XCTestCase {
     
     func assert(snapshot: UIImage, named name: String, file: StaticString = #filePath, line: UInt = #line) {
         let snapshotURL = makeSnapshotURL(named: name, file: file)

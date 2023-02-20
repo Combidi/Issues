@@ -25,8 +25,6 @@ public final class IssuesViewController: UIViewController, IssuesLoadingView, Is
         
     public private(set) lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
-        tableView.registerNibBasedCell(IssueCell.self)
-        tableView.registerNibBasedCell(LoadMoreCell.self)
         tableView.dataSource = self
         return tableView
     }()
