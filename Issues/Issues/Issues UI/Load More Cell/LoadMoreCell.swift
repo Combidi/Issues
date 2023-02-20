@@ -4,4 +4,4 @@
 
 import UIKit
 
-private final class LoadMoreCell: UITableViewCell {}
+final class LoadMoreCell: UITableViewCell {}

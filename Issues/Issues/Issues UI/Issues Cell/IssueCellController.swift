@@ -17,7 +17,7 @@ public final class IssueCellController: NSObject, UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "IssueCell") as! IssueCell
+        let cell: IssueCell = tableView.dequeueReusableCell()
         cell.nameLabel.text = issue.name
         cell.subjectLabel.text = issue.subject
         cell.submissionDateLabel.text = issue.submissionDate

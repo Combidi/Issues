@@ -10,6 +10,6 @@ public final class LoadMoreCellController: NSObject, UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        tableView.dequeueReusableCell(withIdentifier: "LoadMoreCell")!
+        tableView.dequeueReusableCell() as LoadMoreCell
     }
 }
