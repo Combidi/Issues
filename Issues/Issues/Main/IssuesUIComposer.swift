@@ -22,7 +22,7 @@ public struct IssuesUIComposer {
             view: MainThreadDispatchingIssueViewDecorator(decoratee: IssuesViewAdapter(viewController)),
             locale: locale
         )
-        viewController.loadIssues = presenter.loadIssues
+        viewController.load = presenter.loadIssues
         viewController.title = IssuesPresenter.title
         return viewController
     }
@@ -67,7 +67,7 @@ extension MainThreadDispatchingIssueViewDecorator: IssuesView where Decoratee: I
     }
 }
 
-extension MainThreadDispatchingIssueViewDecorator: IssuesLoadingView where Decoratee: IssuesLoadingView {
+extension MainThreadDispatchingIssueViewDecorator: LoadingView where Decoratee: LoadingView {
     func display(isLoading: Bool) {
         dispatch {
             self.decoratee.display(isLoading: isLoading)
@@ -75,7 +75,7 @@ extension MainThreadDispatchingIssueViewDecorator: IssuesLoadingView where Decor
     }
 }
 
-extension MainThreadDispatchingIssueViewDecorator: IssuesErrorView where Decoratee: IssuesErrorView {
+extension MainThreadDispatchingIssueViewDecorator: ErrorView where Decoratee: ErrorView {
     func display(message: String?) {
         dispatch {
             self.decoratee.display(message: message)
@@ -97,13 +97,13 @@ extension WeakRefVirtualProxy: IssuesView where T: IssuesView {
     }
 }
 
-extension WeakRefVirtualProxy: IssuesLoadingView where T: IssuesLoadingView {
+extension WeakRefVirtualProxy: LoadingView where T: LoadingView {
     func display(isLoading: Bool) {
         object?.display(isLoading: isLoading)
     }
 }
 
-extension WeakRefVirtualProxy: IssuesErrorView where T: IssuesErrorView {
+extension WeakRefVirtualProxy: ErrorView where T: ErrorView {
     func display(message: String?) {
         object?.display(message: message)
     }

@@ -120,7 +120,7 @@ final private class LoaderSpy: IssuesLoader {
     }
 }
 
-final class ViewSpy: IssuesView, IssuesLoadingView, IssuesErrorView {
+final class ViewSpy: IssuesView, LoadingView, ErrorView {
     private(set) var capturedIssues = [[IssueViewModel]]()
     func display(issues: [IssueViewModel]) {
         capturedIssues.append(issues)

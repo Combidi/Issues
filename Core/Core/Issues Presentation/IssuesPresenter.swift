@@ -7,15 +7,15 @@ import Foundation
 public final class IssuesPresenter {
     
     private let loader: IssuesLoader
-    private let loadingView: IssuesLoadingView
-    private let errorView: IssuesErrorView
+    private let loadingView: LoadingView
+    private let errorView: ErrorView
     private let view: IssuesView
     private let dateFormatter: DateFormatter
     
     public init(
         loader: IssuesLoader,
-        loadingView: IssuesLoadingView,
-        errorView: IssuesErrorView,
+        loadingView: LoadingView,
+        errorView: ErrorView,
         view: IssuesView,
         locale: Locale = .current
     ) {

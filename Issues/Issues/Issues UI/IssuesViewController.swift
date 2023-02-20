@@ -5,10 +5,10 @@
 import UIKit
 import Core
 
-public final class IssuesViewController: UIViewController, IssuesLoadingView, IssuesErrorView, UITableViewDataSource {
+public final class IssuesViewController: UIViewController, LoadingView, ErrorView, UITableViewDataSource {
     public typealias CellController = UITableViewDataSource
     
-    var loadIssues: (() -> Void)?
+    var load: (() -> Void)?
     
     public private(set) lazy var activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .large)
@@ -52,7 +52,7 @@ public final class IssuesViewController: UIViewController, IssuesLoadingView, Is
         errorLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         errorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
-        loadIssues?()
+        load?()
     }
     
     private var sections = [[CellController]]() {
