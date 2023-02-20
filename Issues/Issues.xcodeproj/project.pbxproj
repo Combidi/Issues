@@ -17,7 +17,7 @@
 		D057CFB729A372F6003246B4 /* UITableView+Dequeuing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D057CFB629A372F6003246B4 /* UITableView+Dequeuing.swift */; };
 		D05842DF28B7B44700450ACA /* IssueCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D05842DE28B7B44700450ACA /* IssueCell.xib */; };
 		D08E51CB28B3FEB7005B4B80 /* IssuesUIIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08E51C928B3FE92005B4B80 /* IssuesUIIntegrationTests.swift */; };
-		D0AB94FC28B55B470010B924 /* IssuesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AB94FB28B55B470010B924 /* IssuesViewController.swift */; };
+		D0AB94FC28B55B470010B924 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AB94FB28B55B470010B924 /* ListViewController.swift */; };
 		D0AB94FF28B55BCB0010B924 /* IssueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AB94FE28B55BCB0010B924 /* IssueCell.swift */; };
 		D0AB950428B55C790010B924 /* IssuesUIComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AB950328B55C790010B924 /* IssuesUIComposer.swift */; };
 		D0AC699728BD31BA0073363F /* Core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0AC699628BD31BA0073363F /* Core.framework */; };
@@ -65,7 +65,7 @@
 		D057CFB629A372F6003246B4 /* UITableView+Dequeuing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Dequeuing.swift"; sourceTree = "<group>"; };
 		D05842DE28B7B44700450ACA /* IssueCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IssueCell.xib; sourceTree = "<group>"; };
 		D08E51C928B3FE92005B4B80 /* IssuesUIIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesUIIntegrationTests.swift; sourceTree = "<group>"; };
-		D0AB94FB28B55B470010B924 /* IssuesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesViewController.swift; sourceTree = "<group>"; };
+		D0AB94FB28B55B470010B924 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		D0AB94FE28B55BCB0010B924 /* IssueCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueCell.swift; sourceTree = "<group>"; };
 		D0AB950328B55C790010B924 /* IssuesUIComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesUIComposer.swift; sourceTree = "<group>"; };
 		D0AC699628BD31BA0073363F /* Core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -147,7 +147,7 @@
 				D057CFB429A3727A003246B4 /* UITableView+CellRegistration.swift */,
 				D057CFB229965A61003246B4 /* Issues Cell */,
 				D057CFB129965A56003246B4 /* Load More Cell */,
-				D0AB94FB28B55B470010B924 /* IssuesViewController.swift */,
+				D0AB94FB28B55B470010B924 /* ListViewController.swift */,
 				D057CFB629A372F6003246B4 /* UITableView+Dequeuing.swift */,
 			);
 			path = "Issues UI";
@@ -307,7 +307,7 @@
 			files = (
 				D057CFB029965A36003246B4 /* LoadMoreCell.swift in Sources */,
 				D057CFB729A372F6003246B4 /* UITableView+Dequeuing.swift in Sources */,
-				D0AB94FC28B55B470010B924 /* IssuesViewController.swift in Sources */,
+				D0AB94FC28B55B470010B924 /* ListViewController.swift in Sources */,
 				D0ED3AC029964EE00097CAB6 /* IssueCellController.swift in Sources */,
 				D0AB950428B55C790010B924 /* IssuesUIComposer.swift in Sources */,
 				D0BAC24F28B3F388001D6538 /* AppDelegate.swift in Sources */,

@@ -97,9 +97,9 @@ final class IssuesUIIntegrationTests: XCTestCase {
         locale: Locale = .current,
         file: StaticString = #filePath,
         line: UInt = #line
-    ) -> (sut: IssuesViewController, loader: IssuesLoaderSpy) {
+    ) -> (sut: ListViewController, loader: IssuesLoaderSpy) {
         let loader = IssuesLoaderSpy()
-        let sut = IssuesUIComposer.compose(withLoader: loader, locale: locale) as! IssuesViewController
+        let sut = IssuesUIComposer.compose(withLoader: loader, locale: locale) as! ListViewController
         trackForMemoryLeaks(loader, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, loader)
@@ -108,7 +108,7 @@ final class IssuesUIIntegrationTests: XCTestCase {
 
 // MARK: Helpers
 
-private extension IssuesViewController {
+private extension ListViewController {
     
     private var issuesSection: Int {
         return 0

@@ -12,7 +12,7 @@ public struct IssuesUIComposer {
         withLoader loader: IssuesLoader,
         locale: Locale = .current
     ) -> UIViewController {
-        let viewController = IssuesViewController()
+        let viewController = ListViewController()
         viewController.tableView.registerNibBasedCell(IssueCell.self)
         viewController.tableView.registerNibBasedCell(LoadMoreCell.self)
         let presenter = IssuesPresenter(
@@ -29,9 +29,9 @@ public struct IssuesUIComposer {
 }
 
 private final class IssuesViewAdapter: IssuesView {
-    private weak var viewController: IssuesViewController?
+    private weak var viewController: ListViewController?
     
-    init(_ viewController: IssuesViewController) {
+    init(_ viewController: ListViewController) {
         self.viewController = viewController
     }
     

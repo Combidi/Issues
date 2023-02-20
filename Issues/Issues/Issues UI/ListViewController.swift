@@ -5,7 +5,7 @@
 import UIKit
 import Core
 
-public final class IssuesViewController: UIViewController, LoadingView, ErrorView, UITableViewDataSource {
+public final class ListViewController: UIViewController, LoadingView, ErrorView, UITableViewDataSource {
     public typealias CellController = UITableViewDataSource
     
     var load: (() -> Void)?
