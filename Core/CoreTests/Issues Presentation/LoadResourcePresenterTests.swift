@@ -27,6 +27,11 @@ private final class LoadResourcePresenter {
         view.display(ResourceLoadingViewModel(isLoading: true))
         view.display(ResourceLoadingErrorViewModel(message: nil))
     }
+    
+    func didFinishLoadingWithError() {
+        view.display(ResourceLoadingViewModel(isLoading: false))
+        view.display(ResourceLoadingErrorViewModel(message: "Invalid data"))
+    }
 }
 
 final class LoadResourcePresenterTests: XCTestCase {
@@ -42,6 +47,20 @@ final class LoadResourcePresenterTests: XCTestCase {
         XCTAssertEqual(view.messages, [
             .display(isLoading: true),
             .display(errorMessage: nil)
+        ])
+    }
+    
+    func test_didFinishLoadingWithError_displaysShowsErrorAndStopsLoading() {
+        let view = ViewSpy()
+        let sut = LoadResourcePresenter(view: view)
+        
+        XCTAssertEqual(view.messages, [])
+
+        sut.didFinishLoadingWithError()
+        
+        XCTAssertEqual(view.messages, [
+            .display(isLoading: false),
+            .display(errorMessage: "Invalid data")
         ])
     }
 }
