@@ -5,11 +5,31 @@
 import UIKit
 import Core
 
+public struct PaginatedIssues {
+    public typealias Result = Swift.Result<PaginatedIssues, Error>
+    public typealias LoadMore = () -> (Result) -> Void
+    
+    let issues: [Issue]
+    let loadMore: LoadMore?
+
+    public init(issues: [Issue], loadMore: LoadMore?) {
+        self.issues = issues
+        self.loadMore = loadMore
+    }
+}
+
+public protocol PaginatedIssuesLoader {
+    typealias LoadIssuesResult = Result<PaginatedIssues, Error>
+    typealias Completion = (LoadIssuesResult) -> Void
+    
+    func loadIssues(completion: @escaping Completion)
+}
+
 public struct IssuesUIComposer {    
     private init() {}
     
     public static func compose(
-        withLoader loader: IssuesLoader,
+        withLoader loader: PaginatedIssuesLoader,
         locale: Locale = .current
     ) -> UIViewController {
         let viewController = ListViewController()
@@ -35,10 +55,10 @@ public struct IssuesUIComposer {
 }
 
 private class LoadResourcePresentationAdapter<Presenter: LoadResourcePresenter<[Issue], IssuesViewAdapter>> {
-    private let loader: IssuesLoader
+    private let loader: PaginatedIssuesLoader
     private let presenter: Presenter
     
-    init(loader: IssuesLoader, presenter: Presenter) {
+    init(loader: PaginatedIssuesLoader, presenter: Presenter) {
         self.loader = loader
         self.presenter = presenter
     }
@@ -48,8 +68,8 @@ private class LoadResourcePresentationAdapter<Presenter: LoadResourcePresenter<[
         loader.loadIssues { [weak self] result in
             guard let self else { return }
             switch result {
-            case .success(let issues):
-                self.presenter.didFinishLoading(with: issues)
+            case .success(let page):
+                self.presenter.didFinishLoading(with: page.issues)
                 
             case .failure:
                 self.presenter.didFinishLoadingWithError()
@@ -72,14 +92,14 @@ private final class IssuesViewAdapter: ResourceView {
     }
 }
 
-private final class MainThreadDispatchingDecorator: IssuesLoader {
-    private let decoratee: IssuesLoader
+private final class MainThreadDispatchingDecorator: PaginatedIssuesLoader {
+    private let decoratee: PaginatedIssuesLoader
     
-    init(decoratee: IssuesLoader) {
+    init(decoratee: PaginatedIssuesLoader) {
         self.decoratee = decoratee
     }
     
-    func loadIssues(completion: @escaping Completion) {
+    func loadIssues(completion: @escaping PaginatedIssuesLoader.Completion) {
         decoratee.loadIssues(completion: { result in
             if Thread.isMainThread {
                 completion(result)

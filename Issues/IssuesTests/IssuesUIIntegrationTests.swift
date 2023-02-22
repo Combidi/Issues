@@ -145,9 +145,7 @@ private extension ListViewController {
     }
 }
 
-private final class IssuesLoaderSpy: IssuesLoader {
-    typealias Result = Swift.Result<[Issue], Error>
-    typealias Completion = (Result) -> Void
+private final class IssuesLoaderSpy: PaginatedIssuesLoader {
     
     var loadIssuesCallCount: Int {
         completions.count
@@ -160,7 +158,7 @@ private final class IssuesLoaderSpy: IssuesLoader {
     }
     
     func completeIssuesLoading(with issues: [Issue] = [], at index: Int = 0) {
-        completions[index](.success(issues))
+        completions[index](.success(PaginatedIssues(issues: issues, loadMore: nil)))
     }
     
     func completeIssuesLoadingWithError(at index: Int = 0) {
