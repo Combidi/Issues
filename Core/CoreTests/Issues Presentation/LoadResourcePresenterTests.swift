@@ -16,11 +16,11 @@ struct ResourceLoadingErrorViewModel {
     let message: String?
 }
 
-private final class LoadResourcePresenter<Resource> {
-    private let view: ViewSpy
-    private let mapper: (Resource) -> String
+private final class LoadResourcePresenter<Resource, View: ResourceView> {
+    private let view: View
+    private let mapper: (Resource) -> View.ResourceViewModel
     
-    init(view: ViewSpy, mapper: @escaping (Resource) -> String) {
+    init(view: View, mapper: @escaping (Resource) -> View.ResourceViewModel) {
         self.view = view
         self.mapper = mapper
     }
@@ -84,7 +84,7 @@ final class LoadResourcePresenterTests: XCTestCase {
 
     // MARK: Helpers
     
-    private typealias SUT = LoadResourcePresenter<String>
+    private typealias SUT = LoadResourcePresenter<String, ViewSpy>
     
     private func makeSUT(
         file: StaticString = #filePath,
@@ -99,7 +99,17 @@ final class LoadResourcePresenterTests: XCTestCase {
     }
 }
 
-private class ViewSpy {
+protocol ResourceView {
+    associatedtype ResourceViewModel
+    
+    func display(_ viewModel: ResourceLoadingViewModel)
+    func display(_ viewModel: ResourceLoadingErrorViewModel)
+    func display(_ viewModel: ResourceViewModel)
+}
+
+private class ViewSpy: ResourceView {
+    
+    typealias ResourceViewModel = String
     
     enum Message: Hashable {
         case display(isLoading: Bool)
