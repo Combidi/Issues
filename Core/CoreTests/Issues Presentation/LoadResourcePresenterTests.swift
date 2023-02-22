@@ -17,10 +17,12 @@ struct ResourceLoadingErrorViewModel {
 }
 
 private final class LoadResourcePresenter<Resource, View: ResourceView> {
-    private let view: View
-    private let mapper: (Resource) -> View.ResourceViewModel
+    typealias Mapper = (Resource) -> View.ResourceViewModel
     
-    init(view: View, mapper: @escaping (Resource) -> View.ResourceViewModel) {
+    private let view: View
+    private let mapper: Mapper
+    
+    init(view: View, mapper: @escaping Mapper) {
         self.view = view
         self.mapper = mapper
     }
