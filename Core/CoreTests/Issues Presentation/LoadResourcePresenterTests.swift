@@ -59,7 +59,7 @@ final class LoadResourcePresenterTests: XCTestCase {
         mapper: @escaping (String) -> String = { $0 }
     ) -> (SUT, ViewSpy) {
         let view = ViewSpy()
-        let sut = SUT(view: view, mapper: mapper)
+        let sut = SUT(view: view, loadingView: view, errorView: view, mapper: mapper)
         trackForMemoryLeaks(view, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, view)
@@ -68,7 +68,7 @@ final class LoadResourcePresenterTests: XCTestCase {
 
 // MARK: Helpers
 
-private class ViewSpy: ResourceView {
+private class ViewSpy: ResourceView, ResourceLoadingView, ResourceErrorView {
     
     typealias ResourceViewModel = String
     
