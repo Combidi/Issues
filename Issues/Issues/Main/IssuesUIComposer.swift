@@ -15,12 +15,13 @@ public struct IssuesUIComposer {
         let viewController = ListViewController()
         viewController.tableView.registerNibBasedCell(IssueCell.self)
         viewController.tableView.registerNibBasedCell(LoadMoreCell.self)
+        let mapper = IssueViewModelMapper(locale: locale)
         let presenter = IssuesPresenter(
             loader: loader,
             loadingView: MainThreadDispatchingIssueViewDecorator(decoratee: WeakRefVirtualProxy(viewController)),
             errorView: MainThreadDispatchingIssueViewDecorator(decoratee: WeakRefVirtualProxy(viewController)),
             view: MainThreadDispatchingIssueViewDecorator(decoratee: IssuesViewAdapter(viewController)),
-            locale: locale
+            mapper: mapper.map
         )
         viewController.load = presenter.loadIssues
         viewController.title = IssuesPresenter.title
