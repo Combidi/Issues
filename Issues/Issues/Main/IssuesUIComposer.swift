@@ -5,6 +5,18 @@
 import UIKit
 import Core
 
+extension ListViewController: ResourceLoadingView {
+    public func display(_ viewModel: ResourceLoadingViewModel) {
+        display(isLoading: viewModel.isLoading)
+    }
+}
+
+extension ListViewController: ResourceErrorView {
+    public func display(_ viewModel: ResourceLoadingErrorViewModel) {
+        display(message: viewModel.message)
+    }
+}
+
 public struct IssuesUIComposer {    
     private init() {}
     
@@ -15,21 +27,51 @@ public struct IssuesUIComposer {
         let viewController = ListViewController()
         viewController.tableView.registerNibBasedCell(IssueCell.self)
         viewController.tableView.registerNibBasedCell(LoadMoreCell.self)
+        
         let mapper = IssueViewModelMapper(locale: locale)
-        let presenter = IssuesPresenter(
-            loader: loader,
-            loadingView: MainThreadDispatchingIssueViewDecorator(decoratee: WeakRefVirtualProxy(viewController)),
-            errorView: MainThreadDispatchingIssueViewDecorator(decoratee: WeakRefVirtualProxy(viewController)),
-            view: MainThreadDispatchingIssueViewDecorator(decoratee: IssuesViewAdapter(viewController)),
+        let presenter = LoadResourcePresenter<[Issue], IssuesViewAdapter>(
+            view: IssuesViewAdapter(viewController),
+            loadingView: WeakRefVirtualProxy(viewController),
+            errorView: WeakRefVirtualProxy(viewController),
             mapper: mapper.map
         )
-        viewController.load = presenter.loadIssues
+        let presentationAdapter = LoadResourcePresentationAdapter(
+            loader: MainThreadDispatchingDecorator(decoratee: loader),
+            presenter: presenter
+        )
+                
+        viewController.load = presentationAdapter.load
         viewController.title = IssuesPresenter.title
         return viewController
     }
 }
 
-private final class IssuesViewAdapter: IssuesView {
+private class LoadResourcePresentationAdapter<Presenter: LoadResourcePresenter<[Issue], IssuesViewAdapter>> {
+    private let loader: IssuesLoader
+    private let presenter: Presenter
+    
+    init(loader: IssuesLoader, presenter: Presenter) {
+        self.loader = loader
+        self.presenter = presenter
+    }
+    
+    func load() {
+        presenter.didStartLoading()
+        loader.loadIssues { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success(let issues):
+                self.presenter.didFinishLoading(with: issues)
+                
+            case .failure:
+                self.presenter.didFinishLoadingWithError()
+            }
+        }
+
+    }
+}
+
+private final class IssuesViewAdapter: IssuesView, ResourceView {
     private weak var viewController: ListViewController?
     
     init(_ viewController: ListViewController) {
@@ -40,47 +82,30 @@ private final class IssuesViewAdapter: IssuesView {
         let cellControllers = issues.map(IssueCellController.init(issue:))
         viewController?.display(sections: [cellControllers])
     }
+    
+    func display(_ viewModel: [IssueViewModel]) {
+        let cellControllers = viewModel.map(IssueCellController.init(issue:))
+        viewController?.display(sections: [cellControllers])
+    }
 }
 
-private final class MainThreadDispatchingIssueViewDecorator<Decoratee> {
-    private let decoratee: Decoratee
+private final class MainThreadDispatchingDecorator: IssuesLoader {
+    private let decoratee: IssuesLoader
     
-    init(decoratee: Decoratee) {
+    init(decoratee: IssuesLoader) {
         self.decoratee = decoratee
     }
     
-    private func dispatch(_ closure: @escaping () -> Void) {
-        if Thread.isMainThread {
-            closure()
-        } else {
-            DispatchQueue.main.async {
-                closure()
+    func loadIssues(completion: @escaping Completion) {
+        decoratee.loadIssues(completion: { result in
+            if Thread.isMainThread {
+                completion(result)
+            } else {
+                DispatchQueue.main.async {
+                    completion(result)
+                }
             }
-        }
-    }
-}
-
-extension MainThreadDispatchingIssueViewDecorator: IssuesView where Decoratee: IssuesView {
-    func display(issues: [IssueViewModel]) {
-        dispatch {
-            self.decoratee.display(issues: issues)
-        }
-    }
-}
-
-extension MainThreadDispatchingIssueViewDecorator: LoadingView where Decoratee: LoadingView {
-    func display(isLoading: Bool) {
-        dispatch {
-            self.decoratee.display(isLoading: isLoading)
-        }
-    }
-}
-
-extension MainThreadDispatchingIssueViewDecorator: ErrorView where Decoratee: ErrorView {
-    func display(message: String?) {
-        dispatch {
-            self.decoratee.display(message: message)
-        }
+        })
     }
 }
 
@@ -92,20 +117,14 @@ private final class WeakRefVirtualProxy<T: AnyObject> {
     }
 }
 
-extension WeakRefVirtualProxy: IssuesView where T: IssuesView {
-    func display(issues: [IssueViewModel]) {
-        object?.display(issues: issues)
+extension WeakRefVirtualProxy: ResourceLoadingView where T: ResourceLoadingView {
+    func display(_ viewModel: ResourceLoadingViewModel) {
+        object?.display(viewModel)
     }
 }
 
-extension WeakRefVirtualProxy: LoadingView where T: LoadingView {
-    func display(isLoading: Bool) {
-        object?.display(isLoading: isLoading)
-    }
-}
-
-extension WeakRefVirtualProxy: ErrorView where T: ErrorView {
-    func display(message: String?) {
-        object?.display(message: message)
+extension WeakRefVirtualProxy: ResourceErrorView where T: ResourceErrorView {
+    func display(_ viewModel: ResourceLoadingErrorViewModel) {
+        object?.display(viewModel)
     }
 }
