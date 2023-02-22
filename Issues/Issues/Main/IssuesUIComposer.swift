@@ -59,7 +59,7 @@ private class LoadResourcePresentationAdapter<Presenter: LoadResourcePresenter<[
     }
 }
 
-private final class IssuesViewAdapter: IssuesView, ResourceView {
+private final class IssuesViewAdapter: ResourceView {
     private weak var viewController: ListViewController?
     
     init(_ viewController: ListViewController) {

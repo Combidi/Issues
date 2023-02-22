@@ -21,7 +21,6 @@
 		D0AC699228BD31760073363F /* Issue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AC699128BD31760073363F /* Issue.swift */; };
 		D0AC699428BD31930073363F /* IssuesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AC699328BD31930073363F /* IssuesLoader.swift */; };
 		D0AC69A028BD365E0073363F /* IssueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AC699F28BD365E0073363F /* IssueViewModel.swift */; };
-		D0AC69A828BD561E0073363F /* IssuesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AC69A728BD561E0073363F /* IssuesView.swift */; };
 		D0AC69AB28BD57720073363F /* Issues.strings in Resources */ = {isa = PBXBuildFile; fileRef = D0AC69AD28BD57720073363F /* Issues.strings */; };
 		D0AC69B028BD580C0073363F /* IssuesLocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AC69AF28BD580C0073363F /* IssuesLocalizationTests.swift */; };
 		D0B9762328C1D45F00BF60C3 /* FileSystemIssueLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B9762228C1D45F00BF60C3 /* FileSystemIssueLoader.swift */; };
@@ -59,7 +58,6 @@
 		D0AC699128BD31760073363F /* Issue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Issue.swift; sourceTree = "<group>"; };
 		D0AC699328BD31930073363F /* IssuesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesLoader.swift; sourceTree = "<group>"; };
 		D0AC699F28BD365E0073363F /* IssueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueViewModel.swift; sourceTree = "<group>"; };
-		D0AC69A728BD561E0073363F /* IssuesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesView.swift; sourceTree = "<group>"; };
 		D0AC69AC28BD57720073363F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Issues.strings; sourceTree = "<group>"; };
 		D0AC69AE28BD57C70073363F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Issues.strings; sourceTree = "<group>"; };
 		D0AC69AF28BD580C0073363F /* IssuesLocalizationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesLocalizationTests.swift; sourceTree = "<group>"; };
@@ -162,7 +160,6 @@
 			isa = PBXGroup;
 			children = (
 				D0AC699F28BD365E0073363F /* IssueViewModel.swift */,
-				D0AC69A728BD561E0073363F /* IssuesView.swift */,
 				D0AC69AD28BD57720073363F /* Issues.strings */,
 				D057CFBC29A63449003246B4 /* IssueViewModelMapper.swift */,
 				D057CFC529A64F28003246B4 /* LoadResourcePresenter.swift */,
@@ -322,7 +319,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D004B55D2901DBC800AAACE3 /* StreamingFileReader.swift in Sources */,
-				D0AC69A828BD561E0073363F /* IssuesView.swift in Sources */,
 				D0EF8DDD2905B05700661505 /* IssuesMapper.swift in Sources */,
 				D057CFBD29A63449003246B4 /* IssueViewModelMapper.swift in Sources */,
 				D057CFC629A64F28003246B4 /* LoadResourcePresenter.swift in Sources */,
