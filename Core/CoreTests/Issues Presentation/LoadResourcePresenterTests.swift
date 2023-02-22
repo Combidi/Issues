@@ -36,10 +36,14 @@ private final class LoadResourcePresenter {
 
 final class LoadResourcePresenterTests: XCTestCase {
     
-    func test_didStartLoading_displaysLoadingAndHidesError() {
-        let (sut, view) = makeSUT()
+    func test_doesNotSendMessagesOnCreation() {
+        let (_, view) = makeSUT()
 
         XCTAssertEqual(view.messages, [])
+    }
+    
+    func test_didStartLoading_displaysLoadingAndHidesError() {
+        let (sut, view) = makeSUT()
 
         sut.didStartLoading()
         
@@ -52,8 +56,6 @@ final class LoadResourcePresenterTests: XCTestCase {
     func test_didFinishLoadingWithError_displaysShowsErrorAndStopsLoading() {
         let (sut, view) = makeSUT()
         
-        XCTAssertEqual(view.messages, [])
-
         sut.didFinishLoadingWithError()
         
         XCTAssertEqual(view.messages, [
