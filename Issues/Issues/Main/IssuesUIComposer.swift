@@ -5,18 +5,6 @@
 import UIKit
 import Core
 
-extension ListViewController: ResourceLoadingView {
-    public func display(_ viewModel: ResourceLoadingViewModel) {
-        display(isLoading: viewModel.isLoading)
-    }
-}
-
-extension ListViewController: ResourceErrorView {
-    public func display(_ viewModel: ResourceLoadingErrorViewModel) {
-        display(message: viewModel.message)
-    }
-}
-
 public struct IssuesUIComposer {    
     private init() {}
     
@@ -126,5 +114,17 @@ extension WeakRefVirtualProxy: ResourceLoadingView where T: ResourceLoadingView 
 extension WeakRefVirtualProxy: ResourceErrorView where T: ResourceErrorView {
     func display(_ viewModel: ResourceLoadingErrorViewModel) {
         object?.display(viewModel)
+    }
+}
+
+extension ListViewController: ResourceLoadingView {
+    public func display(_ viewModel: ResourceLoadingViewModel) {
+        display(isLoading: viewModel.isLoading)
+    }
+}
+
+extension ListViewController: ResourceErrorView {
+    public func display(_ viewModel: ResourceLoadingErrorViewModel) {
+        display(message: viewModel.message)
     }
 }
