@@ -2,12 +2,6 @@
 //  Created by Peter Combee on 22/02/2023.
 //
 
-public protocol ResourceView {
-    associatedtype ResourceViewModel
-    
-    func display(_ viewModel: ResourceViewModel)
-}
-
 public final class LoadResourcePresenter<Resource, View: ResourceView> {
     public typealias Mapper = (Resource) -> View.ResourceViewModel
     
