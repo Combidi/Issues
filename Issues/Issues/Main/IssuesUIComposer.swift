@@ -29,7 +29,7 @@ public struct IssuesUIComposer {
         )
                 
         viewController.load = presentationAdapter.load
-        viewController.title = IssuesPresenter.title
+        viewController.title = IssueViewModelMapper.title
         return viewController
     }
 }

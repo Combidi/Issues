@@ -9,7 +9,7 @@ final class IssuesLocalizationTests: XCTestCase {
     
     func test_localizedStrings_haveKeysAndValuesForAllSupportedLocalizations() {
         let table = "Issues"
-        let bundle = Bundle(for: IssuesPresenter.self)
+        let bundle = Bundle(for: IssueViewModelMapper.self)
         
         assertLocalizedKeysAndValuesExist(in: bundle, table)
     }
