@@ -10,8 +10,6 @@
 		D004B55B28FBFE2C00AAACE3 /* StreamingFileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D004B55A28FBFE2C00AAACE3 /* StreamingFileReader.swift */; };
 		D004B55D2901DBC800AAACE3 /* StreamingFileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D004B55C2901DBC800AAACE3 /* StreamingFileReader.swift */; };
 		D01984D528BE92DF00930C71 /* CSVIssuesMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01984D428BE92DF00930C71 /* CSVIssuesMapperTests.swift */; };
-		D057CFB929A62C96003246B4 /* LoadResourcePresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D057CFB829A62C96003246B4 /* LoadResourcePresenterTests.swift */; };
-		D057CFBB29A62D7F003246B4 /* LoadResourcePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D057CFBA29A62D7F003246B4 /* LoadResourcePresenter.swift */; };
 		D06275F5290AC9720014F27A /* URLSessionHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06275F4290AC9720014F27A /* URLSessionHTTPClient.swift */; };
 		D0A67F272905C52400CD7178 /* URLSessionHTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A67F262905C52400CD7178 /* URLSessionHTTPClientTests.swift */; };
 		D0AC698128BD30E00073363F /* Core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0AC697828BD30E00073363F /* Core.framework */; };
@@ -48,8 +46,6 @@
 		D004B55A28FBFE2C00AAACE3 /* StreamingFileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingFileReader.swift; sourceTree = "<group>"; };
 		D004B55C2901DBC800AAACE3 /* StreamingFileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamingFileReader.swift; sourceTree = "<group>"; };
 		D01984D428BE92DF00930C71 /* CSVIssuesMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSVIssuesMapperTests.swift; sourceTree = "<group>"; };
-		D057CFB829A62C96003246B4 /* LoadResourcePresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadResourcePresenterTests.swift; sourceTree = "<group>"; };
-		D057CFBA29A62D7F003246B4 /* LoadResourcePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadResourcePresenter.swift; sourceTree = "<group>"; };
 		D06275F4290AC9720014F27A /* URLSessionHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClient.swift; sourceTree = "<group>"; };
 		D0A67F262905C52400CD7178 /* URLSessionHTTPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClientTests.swift; sourceTree = "<group>"; };
 		D0AC697828BD30E00073363F /* Core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -146,7 +142,6 @@
 			children = (
 				D0AC699C28BD32280073363F /* IssuesPresenterTests.swift */,
 				D0AC69AF28BD580C0073363F /* IssuesLocalizationTests.swift */,
-				D057CFB829A62C96003246B4 /* LoadResourcePresenterTests.swift */,
 			);
 			path = "Issues Presentation";
 			sourceTree = "<group>";
@@ -160,7 +155,6 @@
 				D0AC69AD28BD57720073363F /* Issues.strings */,
 				D0ED3ABB299648C90097CAB6 /* ErrorView.swift */,
 				D0ED3ABD299648E90097CAB6 /* LoadingView.swift */,
-				D057CFBA29A62D7F003246B4 /* LoadResourcePresenter.swift */,
 			);
 			path = "Issues Presentation";
 			sourceTree = "<group>";
@@ -322,7 +316,6 @@
 				D0AC69A828BD561E0073363F /* IssuesView.swift in Sources */,
 				D0EF8DDD2905B05700661505 /* IssuesMapper.swift in Sources */,
 				D0AC699428BD31930073363F /* IssuesLoader.swift in Sources */,
-				D057CFBB29A62D7F003246B4 /* LoadResourcePresenter.swift in Sources */,
 				D0AC69A028BD365E0073363F /* IssueViewModel.swift in Sources */,
 				D0EF8DD92905AF5700661505 /* HTTPClient.swift in Sources */,
 				D0EF8DDB2905AF9300661505 /* RemoteIssuesLoader.swift in Sources */,
@@ -342,7 +335,6 @@
 				D0EF8DD229050E2A00661505 /* RemoteIssuesLoaderTests.swift in Sources */,
 				D0B9762528C1D49500BF60C3 /* FileSystemIssueLoaderTests.swift in Sources */,
 				D004B55B28FBFE2C00AAACE3 /* StreamingFileReader.swift in Sources */,
-				D057CFB929A62C96003246B4 /* LoadResourcePresenterTests.swift in Sources */,
 				D0AC69B028BD580C0073363F /* IssuesLocalizationTests.swift in Sources */,
 				D0AC699D28BD32280073363F /* IssuesPresenterTests.swift in Sources */,
 				D01984D528BE92DF00930C71 /* CSVIssuesMapperTests.swift in Sources */,
