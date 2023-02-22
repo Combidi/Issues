@@ -2,10 +2,6 @@
 //  Created by Peter Combee on 22/02/2023.
 //
 
-public struct ResourceLoadingErrorViewModel {
-    public let message: String?
-}
-
 public protocol ResourceLoadingView {
     func display(_ viewModel: ResourceLoadingViewModel)
 }
