@@ -8,8 +8,12 @@
 import XCTest
 import Core
 
-struct ResourceLoadingViewModel: Equatable {
+struct ResourceLoadingViewModel {
     let isLoading: Bool
+}
+
+struct ResourceLoadingErrorViewModel {
+    let message: String?
 }
 
 private final class LoadResourcePresenter {
@@ -21,28 +25,41 @@ private final class LoadResourcePresenter {
     
     func didStartLoading() {
         view.display(ResourceLoadingViewModel(isLoading: true))
+        view.display(ResourceLoadingErrorViewModel(message: nil))
     }
 }
 
 final class LoadResourcePresenterTests: XCTestCase {
     
-    func test_didStartLoading_displaysLoading() {
+    func test_didStartLoading_displaysLoadingAndHidesError() {
         let view = ViewSpy()
         let sut = LoadResourcePresenter(view: view)
         
-        XCTAssertEqual(view.captures, [])
+        XCTAssertEqual(view.messages, [])
 
         sut.didStartLoading()
         
-        XCTAssertEqual(view.captures, [ResourceLoadingViewModel(isLoading: true)])
+        XCTAssertEqual(view.messages, [
+            .display(isLoading: true),
+            .display(errorMessage: nil)
+        ])
     }
 }
 
 private class ViewSpy {
     
-    private(set) var captures = [ResourceLoadingViewModel]()
+    enum Message: Hashable {
+        case display(isLoading: Bool)
+        case display(errorMessage: String?)
+    }
+    
+    private(set) var messages = Set<Message>()
     
     func display(_ viewModel: ResourceLoadingViewModel) {
-        captures.append(viewModel)
+        messages.insert(.display(isLoading: viewModel.isLoading))
+    }
+    
+    func display(_ viewModel: ResourceLoadingErrorViewModel) {
+        messages.insert(.display(errorMessage: viewModel.message))
     }
 }
