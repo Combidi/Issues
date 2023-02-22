@@ -8,41 +8,6 @@
 import XCTest
 import Core
 
-struct ResourceLoadingViewModel {
-    let isLoading: Bool
-}
-
-struct ResourceLoadingErrorViewModel {
-    let message: String?
-}
-
-private final class LoadResourcePresenter<Resource, View: ResourceView> {
-    typealias Mapper = (Resource) -> View.ResourceViewModel
-    
-    private let view: View
-    private let mapper: Mapper
-    
-    init(view: View, mapper: @escaping Mapper) {
-        self.view = view
-        self.mapper = mapper
-    }
-    
-    func didStartLoading() {
-        view.display(ResourceLoadingViewModel(isLoading: true))
-        view.display(ResourceLoadingErrorViewModel(message: nil))
-    }
-    
-    func didFinishLoadingWithError() {
-        view.display(ResourceLoadingViewModel(isLoading: false))
-        view.display(ResourceLoadingErrorViewModel(message: "Invalid data"))
-    }
-    
-    func didFinishLoading(with resource: Resource) {
-        view.display(ResourceLoadingViewModel(isLoading: false))
-        view.display(mapper(resource))
-    }
-}
-
 final class LoadResourcePresenterTests: XCTestCase {
     
     func test_doesNotSendMessagesOnCreation() {
@@ -101,13 +66,7 @@ final class LoadResourcePresenterTests: XCTestCase {
     }
 }
 
-protocol ResourceView {
-    associatedtype ResourceViewModel
-    
-    func display(_ viewModel: ResourceLoadingViewModel)
-    func display(_ viewModel: ResourceLoadingErrorViewModel)
-    func display(_ viewModel: ResourceViewModel)
-}
+// MARK: Helpers
 
 private class ViewSpy: ResourceView {
     
