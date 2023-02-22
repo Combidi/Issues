@@ -10,22 +10,20 @@ public final class IssuesPresenter {
     private let loadingView: LoadingView
     private let errorView: ErrorView
     private let view: IssuesView
-    private let dateFormatter: DateFormatter
+    private let mapper: ([Issue]) -> [IssueViewModel]
     
     public init(
         loader: IssuesLoader,
         loadingView: LoadingView,
         errorView: ErrorView,
         view: IssuesView,
-        locale: Locale = .current
+        mapper: @escaping ([Issue]) -> [IssueViewModel]
     ) {
         self.loader = loader
         self.loadingView = loadingView
         self.errorView = errorView
         self.view = view
-        self.dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-        dateFormatter.locale = locale
+        self.mapper = mapper
     }
     
     public static var title: String {
@@ -42,7 +40,7 @@ public final class IssuesPresenter {
             self.loadingView.display(isLoading: false)
             switch result {
             case .success(let issues):
-                self.view.display(issues: issues.map(self.map(issue:)))
+                self.view.display(issues: self.mapper(issues))
                 self.errorView.display(message: nil)
                 
             case .failure:
@@ -50,12 +48,24 @@ public final class IssuesPresenter {
             }
         }
     }
+}
+
+public struct IssueViewModelMapper {
+    private let dateFormatter: DateFormatter
+
+    public init(locale: Locale = .current) {
+        dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.locale = locale
+    }
     
-    private func map(issue: Issue) -> IssueViewModel {
-        IssueViewModel(
-            name: issue.firstName + " " + issue.surname,
-            submissionDate: dateFormatter.string(from: issue.submissionDate),
-            subject: issue.subject
-        )
+    public func map(issues: [Issue]) -> [IssueViewModel] {
+        issues.map { issue in
+            IssueViewModel(
+                name: issue.firstName + " " + issue.surname,
+                submissionDate: dateFormatter.string(from: issue.submissionDate),
+                subject: issue.subject
+            )
+        }
     }
 }
