@@ -1,7 +1,4 @@
 //
-//  IssuesViewModelMapperTests.swift
-//  CoreTests
-//
 //  Created by Peter Combee on 22/02/2023.
 //
 
