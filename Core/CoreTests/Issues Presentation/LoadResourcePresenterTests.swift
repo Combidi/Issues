@@ -1,11 +1,11 @@
 //
-//  Created by Peter Combee on 29/08/2022.
+//  Created by Peter Combee on 22/02/2023.
 //
 
 import XCTest
 import Core
 
-final class IssuesPresenterTests: XCTestCase {
+final class LoadResourcePresenterTests: XCTestCase {
     
     func test_title_isLocalized() {
         XCTAssertEqual(IssuesPresenter.title, localized("ISSUES_VIEW_TITLE"))
@@ -145,3 +145,4 @@ private extension XCTestCase {
         }
     }
 }
+

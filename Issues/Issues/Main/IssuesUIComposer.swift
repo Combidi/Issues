@@ -5,7 +5,7 @@
 import UIKit
 import Core
 
-public struct IssuesUIComposer {
+public struct IssuesUIComposer {    
     private init() {}
     
     public static func compose(
