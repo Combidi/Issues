@@ -77,10 +77,10 @@ final class LoadResourcePresenterTests: XCTestCase {
         locale: Locale = .current,
         file: StaticString = #filePath,
         line: UInt = #line
-    ) -> (sut: IssuesPresenter, loader: LoaderSpy, view: ViewSpy) {
+    ) -> (sut: LoadResourcePresenter, loader: LoaderSpy, view: ViewSpy) {
         let loader = LoaderSpy()
         let view = ViewSpy()
-        let sut = IssuesPresenter(loader: loader, loadingView: view, errorView: view, view: view, locale: locale)
+        let sut = LoadResourcePresenter(loader: loader, loadingView: view, errorView: view, view: view, locale: locale)
         trackForMemoryLeaks(loader, file: file, line: line)
         trackForMemoryLeaks(view, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
