@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct IssueViewModelMapper {
+public class IssueViewModelMapper {
     private let dateFormatter: DateFormatter
 
     public init(locale: Locale = .current) {
@@ -13,6 +13,13 @@ public struct IssueViewModelMapper {
         dateFormatter.locale = locale
     }
     
+    public static var title: String {
+        NSLocalizedString("ISSUES_VIEW_TITLE",
+            tableName: "Issues",
+            bundle: Bundle(for: Self.self),
+            comment: "Title for the issues view")
+    }
+
     public func map(issues: [Issue]) -> [IssueViewModel] {
         issues.map { issue in
             IssueViewModel(

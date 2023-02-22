@@ -10,6 +10,10 @@ import XCTest
 
 final class IssuesViewModelMapperTests: XCTestCase {
     
+    func test_title_isLocalized() {
+        XCTAssertEqual(IssueViewModelMapper.title, localized("ISSUES_VIEW_TITLE"))
+    }
+    
     func test_map() {
         let locale = Locale(identifier: "en_US_POSIX")
         let sut = IssueViewModelMapper(locale: locale)
@@ -24,5 +28,17 @@ final class IssuesViewModelMapperTests: XCTestCase {
         ]
 
         XCTAssertEqual(sut.map(issues: issues), expectedViewModels)
+    }
+    
+    // MARK: Helpers
+    
+    private func localized(_ key: String, file: StaticString = #file, line: UInt = #line) -> String {
+        let table = "Issues"
+        let bundle = Bundle(for: IssuesPresenter.self)
+        let value = bundle.localizedString(forKey: key, value: nil, table: table)
+        if value == key {
+            XCTFail("Missing localized string for key: \(key) in table: \(table)", file: file, line: line)
+        }
+        return value
     }
 }
