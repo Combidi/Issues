@@ -65,12 +65,7 @@ private final class IssuesViewAdapter: ResourceView {
     init(_ viewController: ListViewController) {
         self.viewController = viewController
     }
-    
-    func display(issues: [IssueViewModel]) {
-        let cellControllers = issues.map(IssueCellController.init(issue:))
-        viewController?.display(sections: [cellControllers])
-    }
-    
+
     func display(_ viewModel: [IssueViewModel]) {
         let cellControllers = viewModel.map(IssueCellController.init(issue:))
         viewController?.display(sections: [cellControllers])
