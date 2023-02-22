@@ -37,9 +37,8 @@ private final class LoadResourcePresenter {
 final class LoadResourcePresenterTests: XCTestCase {
     
     func test_didStartLoading_displaysLoadingAndHidesError() {
-        let view = ViewSpy()
-        let sut = LoadResourcePresenter(view: view)
-        
+        let (sut, view) = makeSUT()
+
         XCTAssertEqual(view.messages, [])
 
         sut.didStartLoading()
@@ -51,8 +50,7 @@ final class LoadResourcePresenterTests: XCTestCase {
     }
     
     func test_didFinishLoadingWithError_displaysShowsErrorAndStopsLoading() {
-        let view = ViewSpy()
-        let sut = LoadResourcePresenter(view: view)
+        let (sut, view) = makeSUT()
         
         XCTAssertEqual(view.messages, [])
 
@@ -62,6 +60,19 @@ final class LoadResourcePresenterTests: XCTestCase {
             .display(isLoading: false),
             .display(errorMessage: "Invalid data")
         ])
+    }
+    
+    // MARK: Helpers
+    
+    private func makeSUT(
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) -> (LoadResourcePresenter, ViewSpy) {
+        let view = ViewSpy()
+        let sut = LoadResourcePresenter(view: view)
+        trackForMemoryLeaks(view, file: file, line: line)
+        trackForMemoryLeaks(sut, file: file, line: line)
+        return (sut, view)
     }
 }
 
