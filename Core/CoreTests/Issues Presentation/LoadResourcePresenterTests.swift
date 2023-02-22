@@ -8,6 +8,10 @@
 import XCTest
 import Core
 
+struct ResourceLoadingViewModel: Equatable {
+    let isLoading: Bool
+}
+
 private final class LoadResourcePresenter {
     private let view: ViewSpy
     
@@ -16,7 +20,7 @@ private final class LoadResourcePresenter {
     }
     
     func didStartLoading() {
-        view.displayLoading(true)
+        view.display(ResourceLoadingViewModel(isLoading: true))
     }
 }
 
@@ -26,19 +30,19 @@ final class LoadResourcePresenterTests: XCTestCase {
         let view = ViewSpy()
         let sut = LoadResourcePresenter(view: view)
         
-        XCTAssertEqual(view.capturedDisplayLoading, [])
+        XCTAssertEqual(view.captures, [])
 
         sut.didStartLoading()
         
-        XCTAssertEqual(view.capturedDisplayLoading, [true])
+        XCTAssertEqual(view.captures, [ResourceLoadingViewModel(isLoading: true)])
     }
 }
 
 private class ViewSpy {
     
-    private(set) var capturedDisplayLoading = [Bool]()
+    private(set) var captures = [ResourceLoadingViewModel]()
     
-    func displayLoading(_ flag: Bool) {
-        capturedDisplayLoading.append(flag)
+    func display(_ viewModel: ResourceLoadingViewModel) {
+        captures.append(viewModel)
     }
 }
