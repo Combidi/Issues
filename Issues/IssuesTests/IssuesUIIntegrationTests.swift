@@ -37,6 +37,18 @@ final class IssuesUIIntegrationTests: XCTestCase {
         
         sut.simulateLoadMoreFeedAction()
         XCTAssertEqual(loader.loadMoreCallCount, 1, "Expected no request while loading more")
+        
+        loader.completeLoadMore(lastPage: false)
+        sut.simulateLoadMoreFeedAction()
+        XCTAssertEqual(loader.loadMoreCallCount, 2, "Expected request after load more completed with more pages")
+
+        loader.completeLoadMoreWithError()
+        sut.simulateLoadMoreFeedAction()
+        XCTAssertEqual(loader.loadMoreCallCount, 3, "Expected request after load more failure")
+
+        loader.completeLoadMore(lastPage: true)
+        sut.simulateLoadMoreFeedAction()
+        XCTAssertEqual(loader.loadMoreCallCount, 3, "Expected no request after loading all pages")
     }
     
     func test_loadIssuesCompletion_rendersSuccessfullyLoadedIssues() {
@@ -48,7 +60,7 @@ final class IssuesUIIntegrationTests: XCTestCase {
         
         XCTAssertEqual(sut.numberOfRenderedIssueViews(), 0)
     
-        loader.completeIssuesLoading(with: [issue0, issue1], at: 0)
+        loader.completeIssuesLoading(with: [issue0, issue1])
         
         XCTAssertEqual(sut.numberOfRenderedIssueViews(), 2)
         
@@ -67,7 +79,7 @@ final class IssuesUIIntegrationTests: XCTestCase {
         sut.loadViewIfNeeded()
         XCTAssertTrue(sut.isShowingLoadingIndicator, "Expected loading indicator once view is loaded")
     
-        loader.completeIssuesLoading(at: 0)
+        loader.completeIssuesLoading()
         
         XCTAssertFalse(sut.isShowingLoadingIndicator, "Expected no loading indicator once loading completes successfully")
     }
@@ -89,7 +101,7 @@ final class IssuesUIIntegrationTests: XCTestCase {
 
         let exp = expectation(description: "Wait for background queue")
         DispatchQueue.global().async {
-            loader.completeIssuesLoading(at: 0)
+            loader.completeIssuesLoading()
             exp.fulfill()
         }
         wait(for: [exp], timeout: 1.0)
@@ -101,7 +113,7 @@ final class IssuesUIIntegrationTests: XCTestCase {
         sut.loadViewIfNeeded()
         XCTAssertEqual(sut.renderedErrorMessage(), nil)
 
-        loader.completeIssuesLoadingWithError(at: 0)
+        loader.completeIssuesLoadingWithError()
         XCTAssertEqual(sut.renderedErrorMessage(), "Invalid data")
     }
 
@@ -124,13 +136,8 @@ final class IssuesUIIntegrationTests: XCTestCase {
 
 private extension ListViewController {
     
-    private var issuesSection: Int {
-        return 0
-    }
-    
-    private var loadMoreSection: Int {
-        return 1
-    }
+    private var issuesSection: Int { 0 }
+    private var loadMoreSection: Int { 1 }
 
     func numberOfRenderedIssueViews() -> Int {
         numberOfRows(in: issuesSection)
@@ -195,17 +202,31 @@ private final class IssuesLoaderSpy: PaginatedIssuesLoader {
         loadCompletions.append(completion)
     }
     
-    func completeIssuesLoading(with issues: [Issue] = [], at index: Int = 0) {
+    func completeIssuesLoading(with issues: [Issue] = []) {
         let paginated = PaginatedIssues(issues: issues, loadMore: { [weak self] in
             let loadMoreLoader = IssuesLoaderSpy()
             self?.loadMoreLoaders.append(loadMoreLoader)
             return loadMoreLoader
         })
-        loadCompletions[index](.success(paginated))
+        loadCompletions.last?(.success(paginated))
     }
     
-    func completeIssuesLoadingWithError(at index: Int = 0) {
-        loadCompletions[index](.failure(NSError(domain: "any", code: 1)))
+    func completeIssuesLoadingWithError() {
+        loadCompletions.last?(.failure(NSError(domain: "any", code: 1)))
+    }
+    
+    func completeLoadMore(lastPage: Bool) {
+        let paginated = PaginatedIssues(issues: [], loadMore: lastPage ? nil : { [weak self] in
+            let loadMoreLoader = IssuesLoaderSpy()
+            self?.loadMoreLoaders.append(loadMoreLoader)
+            return loadMoreLoader
+        })
+
+        loadMoreLoaders.last?.loadCompletions.last?(.success(paginated))
+    }
+    
+    func completeLoadMoreWithError() {
+        loadMoreLoaders.last?.loadCompletions.last?(.failure(NSError(domain: "any", code: 1)))
     }
 }
 
