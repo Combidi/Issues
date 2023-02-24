@@ -34,6 +34,9 @@ final class IssuesUIIntegrationTests: XCTestCase {
         
         sut.simulateLoadMoreFeedAction()
         XCTAssertEqual(loader.loadMoreCallCount, 1, "Expected request load more request")
+        
+        sut.simulateLoadMoreFeedAction()
+        XCTAssertEqual(loader.loadMoreCallCount, 1, "Expected no request while loading more")
     }
     
     func test_loadIssuesCompletion_rendersSuccessfullyLoadedIssues() {
@@ -182,7 +185,7 @@ private final class IssuesLoaderSpy: PaginatedIssuesLoader {
     }
     
     var loadMoreCallCount: Int {
-        loadMoreLoaders.count
+        loadMoreLoaders.map(\.loadCompletions.count).reduce(0, +)
     }
     
     private var loadCompletions = [Completion]()

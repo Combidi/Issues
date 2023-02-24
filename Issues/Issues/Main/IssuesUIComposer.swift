@@ -60,9 +60,14 @@ private class LoadResourcePresentationAdapter<Presenter: LoadResourcePresenter<P
         self.presenter = presenter
     }
     
+    private var isLoading = false
+    
     func load() {
+        guard !isLoading else { return }
         presenter.didStartLoading()
+        isLoading = true
         loader.loadIssues { [weak self] result in
+            self?.isLoading = false
             guard let self else { return }
             switch result {
             case .success(let page):
@@ -85,40 +90,37 @@ private final class IssuesViewAdapter: ResourceView {
     }
 
     func display(_ viewModel: PaginatedIssues) {
+        guard let viewController else { return }
         
         let issueControllers: [ListViewController.CellController] = mapper
             .map(issues: viewModel.issues)
             .map(IssueCellController.init(issue:))
         
         guard let getLoadMoreLoader = viewModel.loadMore else {
-            viewController?.display(sections: [issueControllers])
+            viewController.display(sections: [issueControllers])
             return
         }
+                
+        let viewAdapter = IssuesViewAdapter(
+            viewController,
+            mapper: mapper
+        )
         
-        let loadMoreController: ListViewController.CellController = LoadMoreCellController(loadMore: { [weak viewController, mapper] in
-            guard let viewController else { return }
-            
-            let viewAdapter = IssuesViewAdapter(
-                viewController,
-                mapper: mapper
-            )
-            
-            let presenter = LoadResourcePresenter(
-                view: viewAdapter,
-                loadingView: viewController,
-                errorView: viewController,
-                mapper: { $0 }
-            )
-            
-            let adapter = LoadResourcePresentationAdapter(
-                loader: getLoadMoreLoader(),
-                presenter: presenter
-            )
-            
-            return adapter.load()
-        })
+        let presenter = LoadResourcePresenter(
+            view: viewAdapter,
+            loadingView: WeakRefVirtualProxy(viewController),
+            errorView: WeakRefVirtualProxy(viewController),
+            mapper: { $0 }
+        )
         
-        viewController?.display(sections: [issueControllers, [loadMoreController]])
+        let adapter = LoadResourcePresentationAdapter(
+            loader: getLoadMoreLoader(),
+            presenter: presenter
+        )
+        
+        let loadMoreController: ListViewController.CellController = LoadMoreCellController(loadMore: adapter.load)
+        
+        viewController.display(sections: [issueControllers, [loadMoreController]])
     }
 }
 
