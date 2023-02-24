@@ -5,7 +5,7 @@
 import Core
 import UIKit
 
-public final class IssueCellController: NSObject, UITableViewDataSource {
+public final class IssueCellController: NSObject, UITableViewDataSource, UITableViewDelegate {
     private let issue: IssueViewModel
     
     public init(issue: IssueViewModel) {

@@ -56,7 +56,7 @@ final class IssuesSnapshotTests: XCTestCase {
         return sut
     }
     
-    private func issues() -> [[UITableViewDataSource]] {
+    private func issues() -> [[ListViewController.CellController]] {
         let issues = [
             IssueViewModel(
                 name: "a name",
@@ -73,8 +73,8 @@ final class IssuesSnapshotTests: XCTestCase {
 
     }
     
-    private func issuesWithLoadMore() -> [[UITableViewDataSource]] {
-        issues() + [[LoadMoreCellController()]]
+    private func issuesWithLoadMore() -> [[ListViewController.CellController]] {
+        issues() + [[LoadMoreCellController(loadMore: {})]]
     }
 }
 

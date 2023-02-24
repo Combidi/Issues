@@ -6,13 +6,10 @@ import UIKit
 import Core
 
 public struct PaginatedIssues {
-    public typealias Result = Swift.Result<PaginatedIssues, Error>
-    public typealias LoadMore = () -> (Result) -> Void
-    
     let issues: [Issue]
-    let loadMore: LoadMore?
+    public let loadMore: (() -> PaginatedIssuesLoader)?
 
-    public init(issues: [Issue], loadMore: LoadMore?) {
+    public init(issues: [Issue], loadMore: (() -> PaginatedIssuesLoader)?) {
         self.issues = issues
         self.loadMore = loadMore
     }
@@ -37,11 +34,11 @@ public struct IssuesUIComposer {
         viewController.tableView.registerNibBasedCell(LoadMoreCell.self)
         
         let mapper = IssueViewModelMapper(locale: locale)
-        let presenter = LoadResourcePresenter<[Issue], IssuesViewAdapter>(
-            view: IssuesViewAdapter(viewController),
+        let presenter = LoadResourcePresenter<PaginatedIssues, IssuesViewAdapter>(
+            view: IssuesViewAdapter(viewController, mapper: mapper),
             loadingView: WeakRefVirtualProxy(viewController),
             errorView: WeakRefVirtualProxy(viewController),
-            mapper: mapper.map
+            mapper: { $0 }
         )
         let presentationAdapter = LoadResourcePresentationAdapter(
             loader: MainThreadDispatchingDecorator(decoratee: loader),
@@ -54,7 +51,7 @@ public struct IssuesUIComposer {
     }
 }
 
-private class LoadResourcePresentationAdapter<Presenter: LoadResourcePresenter<[Issue], IssuesViewAdapter>> {
+private class LoadResourcePresentationAdapter<Presenter: LoadResourcePresenter<PaginatedIssues, IssuesViewAdapter>> {
     private let loader: PaginatedIssuesLoader
     private let presenter: Presenter
     
@@ -69,26 +66,59 @@ private class LoadResourcePresentationAdapter<Presenter: LoadResourcePresenter<[
             guard let self else { return }
             switch result {
             case .success(let page):
-                self.presenter.didFinishLoading(with: page.issues)
+                self.presenter.didFinishLoading(with: page)
                 
             case .failure:
                 self.presenter.didFinishLoadingWithError()
             }
         }
-
     }
 }
 
 private final class IssuesViewAdapter: ResourceView {
     private weak var viewController: ListViewController?
+    private let mapper: IssueViewModelMapper
     
-    init(_ viewController: ListViewController) {
+    init(_ viewController: ListViewController, mapper: IssueViewModelMapper) {
         self.viewController = viewController
+        self.mapper = mapper
     }
 
-    func display(_ viewModel: [IssueViewModel]) {
-        let cellControllers = viewModel.map(IssueCellController.init(issue:))
-        viewController?.display(sections: [cellControllers])
+    func display(_ viewModel: PaginatedIssues) {
+        
+        let issueControllers: [ListViewController.CellController] = mapper
+            .map(issues: viewModel.issues)
+            .map(IssueCellController.init(issue:))
+        
+        guard let getLoadMoreLoader = viewModel.loadMore else {
+            viewController?.display(sections: [issueControllers])
+            return
+        }
+        
+        let loadMoreController: ListViewController.CellController = LoadMoreCellController(loadMore: { [weak viewController, mapper] in
+            guard let viewController else { return }
+            
+            let viewAdapter = IssuesViewAdapter(
+                viewController,
+                mapper: mapper
+            )
+            
+            let presenter = LoadResourcePresenter(
+                view: viewAdapter,
+                loadingView: viewController,
+                errorView: viewController,
+                mapper: { $0 }
+            )
+            
+            let adapter = LoadResourcePresentationAdapter(
+                loader: getLoadMoreLoader(),
+                presenter: presenter
+            )
+            
+            return adapter.load()
+        })
+        
+        viewController?.display(sections: [issueControllers, [loadMoreController]])
     }
 }
 

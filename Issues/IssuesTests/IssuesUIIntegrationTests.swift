@@ -25,6 +25,17 @@ final class IssuesUIIntegrationTests: XCTestCase {
         XCTAssertEqual(loader.loadIssuesCallCount, 1, "Expected a loading request once view is loaded")
     }
     
+    func test_loadMoreActions_requestMoreFromLoader() {
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        loader.completeIssuesLoading()
+        
+        XCTAssertEqual(loader.loadMoreCallCount, 0, "Expected no request before load more action")
+        
+        sut.simulateLoadMoreFeedAction()
+        XCTAssertEqual(loader.loadMoreCallCount, 1, "Expected request load more request")
+    }
+    
     func test_loadIssuesCompletion_rendersSuccessfullyLoadedIssues() {
         let issue0 = Issue(firstName: "Peter", surname: "Combee", submissionDate: Date(timeIntervalSince1970: 662072400), subject: "Phone charger is missing")
         let issue1 = Issue(firstName: "Luna", surname: "Combee", submissionDate: Date(timeIntervalSince1970: 720220087), subject: "My game controller is broken")
@@ -113,9 +124,17 @@ private extension ListViewController {
     private var issuesSection: Int {
         return 0
     }
+    
+    private var loadMoreSection: Int {
+        return 1
+    }
 
     func numberOfRenderedIssueViews() -> Int {
-        tableView.numberOfSections > issuesSection ? tableView.numberOfRows(inSection: issuesSection) : 0
+        numberOfRows(in: issuesSection)
+    }
+    
+    private func numberOfRows(in section: Int) -> Int {
+        tableView.numberOfSections > section ? tableView.numberOfRows(inSection: section) : 0
     }
 
     func renderedName(atIndex index: Int = 0) -> String? {
@@ -131,9 +150,14 @@ private extension ListViewController {
     }
     
     private func issueView(atIndex index: Int = 0) -> IssueCell? {
-        let dataSource = tableView.dataSource
-        let index = IndexPath(row: index, section: issuesSection)
-        return dataSource?.tableView(tableView, cellForRowAt: index) as? IssueCell
+        cell(at: IndexPath(row: index, section: issuesSection)) as? IssueCell
+    }
+    
+    private func cell(at indexPath: IndexPath) -> UITableViewCell? {
+        guard numberOfRows(in: indexPath.section) > indexPath.row else {
+            return nil
+        }
+        return tableView.dataSource?.tableView(tableView, cellForRowAt: indexPath)
     }
     
     var isShowingLoadingIndicator: Bool {
@@ -143,26 +167,42 @@ private extension ListViewController {
     func renderedErrorMessage() -> String? {
         errorLabel.text
     }
+    
+    func simulateLoadMoreFeedAction() {
+        let index = IndexPath(row: 0, section: loadMoreSection)
+        guard let cell = cell(at: index) else { return }
+        tableView.delegate?.tableView?(tableView, willDisplay: cell, forRowAt: index)
+    }
 }
 
 private final class IssuesLoaderSpy: PaginatedIssuesLoader {
     
     var loadIssuesCallCount: Int {
-        completions.count
+        loadCompletions.count
     }
     
-    private var completions = [Completion]()
+    var loadMoreCallCount: Int {
+        loadMoreLoaders.count
+    }
+    
+    private var loadCompletions = [Completion]()
+    private var loadMoreLoaders = [IssuesLoaderSpy]()
     
     func loadIssues(completion: @escaping Completion) {
-        completions.append(completion)
+        loadCompletions.append(completion)
     }
     
     func completeIssuesLoading(with issues: [Issue] = [], at index: Int = 0) {
-        completions[index](.success(PaginatedIssues(issues: issues, loadMore: nil)))
+        let paginated = PaginatedIssues(issues: issues, loadMore: { [weak self] in
+            let loadMoreLoader = IssuesLoaderSpy()
+            self?.loadMoreLoaders.append(loadMoreLoader)
+            return loadMoreLoader
+        })
+        loadCompletions[index](.success(paginated))
     }
     
     func completeIssuesLoadingWithError(at index: Int = 0) {
-        completions[index](.failure(NSError(domain: "any", code: 1)))
+        loadCompletions[index](.failure(NSError(domain: "any", code: 1)))
     }
 }
 
