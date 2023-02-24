@@ -5,8 +5,8 @@
 import UIKit
 import Core
 
-public final class ListViewController: UIViewController, UITableViewDataSource {
-    public typealias CellController = UITableViewDataSource
+public final class ListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    public typealias CellController = UITableViewDataSource & UITableViewDelegate
     
     var load: (() -> Void)?
     
@@ -26,6 +26,7 @@ public final class ListViewController: UIViewController, UITableViewDataSource {
     public private(set) lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.dataSource = self
+        tableView.delegate = self
         return tableView
     }()
     
@@ -69,6 +70,10 @@ public final class ListViewController: UIViewController, UITableViewDataSource {
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         sections[indexPath.section][indexPath.row].tableView(tableView, cellForRowAt: indexPath)
+    }
+    
+    public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        sections[indexPath.section][indexPath.row].tableView?(tableView, willDisplay: cell, forRowAt: indexPath)
     }
     
     public func display(sections: [[CellController]]) {
