@@ -28,6 +28,16 @@ final class IssuesSnapshotTests: XCTestCase {
         assert(snapshot: sut.snapshot(for: .iPhone14(style: .light, contentSize: .extraExtraExtraLarge)), named: "ISSUES_WITH_LOAD_MORE_light_extraExtraExtraLarge")
     }
     
+    func test_issuesWithLoadMoreError() {
+        let sut = makeSUT()
+
+        sut.display(sections: issuesWithLoadMoreError())
+    
+        assert(snapshot: sut.snapshot(for: .iPhone14(style: .light)), named: "ISSUES_WITH_LOAD_MORE_ERROR_light")
+        assert(snapshot: sut.snapshot(for: .iPhone14(style: .dark)), named: "ISSUES_WITH_LOAD_MORE_ERROR_dark")
+        assert(snapshot: sut.snapshot(for: .iPhone14(style: .light, contentSize: .extraExtraExtraLarge)), named: "ISSUES_WITH_LOAD_MORE_ERROR_light_extraExtraExtraLarge")
+    }
+    
     func test_loading() {
         let sut = makeSUT()
 
@@ -76,6 +86,12 @@ final class IssuesSnapshotTests: XCTestCase {
     private func issuesWithLoadMore() -> [[ListViewController.CellController]] {
         let loadMoreController = LoadMoreCellController(loadMore: {})
         loadMoreController.display(ResourceLoadingViewModel(isLoading: true))
+        return issues() + [[loadMoreController]]
+    }
+    
+    private func issuesWithLoadMoreError() -> [[ListViewController.CellController]] {
+        let loadMoreController = LoadMoreCellController(loadMore: {})
+        loadMoreController.display(ResourceLoadingErrorViewModel(message: "A message"))
         return issues() + [[loadMoreController]]
     }
 }
