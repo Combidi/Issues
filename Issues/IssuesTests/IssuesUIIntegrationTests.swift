@@ -130,6 +130,21 @@ final class IssuesUIIntegrationTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
+    func test_loadMoreCompletion_dispatchesFromBackgroundToMainThread() {
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        loader.completeIssuesLoading()
+        sut.simulateLoadMoreIssuesAction()
+        
+        let exp = expectation(description: "wait for load more completion")
+        DispatchQueue.global().async {
+            loader.completeLoadMore(lastPage: true)
+            exp.fulfill()
+        }
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+    
     func test_loadIssuesCompletion_rendersErrorMessageOnError() {
         let (sut, loader) = makeSUT()
 

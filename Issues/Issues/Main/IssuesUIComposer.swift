@@ -105,7 +105,7 @@ private final class IssuesViewAdapter: ResourceView {
             mapper: mapper
         )
         
-        let adapter = LoadResourcePresentationAdapter(loader: getLoadMoreLoader())
+        let adapter = LoadResourcePresentationAdapter(loader: MainThreadDispatchingDecorator(decoratee: getLoadMoreLoader()))
         
         let loadMoreController = LoadMoreCellController(loadMore: adapter.load)
         
