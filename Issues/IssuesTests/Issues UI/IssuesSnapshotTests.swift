@@ -62,7 +62,6 @@ final class IssuesSnapshotTests: XCTestCase {
     private func makeSUT() -> ListViewController {
         let sut = ListViewController()
         sut.tableView.registerNibBasedCell(IssueCell.self)
-        sut.tableView.registerNibBasedCell(LoadMoreCell.self)
         return sut
     }
     
