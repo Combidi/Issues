@@ -154,6 +154,17 @@ final class IssuesUIIntegrationTests: XCTestCase {
         loader.completeIssuesLoadingWithError()
         XCTAssertEqual(sut.renderedErrorMessage(), "Invalid data")
     }
+    
+    func test_loadMoreCompletion_rendersErrorMessageOnError() {
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        loader.completeIssuesLoading()
+        
+        sut.simulateLoadMoreIssuesAction()
+        loader.completeLoadMoreWithError()
+        
+        XCTAssertEqual(sut.renderedLoadMoreErrorMessage(), "Invalid data")
+    }
 
     // MARK: Helpers
     
@@ -216,6 +227,10 @@ private extension ListViewController {
         errorLabel.text
     }
     
+    func renderedLoadMoreErrorMessage() -> String? {
+        renderedLoadMoreView()?.message
+    }
+    
     func simulateLoadMoreIssuesAction() {
         let index = IndexPath(row: 0, section: loadMoreSection)
         guard let cell = cell(at: index) else { return }
@@ -223,7 +238,11 @@ private extension ListViewController {
     }
     
     var isShowingLoadMoreIndicator: Bool {
-        (cell(at: IndexPath(row: 0, section: loadMoreSection)) as? LoadMoreCell)?.loadingIndicator.isAnimating ?? false
+        renderedLoadMoreView()?.loadingIndicator.isAnimating ?? false
+    }
+    
+    private func renderedLoadMoreView() -> LoadMoreCell? {
+        cell(at: IndexPath(row: 0, section: loadMoreSection)) as? LoadMoreCell
     }
 }
 

@@ -112,7 +112,7 @@ private final class IssuesViewAdapter: ResourceView {
         let presenter = LoadResourcePresenter(
             view: viewAdapter,
             loadingView: WeakRefVirtualProxy(loadMoreController),
-            errorView: WeakRefVirtualProxy(viewController),
+            errorView: WeakRefVirtualProxy(loadMoreController),
             mapper: { $0 }
         )
         

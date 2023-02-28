@@ -34,3 +34,9 @@ extension LoadMoreCellController: ResourceLoadingView {
         viewModel.isLoading ? cell.loadingIndicator.startAnimating() : cell.loadingIndicator.stopAnimating()
     }
 }
+
+extension LoadMoreCellController: ResourceErrorView {
+    public func display(_ viewModel: ResourceLoadingErrorViewModel) {
+        cell.message = viewModel.message
+    }
+}

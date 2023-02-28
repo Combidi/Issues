@@ -20,4 +20,6 @@ public final class LoadMoreCell: UITableViewCell {
         
         return indicator
     }()
+    
+    public var message: String? = nil
 }
