@@ -37,7 +37,7 @@ private class PaginatedIssueLoaderAdapter: PaginatedIssuesLoader {
     
     func loadIssues(completion: @escaping PaginatedIssuesLoader.Completion) {
         issueLoader.loadIssues { result in
-            completion(result.map { PaginatedIssues(issues: $0, loadMore: nil) })
+            completion(result.map { PaginatedIssues(issues: $0, loadMore: { self }) })
         }
     }
 }

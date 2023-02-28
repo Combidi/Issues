@@ -6,6 +6,7 @@ import UIKit
 
 public final class LoadMoreCellController: NSObject, UITableViewDataSource, UITableViewDelegate {
     
+    private let cell = LoadMoreCell()
     private let loadMore: () -> Void
     
     public init(loadMore: @escaping () -> Void) {
@@ -18,10 +19,18 @@ public final class LoadMoreCellController: NSObject, UITableViewDataSource, UITa
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        tableView.dequeueReusableCell() as LoadMoreCell
+        return cell
     }
     
     public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         loadMore()
+    }
+}
+
+import Core
+
+extension LoadMoreCellController: ResourceLoadingView {
+    public func display(_ viewModel: ResourceLoadingViewModel) {
+        viewModel.isLoading ? cell.loadingIndicator.startAnimating() : cell.loadingIndicator.stopAnimating()
     }
 }

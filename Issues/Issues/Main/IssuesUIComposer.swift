@@ -31,7 +31,6 @@ public struct IssuesUIComposer {
     ) -> UIViewController {
         let viewController = ListViewController()
         viewController.tableView.registerNibBasedCell(IssueCell.self)
-        viewController.tableView.registerNibBasedCell(LoadMoreCell.self)
         
         let mapper = IssueViewModelMapper(locale: locale)
         let presenter = LoadResourcePresenter<PaginatedIssues, IssuesViewAdapter>(
@@ -41,10 +40,11 @@ public struct IssuesUIComposer {
             mapper: { $0 }
         )
         let presentationAdapter = LoadResourcePresentationAdapter(
-            loader: MainThreadDispatchingDecorator(decoratee: loader),
-            presenter: presenter
+            loader: MainThreadDispatchingDecorator(decoratee: loader)
         )
-                
+               
+        presentationAdapter.presenter = presenter
+        
         viewController.load = presentationAdapter.load
         viewController.title = IssueViewModelMapper.title
         return viewController
@@ -53,11 +53,10 @@ public struct IssuesUIComposer {
 
 private class LoadResourcePresentationAdapter<Presenter: LoadResourcePresenter<PaginatedIssues, IssuesViewAdapter>> {
     private let loader: PaginatedIssuesLoader
-    private let presenter: Presenter
+    var presenter: Presenter!
     
-    init(loader: PaginatedIssuesLoader, presenter: Presenter) {
+    init(loader: PaginatedIssuesLoader) {
         self.loader = loader
-        self.presenter = presenter
     }
     
     private var isLoading = false
@@ -106,19 +105,18 @@ private final class IssuesViewAdapter: ResourceView {
             mapper: mapper
         )
         
+        let adapter = LoadResourcePresentationAdapter(loader: getLoadMoreLoader())
+        
+        let loadMoreController = LoadMoreCellController(loadMore: adapter.load)
+        
         let presenter = LoadResourcePresenter(
             view: viewAdapter,
-            loadingView: WeakRefVirtualProxy(viewController),
+            loadingView: WeakRefVirtualProxy(loadMoreController),
             errorView: WeakRefVirtualProxy(viewController),
             mapper: { $0 }
         )
         
-        let adapter = LoadResourcePresentationAdapter(
-            loader: getLoadMoreLoader(),
-            presenter: presenter
-        )
-        
-        let loadMoreController: ListViewController.CellController = LoadMoreCellController(loadMore: adapter.load)
+        adapter.presenter = presenter
         
         viewController.display(sections: [issueControllers, [loadMoreController]])
     }

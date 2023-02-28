@@ -32,22 +32,22 @@ final class IssuesUIIntegrationTests: XCTestCase {
         
         XCTAssertEqual(loader.loadMoreCallCount, 0, "Expected no request before load more action")
         
-        sut.simulateLoadMoreFeedAction()
+        sut.simulateLoadMoreIssuesAction()
         XCTAssertEqual(loader.loadMoreCallCount, 1, "Expected request load more request")
         
-        sut.simulateLoadMoreFeedAction()
+        sut.simulateLoadMoreIssuesAction()
         XCTAssertEqual(loader.loadMoreCallCount, 1, "Expected no request while loading more")
         
         loader.completeLoadMore(lastPage: false)
-        sut.simulateLoadMoreFeedAction()
+        sut.simulateLoadMoreIssuesAction()
         XCTAssertEqual(loader.loadMoreCallCount, 2, "Expected request after load more completed with more pages")
 
         loader.completeLoadMoreWithError()
-        sut.simulateLoadMoreFeedAction()
+        sut.simulateLoadMoreIssuesAction()
         XCTAssertEqual(loader.loadMoreCallCount, 3, "Expected request after load more failure")
 
         loader.completeLoadMore(lastPage: true)
-        sut.simulateLoadMoreFeedAction()
+        sut.simulateLoadMoreIssuesAction()
         XCTAssertEqual(loader.loadMoreCallCount, 3, "Expected no request after loading all pages")
     }
     
@@ -95,6 +95,29 @@ final class IssuesUIIntegrationTests: XCTestCase {
         XCTAssertFalse(sut.isShowingLoadingIndicator, "Expected no loading indicator once loading completes with error")
     }
     
+    func test_loadingMoreIndicator_isVisibleWhileLoadingMore() {
+        let (sut, loader) = makeSUT()
+
+        sut.loadViewIfNeeded()
+        XCTAssertFalse(sut.isShowingLoadMoreIndicator, "Expected no loading indicator once view is loaded")
+
+        loader.completeIssuesLoading()
+        XCTAssertFalse(sut.isShowingLoadMoreIndicator, "Expected no loading indicator once loading completes successfully")
+
+        sut.simulateLoadMoreIssuesAction()
+        XCTAssertTrue(sut.isShowingLoadMoreIndicator, "Expected loading indicator on load more action")
+
+        loader.completeLoadMore(lastPage: false)
+
+        XCTAssertFalse(sut.isShowingLoadMoreIndicator, "Expected no loading indicator once user initiated loading completes successfully")
+
+        sut.simulateLoadMoreIssuesAction()
+        XCTAssertTrue(sut.isShowingLoadMoreIndicator, "Expected loading indicator on second load more action")
+
+        loader.completeLoadMoreWithError()
+        XCTAssertFalse(sut.isShowingLoadMoreIndicator, "Expected no loading indicator once user initiated loading completes with error")
+    }
+
     func test_loadIssuesCompletion_dispatchesFromBackgroundToMainThread() {
         let (sut, loader) = makeSUT()
         sut.loadViewIfNeeded()
@@ -178,10 +201,14 @@ private extension ListViewController {
         errorLabel.text
     }
     
-    func simulateLoadMoreFeedAction() {
+    func simulateLoadMoreIssuesAction() {
         let index = IndexPath(row: 0, section: loadMoreSection)
         guard let cell = cell(at: index) else { return }
         tableView.delegate?.tableView?(tableView, willDisplay: cell, forRowAt: index)
+    }
+    
+    var isShowingLoadMoreIndicator: Bool {
+        (cell(at: IndexPath(row: 0, section: loadMoreSection)) as? LoadMoreCell)?.loadingIndicator.isAnimating ?? false
     }
 }
 

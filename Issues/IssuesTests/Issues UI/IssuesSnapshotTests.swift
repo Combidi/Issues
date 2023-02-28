@@ -74,7 +74,9 @@ final class IssuesSnapshotTests: XCTestCase {
     }
     
     private func issuesWithLoadMore() -> [[ListViewController.CellController]] {
-        issues() + [[LoadMoreCellController(loadMore: {})]]
+        let loadMoreController = LoadMoreCellController(loadMore: {})
+        loadMoreController.display(ResourceLoadingViewModel(isLoading: true))
+        return issues() + [[loadMoreController]]
     }
 }
 
