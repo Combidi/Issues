@@ -31,7 +31,7 @@ import Core
 
 extension LoadMoreCellController: ResourceLoadingView {
     public func display(_ viewModel: ResourceLoadingViewModel) {
-        viewModel.isLoading ? cell.loadingIndicator.startAnimating() : cell.loadingIndicator.stopAnimating()
+        cell.isLoading = viewModel.isLoading
     }
 }
 

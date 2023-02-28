@@ -238,7 +238,7 @@ private extension ListViewController {
     }
     
     var isShowingLoadMoreIndicator: Bool {
-        renderedLoadMoreView()?.loadingIndicator.isAnimating ?? false
+        renderedLoadMoreView()?.isLoading ?? false
     }
     
     private func renderedLoadMoreView() -> LoadMoreCell? {
