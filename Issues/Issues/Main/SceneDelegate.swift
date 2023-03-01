@@ -24,7 +24,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let issues = IssuesUIComposer.compose(withLoader: { completion in
             loader.loadIssues { result in
-                completion(result.map { PaginatedIssues(issues: $0, loadMore: nil) })
+                completion(result.map { Paginated(models: $0, loadMore: nil) })
             }
         })
         window?.rootViewController = UINavigationController(rootViewController: issues)

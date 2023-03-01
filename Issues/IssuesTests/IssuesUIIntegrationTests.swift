@@ -264,7 +264,7 @@ private final class IssuesLoaderSpy {
     }
     
     func completeIssuesLoading(with issues: [Issue] = []) {
-        let paginated = PaginatedIssues(issues: issues, loadMore: { [weak self] completion in
+        let paginated = Paginated<Issue>(models: issues, loadMore: { [weak self] completion in
             self?.loadMoreCompletions.append(completion)
         })
         loadCompletions.last?(.success(paginated))
@@ -275,10 +275,9 @@ private final class IssuesLoaderSpy {
     }
     
     func completeLoadMore(lastPage: Bool) {
-        let paginated = PaginatedIssues(issues: [], loadMore: lastPage ? nil : { [weak self] completion in
+        let paginated = Paginated(models: [], loadMore: lastPage ? nil : { [weak self] completion in
             self?.loadMoreCompletions.append(completion)
         })
-
         loadMoreCompletions.last?(.success(paginated))
     }
     

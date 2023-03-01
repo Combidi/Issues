@@ -5,21 +5,21 @@
 import UIKit
 import Core
 
-public struct PaginatedIssues {
-    public typealias LoadMoreResult = Result<PaginatedIssues, Error>
+public struct Paginated<T> {
+    public typealias LoadMoreResult = Result<Self, Error>
     public typealias LoadMoreCompletion = (LoadMoreResult) -> Void
     public typealias LoadMore = (@escaping LoadMoreCompletion) -> Void
     
-    let issues: [Issue]
+    let models: [T]
     public let loadMore: LoadMore?
 
-    public init(issues: [Issue], loadMore: LoadMore?) {
-        self.issues = issues
+    public init(models: [T], loadMore: LoadMore?) {
+        self.models = models
         self.loadMore = loadMore
     }
 }
 
-public typealias LoadResult = Result<PaginatedIssues, Error>
+public typealias LoadResult = Result<Paginated<Issue>, Error>
 public typealias LoadCompletion = (LoadResult) -> Void
 public typealias Loader = (@escaping LoadCompletion) -> Void
 
@@ -35,7 +35,7 @@ public struct IssuesUIComposer {
         viewController.tableView.registerNibBasedCell(IssueCell.self)
         
         let mapper = IssueViewModelMapper(locale: locale)
-        let presenter = LoadResourcePresenter<PaginatedIssues, IssuesViewAdapter>(
+        let presenter = LoadResourcePresenter<Paginated<Issue>, IssuesViewAdapter>(
             view: IssuesViewAdapter(viewController, mapper: mapper),
             loadingView: WeakRefVirtualProxy(viewController),
             errorView: WeakRefVirtualProxy(viewController),
@@ -54,7 +54,7 @@ public struct IssuesUIComposer {
     }
 }
 
-private class LoadResourcePresentationAdapter<Presenter: LoadResourcePresenter<PaginatedIssues, IssuesViewAdapter>> {
+private class LoadResourcePresentationAdapter<Presenter: LoadResourcePresenter<Paginated<Issue>, IssuesViewAdapter>> {
     private let loadIssues: Loader
     var presenter: Presenter!
     
@@ -107,11 +107,11 @@ private final class IssuesViewAdapter: ResourceView {
         self.mapper = mapper
     }
 
-    func display(_ viewModel: PaginatedIssues) {
+    func display(_ viewModel: Paginated<Issue>) {
         guard let viewController else { return }
         
         let issueControllers: [ListViewController.CellController] = mapper
-            .map(issues: viewModel.issues)
+            .map(issues: viewModel.models)
             .map(IssueCellController.init(issue:))
         
         guard let loadMore = viewModel.loadMore else {
