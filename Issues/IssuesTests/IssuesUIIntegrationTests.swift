@@ -174,7 +174,7 @@ final class IssuesUIIntegrationTests: XCTestCase {
         line: UInt = #line
     ) -> (sut: ListViewController, loader: IssuesLoaderSpy) {
         let loader = IssuesLoaderSpy()
-        let sut = IssuesUIComposer.compose(withLoader: loader, locale: locale) as! ListViewController
+        let sut = IssuesUIComposer.compose(withLoader: loader.loadIssues, locale: locale) as! ListViewController
         trackForMemoryLeaks(loader, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, loader)
@@ -246,28 +246,26 @@ private extension ListViewController {
     }
 }
 
-private final class IssuesLoaderSpy: PaginatedIssuesLoader {
+private final class IssuesLoaderSpy {
     
     var loadIssuesCallCount: Int {
         loadCompletions.count
     }
     
     var loadMoreCallCount: Int {
-        loadMoreLoaders.map(\.loadCompletions.count).reduce(0, +)
+        loadMoreCompletions.count
     }
     
-    private var loadCompletions = [Completion]()
-    private var loadMoreLoaders = [IssuesLoaderSpy]()
+    private var loadCompletions = [LoadCompletion]()
+    private var loadMoreCompletions = [LoadCompletion]()
     
-    func loadIssues(completion: @escaping Completion) {
+    func loadIssues(completion: @escaping LoadCompletion) {
         loadCompletions.append(completion)
     }
     
     func completeIssuesLoading(with issues: [Issue] = []) {
-        let paginated = PaginatedIssues(issues: issues, loadMore: { [weak self] in
-            let loadMoreLoader = IssuesLoaderSpy()
-            self?.loadMoreLoaders.append(loadMoreLoader)
-            return loadMoreLoader
+        let paginated = PaginatedIssues(issues: issues, loadMore: { [weak self] completion in
+            self?.loadMoreCompletions.append(completion)
         })
         loadCompletions.last?(.success(paginated))
     }
@@ -277,17 +275,15 @@ private final class IssuesLoaderSpy: PaginatedIssuesLoader {
     }
     
     func completeLoadMore(lastPage: Bool) {
-        let paginated = PaginatedIssues(issues: [], loadMore: lastPage ? nil : { [weak self] in
-            let loadMoreLoader = IssuesLoaderSpy()
-            self?.loadMoreLoaders.append(loadMoreLoader)
-            return loadMoreLoader
+        let paginated = PaginatedIssues(issues: [], loadMore: lastPage ? nil : { [weak self] completion in
+            self?.loadMoreCompletions.append(completion)
         })
 
-        loadMoreLoaders.last?.loadCompletions.last?(.success(paginated))
+        loadMoreCompletions.last?(.success(paginated))
     }
     
     func completeLoadMoreWithError() {
-        loadMoreLoaders.last?.loadCompletions.last?(.failure(NSError(domain: "any", code: 1)))
+        loadMoreCompletions.last?(.failure(NSError(domain: "any", code: 1)))
     }
 }
 

@@ -21,23 +21,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             return
         }
         let loader = FileSystemIssueLoader(fileURL: url, mapper: { try CSVIssuesMapper.map($0) })
-        let loaderAdapter = PaginatedIssueLoaderAdapter(issueLoader: loader)
-        let issues = IssuesUIComposer.compose(withLoader: loaderAdapter)
+        
+        let issues = IssuesUIComposer.compose(withLoader: { completion in
+            loader.loadIssues { result in
+                completion(result.map { PaginatedIssues(issues: $0, loadMore: nil) })
+            }
+        })
         window?.rootViewController = UINavigationController(rootViewController: issues)
         window?.makeKeyAndVisible()
-    }
-}
-
-private class PaginatedIssueLoaderAdapter: PaginatedIssuesLoader {
-    private let issueLoader: IssuesLoader
-    
-    init(issueLoader: IssuesLoader) {
-        self.issueLoader = issueLoader
-    }
-    
-    func loadIssues(completion: @escaping PaginatedIssuesLoader.Completion) {
-        issueLoader.loadIssues { result in
-            completion(result.map { PaginatedIssues(issues: $0, loadMore: { self }) })
-        }
     }
 }

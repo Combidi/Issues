@@ -6,27 +6,29 @@ import UIKit
 import Core
 
 public struct PaginatedIssues {
+    public typealias LoadMoreResult = Result<PaginatedIssues, Error>
+    public typealias LoadMoreCompletion = (LoadMoreResult) -> Void
+    public typealias LoadMore = (@escaping LoadMoreCompletion) -> Void
+    
     let issues: [Issue]
-    public let loadMore: (() -> PaginatedIssuesLoader)?
+    public let loadMore: LoadMore?
 
-    public init(issues: [Issue], loadMore: (() -> PaginatedIssuesLoader)?) {
+    public init(issues: [Issue], loadMore: LoadMore?) {
         self.issues = issues
         self.loadMore = loadMore
     }
 }
 
-public protocol PaginatedIssuesLoader {
-    typealias LoadIssuesResult = Result<PaginatedIssues, Error>
-    typealias Completion = (LoadIssuesResult) -> Void
-    
-    func loadIssues(completion: @escaping Completion)
-}
+public typealias LoadResult = Result<PaginatedIssues, Error>
+public typealias LoadCompletion = (LoadResult) -> Void
+public typealias Loader = (@escaping LoadCompletion) -> Void
 
-public struct IssuesUIComposer {    
+public struct IssuesUIComposer {
+    
     private init() {}
     
     public static func compose(
-        withLoader loader: PaginatedIssuesLoader,
+        withLoader loader: @escaping Loader,
         locale: Locale = .current
     ) -> UIViewController {
         let viewController = ListViewController()
@@ -39,8 +41,9 @@ public struct IssuesUIComposer {
             errorView: WeakRefVirtualProxy(viewController),
             mapper: { $0 }
         )
+        
         let presentationAdapter = LoadResourcePresentationAdapter(
-            loader: MainThreadDispatchingDecorator(decoratee: loader)
+            loadIssues: loader
         )
                
         presentationAdapter.presenter = presenter
@@ -52,11 +55,11 @@ public struct IssuesUIComposer {
 }
 
 private class LoadResourcePresentationAdapter<Presenter: LoadResourcePresenter<PaginatedIssues, IssuesViewAdapter>> {
-    private let loader: PaginatedIssuesLoader
+    private let loadIssues: Loader
     var presenter: Presenter!
     
-    init(loader: PaginatedIssuesLoader) {
-        self.loader = loader
+    init(loadIssues: @escaping Loader) {
+        self.loadIssues = loadIssues
     }
     
     private var isLoading = false
@@ -65,15 +68,31 @@ private class LoadResourcePresentationAdapter<Presenter: LoadResourcePresenter<P
         guard !isLoading else { return }
         presenter.didStartLoading()
         isLoading = true
-        loader.loadIssues { [weak self] result in
-            self?.isLoading = false
+        loadIssues { [weak self] result in
             guard let self else { return }
-            switch result {
-            case .success(let page):
-                self.presenter.didFinishLoading(with: page)
-                
-            case .failure:
-                self.presenter.didFinishLoadingWithError()
+            self.isLoading = false
+            self.dispatch { [weak self] in
+                self?.present(result: result)
+            }
+        }
+    }
+    
+    private func present(result: LoadResult) {
+        switch result {
+        case .success(let page):
+            presenter.didFinishLoading(with: page)
+            
+        case .failure:
+            presenter.didFinishLoadingWithError()
+        }
+    }
+    
+    private func dispatch(_ closure: @escaping () -> Void) {
+        if Thread.isMainThread {
+            closure()
+        } else {
+            DispatchQueue.main.async {
+                closure()
             }
         }
     }
@@ -95,7 +114,7 @@ private final class IssuesViewAdapter: ResourceView {
             .map(issues: viewModel.issues)
             .map(IssueCellController.init(issue:))
         
-        guard let getLoadMoreLoader = viewModel.loadMore else {
+        guard let loadMore = viewModel.loadMore else {
             viewController.display(sections: [issueControllers])
             return
         }
@@ -104,8 +123,8 @@ private final class IssuesViewAdapter: ResourceView {
             viewController,
             mapper: mapper
         )
-        
-        let adapter = LoadResourcePresentationAdapter(loader: MainThreadDispatchingDecorator(decoratee: getLoadMoreLoader()))
+
+        let adapter = LoadResourcePresentationAdapter(loadIssues: loadMore)
         
         let loadMoreController = LoadMoreCellController(loadMore: adapter.load)
         
@@ -119,26 +138,6 @@ private final class IssuesViewAdapter: ResourceView {
         adapter.presenter = presenter
         
         viewController.display(sections: [issueControllers, [loadMoreController]])
-    }
-}
-
-private final class MainThreadDispatchingDecorator: PaginatedIssuesLoader {
-    private let decoratee: PaginatedIssuesLoader
-    
-    init(decoratee: PaginatedIssuesLoader) {
-        self.decoratee = decoratee
-    }
-    
-    func loadIssues(completion: @escaping PaginatedIssuesLoader.Completion) {
-        decoratee.loadIssues(completion: { result in
-            if Thread.isMainThread {
-                completion(result)
-            } else {
-                DispatchQueue.main.async {
-                    completion(result)
-                }
-            }
-        })
     }
 }
 
