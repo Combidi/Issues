@@ -5,16 +5,15 @@
 import UIKit
 import Core
 
-public typealias LoadResult = Result<Paginated<Issue>, Error>
-public typealias LoadCompletion = (LoadResult) -> Void
-public typealias Loader = (@escaping LoadCompletion) -> Void
+public typealias LoadIssuesCompletion = (Result<Paginated<Issue>, Error>) -> Void
+public typealias LoadIssues = (@escaping LoadIssuesCompletion) -> Void
 
 public struct IssuesUIComposer {
     
     private init() {}
     
     public static func compose(
-        withLoader loader: @escaping Loader,
+        withLoader loader: @escaping LoadIssues,
         locale: Locale = .current
     ) -> UIViewController {
         let viewController = ListViewController()
@@ -41,10 +40,10 @@ public struct IssuesUIComposer {
 }
 
 private class LoadResourcePresentationAdapter<Presenter: LoadResourcePresenter<Paginated<Issue>, IssuesViewAdapter>> {
-    private let loadIssues: Loader
+    private let loadIssues: LoadIssues
     var presenter: Presenter!
     
-    init(loadIssues: @escaping Loader) {
+    init(loadIssues: @escaping LoadIssues) {
         self.loadIssues = loadIssues
     }
     
@@ -63,7 +62,7 @@ private class LoadResourcePresentationAdapter<Presenter: LoadResourcePresenter<P
         }
     }
     
-    private func present(result: LoadResult) {
+    private func present(result: Result<Paginated<Issue>, Error>) {
         switch result {
         case .success(let page):
             presenter.didFinishLoading(with: page)

@@ -247,6 +247,7 @@ private extension ListViewController {
 }
 
 private final class IssuesLoaderSpy {
+    typealias LoadCompletion = (Result<Paginated<Issue>, Error>) -> Void
     
     var loadIssuesCallCount: Int {
         loadCompletions.count
@@ -264,7 +265,7 @@ private final class IssuesLoaderSpy {
     }
     
     func completeIssuesLoading(with issues: [Issue] = []) {
-        let paginated = Paginated<Issue>(models: issues, loadMore: { [weak self] completion in
+        let paginated = Paginated(models: issues, loadMore: { [weak self] completion in
             self?.loadMoreCompletions.append(completion)
         })
         loadCompletions.last?(.success(paginated))
