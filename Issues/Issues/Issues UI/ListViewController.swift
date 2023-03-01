@@ -5,8 +5,10 @@
 import UIKit
 import Core
 
-public final class IssuesViewController: UIViewController, IssuesView, UITableViewDataSource {
-    var loadIssues: (() -> Void)?
+public final class ListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    public typealias CellController = UITableViewDataSource & UITableViewDelegate
+    
+    var load: (() -> Void)?
     
     public private(set) lazy var activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .large)
@@ -23,8 +25,8 @@ public final class IssuesViewController: UIViewController, IssuesView, UITableVi
         
     public private(set) lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
-        tableView.register(UINib(nibName: "IssueCell", bundle: .main), forCellReuseIdentifier: "IssueCell")
         tableView.dataSource = self
+        tableView.delegate = self
         return tableView
     }()
     
@@ -51,35 +53,38 @@ public final class IssuesViewController: UIViewController, IssuesView, UITableVi
         errorLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         errorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
-        loadIssues?()
+        load?()
     }
     
-    private var issues = [IssueViewModel]() {
+    private var sections = [[CellController]]() {
         didSet { tableView.reloadData() }
     }
 
+    public func numberOfSections(in tableView: UITableView) -> Int {
+        sections.count
+    }
+    
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        issues.count
+        sections[section].count
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "IssueCell") as! IssueCell
-        let issue = issues[indexPath.row]
-        cell.nameLabel.text = issue.name
-        cell.subjectLabel.text = issue.subject
-        cell.submissionDateLabel.text = issue.submissionDate
-        return cell
+        sections[indexPath.section][indexPath.row].tableView(tableView, cellForRowAt: indexPath)
     }
     
-    public func present(issues: [IssueViewModel]) {
-        self.issues = issues
+    public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        sections[indexPath.section][indexPath.row].tableView?(tableView, willDisplay: cell, forRowAt: indexPath)
     }
     
-    public func presentLoading(_ isLoading: Bool) {
+    public func display(sections: [[CellController]]) {
+        self.sections = sections
+    }
+
+    public func display(isLoading: Bool) {
         isLoading ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
     }
     
-    public func presentMessage(_ message: String?) {
+    public func display(message: String?) {
         errorLabel.text = message
         errorLabel.isHidden = message == nil
     }

@@ -10,9 +10,14 @@
 		D035DFDF28B69A5600003ACB /* IssuesSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D035DFDE28B69A5600003ACB /* IssuesSnapshotTests.swift */; };
 		D035DFE128B69BD200003ACB /* snapshots in Resources */ = {isa = PBXBuildFile; fileRef = D035DFE028B69BD200003ACB /* snapshots */; };
 		D045211E28C522F500974145 /* issues.csv in Resources */ = {isa = PBXBuildFile; fileRef = D045211D28C522F500974145 /* issues.csv */; };
+		D057CFAE29965A13003246B4 /* LoadMoreCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D057CFAD29965A13003246B4 /* LoadMoreCellController.swift */; };
+		D057CFB029965A36003246B4 /* LoadMoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D057CFAF29965A36003246B4 /* LoadMoreCell.swift */; };
+		D057CFB529A3727A003246B4 /* UITableView+CellRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D057CFB429A3727A003246B4 /* UITableView+CellRegistration.swift */; };
+		D057CFB729A372F6003246B4 /* UITableView+Dequeuing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D057CFB629A372F6003246B4 /* UITableView+Dequeuing.swift */; };
+		D057CFC829A659EA003246B4 /* WeakRefVirtualProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = D057CFC729A659EA003246B4 /* WeakRefVirtualProxy.swift */; };
 		D05842DF28B7B44700450ACA /* IssueCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D05842DE28B7B44700450ACA /* IssueCell.xib */; };
 		D08E51CB28B3FEB7005B4B80 /* IssuesUIIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08E51C928B3FE92005B4B80 /* IssuesUIIntegrationTests.swift */; };
-		D0AB94FC28B55B470010B924 /* IssuesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AB94FB28B55B470010B924 /* IssuesViewController.swift */; };
+		D0AB94FC28B55B470010B924 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AB94FB28B55B470010B924 /* ListViewController.swift */; };
 		D0AB94FF28B55BCB0010B924 /* IssueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AB94FE28B55BCB0010B924 /* IssueCell.swift */; };
 		D0AB950428B55C790010B924 /* IssuesUIComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AB950328B55C790010B924 /* IssuesUIComposer.swift */; };
 		D0AC699728BD31BA0073363F /* Core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0AC699628BD31BA0073363F /* Core.framework */; };
@@ -22,6 +27,8 @@
 		D0BAC25128B3F388001D6538 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BAC25028B3F388001D6538 /* SceneDelegate.swift */; };
 		D0BAC25828B3F38A001D6538 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0BAC25728B3F38A001D6538 /* Assets.xcassets */; };
 		D0BAC25B28B3F38A001D6538 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D0BAC25928B3F38A001D6538 /* LaunchScreen.storyboard */; };
+		D0ED3AC029964EE00097CAB6 /* IssueCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED3ABF29964EE00097CAB6 /* IssueCellController.swift */; };
+		D0EE74F929AF4B290065E742 /* Paginated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EE74F829AF4B290065E742 /* Paginated.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,9 +59,14 @@
 		D035DFDE28B69A5600003ACB /* IssuesSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesSnapshotTests.swift; sourceTree = "<group>"; };
 		D035DFE028B69BD200003ACB /* snapshots */ = {isa = PBXFileReference; lastKnownFileType = folder; path = snapshots; sourceTree = "<group>"; };
 		D045211D28C522F500974145 /* issues.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = issues.csv; sourceTree = "<group>"; };
+		D057CFAD29965A13003246B4 /* LoadMoreCellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreCellController.swift; sourceTree = "<group>"; };
+		D057CFAF29965A36003246B4 /* LoadMoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreCell.swift; sourceTree = "<group>"; };
+		D057CFB429A3727A003246B4 /* UITableView+CellRegistration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+CellRegistration.swift"; sourceTree = "<group>"; };
+		D057CFB629A372F6003246B4 /* UITableView+Dequeuing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Dequeuing.swift"; sourceTree = "<group>"; };
+		D057CFC729A659EA003246B4 /* WeakRefVirtualProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeakRefVirtualProxy.swift; sourceTree = "<group>"; };
 		D05842DE28B7B44700450ACA /* IssueCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IssueCell.xib; sourceTree = "<group>"; };
 		D08E51C928B3FE92005B4B80 /* IssuesUIIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesUIIntegrationTests.swift; sourceTree = "<group>"; };
-		D0AB94FB28B55B470010B924 /* IssuesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesViewController.swift; sourceTree = "<group>"; };
+		D0AB94FB28B55B470010B924 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		D0AB94FE28B55BCB0010B924 /* IssueCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueCell.swift; sourceTree = "<group>"; };
 		D0AB950328B55C790010B924 /* IssuesUIComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesUIComposer.swift; sourceTree = "<group>"; };
 		D0AC699628BD31BA0073363F /* Core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -66,6 +78,8 @@
 		D0BAC25A28B3F38A001D6538 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D0BAC25C28B3F38A001D6538 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D0BAC26128B3F38B001D6538 /* IssuesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IssuesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D0ED3ABF29964EE00097CAB6 /* IssueCellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueCellController.swift; sourceTree = "<group>"; };
+		D0EE74F829AF4B290065E742 /* Paginated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paginated.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,12 +110,48 @@
 			path = "Issues UI";
 			sourceTree = "<group>";
 		};
+		D057CFB129965A56003246B4 /* Load More Cell */ = {
+			isa = PBXGroup;
+			children = (
+				D057CFAD29965A13003246B4 /* LoadMoreCellController.swift */,
+				D057CFAF29965A36003246B4 /* LoadMoreCell.swift */,
+			);
+			path = "Load More Cell";
+			sourceTree = "<group>";
+		};
+		D057CFB229965A61003246B4 /* Issues Cell */ = {
+			isa = PBXGroup;
+			children = (
+				D0AB94FE28B55BCB0010B924 /* IssueCell.swift */,
+				D05842DE28B7B44700450ACA /* IssueCell.xib */,
+				D0ED3ABF29964EE00097CAB6 /* IssueCellController.swift */,
+			);
+			path = "Issues Cell";
+			sourceTree = "<group>";
+		};
+		D057CFB329965ABA003246B4 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				D0AB950328B55C790010B924 /* IssuesUIComposer.swift */,
+				D0BAC24E28B3F388001D6538 /* AppDelegate.swift */,
+				D0BAC25028B3F388001D6538 /* SceneDelegate.swift */,
+				D045211D28C522F500974145 /* issues.csv */,
+				D0BAC25728B3F38A001D6538 /* Assets.xcassets */,
+				D0BAC25928B3F38A001D6538 /* LaunchScreen.storyboard */,
+				D057CFC729A659EA003246B4 /* WeakRefVirtualProxy.swift */,
+				D0EE74F829AF4B290065E742 /* Paginated.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
 		D0AB94FD28B55BBC0010B924 /* Issues UI */ = {
 			isa = PBXGroup;
 			children = (
-				D0AB94FB28B55B470010B924 /* IssuesViewController.swift */,
-				D0AB94FE28B55BCB0010B924 /* IssueCell.swift */,
-				D05842DE28B7B44700450ACA /* IssueCell.xib */,
+				D057CFB429A3727A003246B4 /* UITableView+CellRegistration.swift */,
+				D057CFB229965A61003246B4 /* Issues Cell */,
+				D057CFB129965A56003246B4 /* Load More Cell */,
+				D0AB94FB28B55B470010B924 /* ListViewController.swift */,
+				D057CFB629A372F6003246B4 /* UITableView+Dequeuing.swift */,
 			);
 			path = "Issues UI";
 			sourceTree = "<group>";
@@ -136,13 +186,8 @@
 		D0BAC24D28B3F388001D6538 /* Issues */ = {
 			isa = PBXGroup;
 			children = (
+				D057CFB329965ABA003246B4 /* Main */,
 				D0AB94FD28B55BBC0010B924 /* Issues UI */,
-				D0AB950328B55C790010B924 /* IssuesUIComposer.swift */,
-				D0BAC24E28B3F388001D6538 /* AppDelegate.swift */,
-				D0BAC25028B3F388001D6538 /* SceneDelegate.swift */,
-				D045211D28C522F500974145 /* issues.csv */,
-				D0BAC25728B3F38A001D6538 /* Assets.xcassets */,
-				D0BAC25928B3F38A001D6538 /* LaunchScreen.storyboard */,
 				D0BAC25C28B3F38A001D6538 /* Info.plist */,
 			);
 			path = Issues;
@@ -262,11 +307,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D0AB94FC28B55B470010B924 /* IssuesViewController.swift in Sources */,
+				D057CFC829A659EA003246B4 /* WeakRefVirtualProxy.swift in Sources */,
+				D057CFB029965A36003246B4 /* LoadMoreCell.swift in Sources */,
+				D057CFB729A372F6003246B4 /* UITableView+Dequeuing.swift in Sources */,
+				D0AB94FC28B55B470010B924 /* ListViewController.swift in Sources */,
+				D0ED3AC029964EE00097CAB6 /* IssueCellController.swift in Sources */,
 				D0AB950428B55C790010B924 /* IssuesUIComposer.swift in Sources */,
 				D0BAC24F28B3F388001D6538 /* AppDelegate.swift in Sources */,
+				D057CFAE29965A13003246B4 /* LoadMoreCellController.swift in Sources */,
 				D0BAC25128B3F388001D6538 /* SceneDelegate.swift in Sources */,
 				D0AB94FF28B55BCB0010B924 /* IssueCell.swift in Sources */,
+				D057CFB529A3727A003246B4 /* UITableView+CellRegistration.swift in Sources */,
+				D0EE74F929AF4B290065E742 /* Paginated.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
