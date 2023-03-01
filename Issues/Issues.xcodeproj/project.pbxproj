@@ -28,6 +28,7 @@
 		D0BAC25828B3F38A001D6538 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0BAC25728B3F38A001D6538 /* Assets.xcassets */; };
 		D0BAC25B28B3F38A001D6538 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D0BAC25928B3F38A001D6538 /* LaunchScreen.storyboard */; };
 		D0ED3AC029964EE00097CAB6 /* IssueCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0ED3ABF29964EE00097CAB6 /* IssueCellController.swift */; };
+		D0EE74F929AF4B290065E742 /* Paginated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EE74F829AF4B290065E742 /* Paginated.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +79,7 @@
 		D0BAC25C28B3F38A001D6538 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D0BAC26128B3F38B001D6538 /* IssuesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IssuesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0ED3ABF29964EE00097CAB6 /* IssueCellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueCellController.swift; sourceTree = "<group>"; };
+		D0EE74F829AF4B290065E742 /* Paginated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paginated.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +139,7 @@
 				D0BAC25728B3F38A001D6538 /* Assets.xcassets */,
 				D0BAC25928B3F38A001D6538 /* LaunchScreen.storyboard */,
 				D057CFC729A659EA003246B4 /* WeakRefVirtualProxy.swift */,
+				D0EE74F829AF4B290065E742 /* Paginated.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -315,6 +318,7 @@
 				D0BAC25128B3F388001D6538 /* SceneDelegate.swift in Sources */,
 				D0AB94FF28B55BCB0010B924 /* IssueCell.swift in Sources */,
 				D057CFB529A3727A003246B4 /* UITableView+CellRegistration.swift in Sources */,
+				D0EE74F929AF4B290065E742 /* Paginated.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

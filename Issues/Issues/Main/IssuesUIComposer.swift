@@ -5,20 +5,6 @@
 import UIKit
 import Core
 
-public struct Paginated<T> {
-    public typealias LoadMoreResult = Result<Self, Error>
-    public typealias LoadMoreCompletion = (LoadMoreResult) -> Void
-    public typealias LoadMore = (@escaping LoadMoreCompletion) -> Void
-    
-    let models: [T]
-    public let loadMore: LoadMore?
-
-    public init(models: [T], loadMore: LoadMore?) {
-        self.models = models
-        self.loadMore = loadMore
-    }
-}
-
 public typealias LoadResult = Result<Paginated<Issue>, Error>
 public typealias LoadCompletion = (LoadResult) -> Void
 public typealias Loader = (@escaping LoadCompletion) -> Void
