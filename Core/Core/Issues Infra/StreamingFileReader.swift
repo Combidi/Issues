@@ -40,3 +40,7 @@ public final class StreamingFileReader {
         } while true
     }
 }
+
+/// You can use this to determine if you reached the end of the file. This is needed to determine if you need to show a load more cell or not.
+/// https://developer.apple.com/documentation/foundation/filehandle/1411463-availabledata
+

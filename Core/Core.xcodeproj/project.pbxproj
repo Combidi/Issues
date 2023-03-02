@@ -30,6 +30,7 @@
 		D0AC69B028BD580C0073363F /* IssuesLocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AC69AF28BD580C0073363F /* IssuesLocalizationTests.swift */; };
 		D0B9762328C1D45F00BF60C3 /* FileSystemIssueLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B9762228C1D45F00BF60C3 /* FileSystemIssueLoader.swift */; };
 		D0B9762528C1D49500BF60C3 /* FileSystemIssueLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B9762428C1D49500BF60C3 /* FileSystemIssueLoaderTests.swift */; };
+		D0EE74FB29B0EB210065E742 /* BatchedFileSystemIssueLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EE74FA29B0EB210065E742 /* BatchedFileSystemIssueLoaderTests.swift */; };
 		D0EF8DD229050E2A00661505 /* RemoteIssuesLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EF8DD129050E2A00661505 /* RemoteIssuesLoaderTests.swift */; };
 		D0EF8DD92905AF5700661505 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EF8DD82905AF5700661505 /* HTTPClient.swift */; };
 		D0EF8DDB2905AF9300661505 /* RemoteIssuesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EF8DDA2905AF9300661505 /* RemoteIssuesLoader.swift */; };
@@ -73,6 +74,7 @@
 		D0AC69AF28BD580C0073363F /* IssuesLocalizationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesLocalizationTests.swift; sourceTree = "<group>"; };
 		D0B9762228C1D45F00BF60C3 /* FileSystemIssueLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemIssueLoader.swift; sourceTree = "<group>"; };
 		D0B9762428C1D49500BF60C3 /* FileSystemIssueLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemIssueLoaderTests.swift; sourceTree = "<group>"; };
+		D0EE74FA29B0EB210065E742 /* BatchedFileSystemIssueLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchedFileSystemIssueLoaderTests.swift; sourceTree = "<group>"; };
 		D0EF8DD129050E2A00661505 /* RemoteIssuesLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteIssuesLoaderTests.swift; sourceTree = "<group>"; };
 		D0EF8DD82905AF5700661505 /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		D0EF8DDA2905AF9300661505 /* RemoteIssuesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteIssuesLoader.swift; sourceTree = "<group>"; };
@@ -218,6 +220,7 @@
 				D01984D428BE92DF00930C71 /* CSVIssuesMapperTests.swift */,
 				D0B9762428C1D49500BF60C3 /* FileSystemIssueLoaderTests.swift */,
 				D004B55A28FBFE2C00AAACE3 /* StreamingFileReader.swift */,
+				D0EE74FA29B0EB210065E742 /* BatchedFileSystemIssueLoaderTests.swift */,
 			);
 			path = "Issues Infra";
 			sourceTree = "<group>";
@@ -360,6 +363,7 @@
 				D0A67F272905C52400CD7178 /* URLSessionHTTPClientTests.swift in Sources */,
 				D0EF8DD229050E2A00661505 /* RemoteIssuesLoaderTests.swift in Sources */,
 				D0B9762528C1D49500BF60C3 /* FileSystemIssueLoaderTests.swift in Sources */,
+				D0EE74FB29B0EB210065E742 /* BatchedFileSystemIssueLoaderTests.swift in Sources */,
 				D057CFC129A635E9003246B4 /* LoadResourcePresenterTests.swift in Sources */,
 				D004B55B28FBFE2C00AAACE3 /* StreamingFileReader.swift in Sources */,
 				D0AC69B028BD580C0073363F /* IssuesLocalizationTests.swift in Sources */,
