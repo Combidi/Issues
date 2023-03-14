@@ -9,7 +9,7 @@ final class FileSystemIssueLoaderTests: XCTestCase {
         
     func test_loadIssues_deliversErrorOnMapperError() {
         let mapperError = anyError()
-        let sut = makeSUT(mapResultStub: .failure(mapperError))
+        let sut = makeSUT(mapper: { _ in throw mapperError })
         saveTestFileWith(data: invalidData())
         
         assertThat(sut, completesWith: mapperError)
@@ -24,26 +24,21 @@ final class FileSystemIssueLoaderTests: XCTestCase {
     
     func test_loadIssues_deliversIssuesOnSuccessfullMapping() {
         let issues = sampleIssues()
-        let sut = makeSUT(mapResultStub: .success(issues))
-        saveTestFileWith(data: validData())
+        let validData = validData()
+        let sut = makeSUT(mapper: { data in
+            XCTAssertEqual(data, validData, "wrong data passed to mapper")
+            return issues
+        })
+        saveTestFileWith(data: validData)
 
         assertThat(sut, completesWith: issues)
     }
     
     // MARK: Helpers
     
-    private func makeSUT(mapResultStub resultStub: Result<[Issue], NSError> = .success([])) -> FileSystemIssueLoader {
+    private func makeSUT(mapper: @escaping (Data) throws -> [Issue] = { _ in [] }) -> FileSystemIssueLoader {
         let fileURL = testSpecificFileURL()
-        let sut = FileSystemIssueLoader(fileURL: fileURL, mapper: { data in
-            switch resultStub {
-            case .failure(let error):
-                throw error
-                
-            case .success(let issues):
-                return issues
-                
-            }
-        })
+        let sut = FileSystemIssueLoader(fileURL: fileURL, mapper: mapper)
         return sut
     }
 
