@@ -18,14 +18,23 @@ final class StreamingReader {
 
 final class BatchedFileSystemIssueLoader {
     private let streamingReader: StreamingReader
+    private let mapper: (String) throws -> [Issue]
     
-    init(streamingReader: StreamingReader) {
+    init(streamingReader: StreamingReader, mapper: @escaping (String) throws -> [Issue]) {
         self.streamingReader = streamingReader
+        self.mapper = mapper
     }
     
     func loadIssues(completion: (Result<[Issue], Error>) -> Void) {
-        _ = streamingReader.nextLine()
-        completion(.failure(NSError(domain: "any", code: 0)))
+        let _ = streamingReader.nextLine()
+        
+        do {
+            let _ = try mapper("")
+        } catch {
+            completion(.failure(error))
+            
+        }
+        
     }
 }
 
@@ -46,7 +55,11 @@ class BatchedFileSystemIssueLoaderTests: XCTestCase {
     }
     
     func test_loadIssues_deliversErrorOnMappingError() {
-        let (sut, _) = makeSUT(readerStub: ["invalid data"])
+        let mapperError = NSError(domain: "any", code: 1)
+        let (sut, _) = makeSUT(
+            readerStub: ["invalid data"],
+            mapper: { line in throw mapperError }
+        )
 
         var receivedError: Error?
         sut.loadIssues { result in
@@ -55,18 +68,19 @@ class BatchedFileSystemIssueLoaderTests: XCTestCase {
             }
         }
         
-        XCTAssertNotNil(receivedError)
+        XCTAssertEqual(receivedError as? NSError, mapperError)
     }
     
     // MARK: Helpers
     
     private func makeSUT(
         readerStub: [String] = [],
+        mapper: @escaping (String) throws -> [Issue] = { _ in [] },
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> (BatchedFileSystemIssueLoader, StreamingReader) {
         let streamingReader = StreamingReader(stub: readerStub)
-        let sut = BatchedFileSystemIssueLoader(streamingReader: streamingReader)
+        let sut = BatchedFileSystemIssueLoader(streamingReader: streamingReader, mapper: mapper)
         
         trackForMemoryLeaks(streamingReader, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
