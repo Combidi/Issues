@@ -22,7 +22,7 @@ final class FileSystemIssueLoaderTests: XCTestCase {
         assertThat(sut, completesWith: fileNotFoundError())
     }
     
-    func test_loadIssues_deliversIssuesOnSuccessfulMapping() {
+    func test_loadIssues_deliversIssuesOnSuccessfullMapping() {
         let issues = sampleIssues()
         let sut = makeSUT(mapResultStub: .success(issues))
         saveTestFileWith(data: validData())
