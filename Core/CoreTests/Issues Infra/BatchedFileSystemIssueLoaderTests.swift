@@ -22,9 +22,9 @@ final class BatchedFileSystemIssueLoader {
         self.streamingReader = streamingReader
     }
     
-    func loadIssues(completion: (Error) -> Void) {
+    func loadIssues(completion: (Result<[Issue], Error>) -> Void) {
         _ = streamingReader.nextLine()
-        completion(NSError(domain: "any", code: 0))
+        completion(.failure(NSError(domain: "any", code: 0)))
     }
 }
 
@@ -54,7 +54,11 @@ class BatchedFileSystemIssueLoaderTests: XCTestCase {
         let sut = BatchedFileSystemIssueLoader(streamingReader: streamingReader)
 
         var receivedError: Error?
-        sut.loadIssues { receivedError = $0 }
+        sut.loadIssues { result in
+            if case let .failure(error) = result {
+                receivedError = error
+            }
+        }
         
         XCTAssertNotNil(receivedError)
     }
