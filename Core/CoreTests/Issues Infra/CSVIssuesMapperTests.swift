@@ -34,8 +34,8 @@ final class CSVIssuesMapperTests: XCTestCase {
         XCTAssertTrue(try CSVIssuesMapper.map(dataWithEmptyIssues).isEmpty, "Expected empty issues")
     }
 
-    func test_map_throwsOnInvalidColumnSize() {
-        let dataWithInvalidColumsSize = Data(
+    func test_map_throwsOnInvalidLineComponentCount() {
+        let dataWithInvalidLineComponentCount = Data(
             """
             "First name","Sur name","Subject","Date of submission"
             "Theo","Jansen","My television is broken","1978-01-02T00:00:00"
@@ -43,7 +43,7 @@ final class CSVIssuesMapperTests: XCTestCase {
             """.utf8
         )
 
-        assertThat(try CSVIssuesMapper.map(dataWithInvalidColumsSize), throws: .invalidColumnSize(columnIndex: 1))
+        assertThat(try CSVIssuesMapper.map(dataWithInvalidLineComponentCount), throws: .invalidComponentCount(components: ["Fiona", "de Vries", "Can't find my shoes"]))
     }
 
     func test_map_validIssueDataDeliversIssues() {
@@ -74,7 +74,7 @@ final class CSVIssuesMapperTests: XCTestCase {
             """.utf8
         )
 
-        assertThat(try CSVIssuesMapper.map(dateWithInvalidDateFormat), throws: .invalidDateFormat(columnIndex: 1, elementIndex: 3))
+        assertThat(try CSVIssuesMapper.map(dateWithInvalidDateFormat), throws: .invalidDateFormat(date: "2020-08-28T15:07:02+00:00"))
     }
     
     func test_map_supportsCarriageReturn() {
