@@ -3,6 +3,7 @@
 //
 
 import XCTest
+import Core
 
 final class StreamingReader {
     init(stub: [String] = []) {}
