@@ -6,7 +6,7 @@ import XCTest
 import Core
 
 final class StreamingReader {
-    init(stub: [String] = []) {}
+    init(stub: [String]) {}
     
     private(set) var nextLineCallCount = 0
     
@@ -32,27 +32,21 @@ final class BatchedFileSystemIssueLoader {
 class BatchedFileSystemIssueLoaderTests: XCTestCase {
      
     func test_doesNotRequestLinesOnInit() {
+        let (_, streamingReader) = makeSUT()
         
-        let streamingReader = StreamingReader()
-        let _ = BatchedFileSystemIssueLoader(streamingReader: streamingReader)
-                
         XCTAssertEqual(streamingReader.nextLineCallCount, 0)
     }
     
     func test_loadIssues_requestsNextLine() {
-        let streamingReader = StreamingReader()
-        let sut = BatchedFileSystemIssueLoader(streamingReader: streamingReader)
-                
+        let (sut, streamingReader) = makeSUT()
+
         sut.loadIssues { _ in }
         
         XCTAssertEqual(streamingReader.nextLineCallCount, 1)
     }
     
     func test_loadIssues_deliversErrorOnMappingError() {
-        let streamingReader = StreamingReader(stub: [
-            "invalid data"
-        ])
-        let sut = BatchedFileSystemIssueLoader(streamingReader: streamingReader)
+        let (sut, _) = makeSUT(readerStub: ["invalid data"])
 
         var receivedError: Error?
         sut.loadIssues { result in
@@ -62,5 +56,21 @@ class BatchedFileSystemIssueLoaderTests: XCTestCase {
         }
         
         XCTAssertNotNil(receivedError)
+    }
+    
+    // MARK: Helpers
+    
+    private func makeSUT(
+        readerStub: [String] = [],
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) -> (BatchedFileSystemIssueLoader, StreamingReader) {
+        let streamingReader = StreamingReader(stub: readerStub)
+        let sut = BatchedFileSystemIssueLoader(streamingReader: streamingReader)
+        
+        trackForMemoryLeaks(streamingReader, file: file, line: line)
+        trackForMemoryLeaks(sut, file: file, line: line)
+
+        return (sut, streamingReader)
     }
 }
