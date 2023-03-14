@@ -23,7 +23,7 @@ final class FileSystemIssueLoaderTests: XCTestCase {
     }
     
     func test_loadIssues_deliversIssuesOnSuccessfullMapping() {
-        let issues = sampleIssues()
+        let issues = [sampleIssue()]
         let validData = validData()
         let sut = makeSUT(mapper: { data in
             XCTAssertEqual(data, validData, "wrong data passed to mapper")
@@ -113,12 +113,8 @@ final class FileSystemIssueLoaderTests: XCTestCase {
         return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("\(type(of: self)).csv")
     }
     
-    private func sampleIssues() -> [Issue] {
-        [
-            Issue(firstName: "Theo", surname: "Jansen", submissionDate: Date(timeIntervalSince1970: 252543600), subject: "My television is broken"),
-            Issue(firstName: "Fiona", surname: "de Vries", submissionDate: Date(timeIntervalSince1970: -603939600), subject: "Can't find my shoes"),
-            Issue(firstName: "Petra", surname: "Boersma", submissionDate: Date(timeIntervalSince1970: 987717600), subject: "Dropped my phone"),
-        ]
+    private func sampleIssue() -> Issue {
+        Issue(firstName: "Theo", surname: "Jansen", submissionDate: Date(timeIntervalSince1970: 252543600), subject: "My television is broken")
     }
     
     private func anyError() -> NSError {
