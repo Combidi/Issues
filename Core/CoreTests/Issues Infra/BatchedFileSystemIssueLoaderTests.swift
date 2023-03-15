@@ -117,5 +117,5 @@ private func makeIssue(firstname: String) -> Issue {
 }
 
 private func anyIssue() -> Issue {
-    Issue(firstName: "any", surname: "any", submissionDate: .init(), subject: "any")
+    makeIssue(firstname: "any")
 }
