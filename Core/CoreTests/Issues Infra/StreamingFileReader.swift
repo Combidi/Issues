@@ -23,24 +23,24 @@ class StreamingFileReaderTests: XCTestCase {
         XCTAssertThrowsError(try StreamingFileReader(fileURL: testSpecificFileURL(), delimiter: .lineFeed))
     }
     
-    func test_readNextLine_deliversNilOnEmptyData() {
+    func test_nextLine_deliversNilOnEmptyData() {
         let emptyData = Data()
         inject(testData: emptyData)
         
-        XCTAssertNil(makeSUT().readNextLine())
+        XCTAssertNil(makeSUT().nextLine())
     }
 
-    func test_readNextLine_returnsFirstLine() throws {
+    func test_nextLine_returnsFirstLine() throws {
         let testData = Data("first\nsecond\nthird\nfourth".utf8)
         inject(testData: testData)
         let sut = makeSUT()
         
-        let result = sut.readNextLine()
+        let result = sut.nextLine()
         
         XCTAssertEqual(result, "first")
     }
     
-    func test_readNextLine_worksWithAllNewLineCharacters() throws {
+    func test_nextLine_worksWithAllNewLineCharacters() throws {
         let delimiters: [StreamingFileReader.Delimiter] = [.carriageReturn, .lineFeed, .endOfLine]
                 
         delimiters.forEach { delimiter in
@@ -48,19 +48,19 @@ class StreamingFileReaderTests: XCTestCase {
             inject(testData: testData)
             let sut = makeSUT(delimiter: delimiter)
 
-            let result = sut.readNextLine()
+            let result = sut.nextLine()
 
             XCTAssertEqual(result, "first")
         }
     }
     
-    func test_readNextLine_returnsNewLineUntilReachingEndOfFile() throws {
+    func test_nextLine_returnsNewLineUntilReachingEndOfFile() throws {
         let testData = Data("first\nsecond\nthird\nfourth".utf8)
         inject(testData: testData)
         let sut = makeSUT()
         
         var result = [String]()
-        while let next = sut.readNextLine() {
+        while let next = sut.nextLine() {
             result.append(next)
         }
 

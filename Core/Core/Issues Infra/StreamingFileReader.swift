@@ -4,7 +4,7 @@
 
 import Foundation
 
-public final class StreamingFileReader {
+public final class StreamingFileReader: StreamingReader {
     public enum Delimiter: String {
         case carriageReturn = "\r"
         case lineFeed = "\n"
@@ -22,7 +22,7 @@ public final class StreamingFileReader {
     private let chunkSize: Int = 10
     private var buffer = Data()
 
-    public func readNextLine() -> String? {
+    public func nextLine() -> String? {
         repeat {
             if let rangeOfDelimiter = buffer.range(of: delimiter, in: buffer.startIndex..<buffer.endIndex) {
                 let dataBeforeDelimiter = buffer.subdata(in: buffer.startIndex..<rangeOfDelimiter.lowerBound)
