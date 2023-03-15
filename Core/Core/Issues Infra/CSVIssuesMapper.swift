@@ -14,7 +14,7 @@ public struct CSVIssuesMapper {
     
     private init() {}
     
-    public static func map(_ data: Data, timeZone: TimeZone = .current) throws -> [Issue] {
+    public static func map(data: Data, timeZone: TimeZone = .current) throws -> [Issue] {
         let dataString = try dataString(from: data)
         var lines = lines(from: dataString)
         try validateHeaders(lines: &lines)
