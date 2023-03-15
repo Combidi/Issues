@@ -5,7 +5,7 @@
 import XCTest
 import Core
 
-final class StreamingReaderStub {
+final class StreamingReaderStub: StreamingReader {
     private var stub: [String]?
     
     init(stub: [String]?) {
@@ -17,14 +17,18 @@ final class StreamingReaderStub {
     }
 }
 
+protocol StreamingReader {
+    func nextLine() -> String?
+}
+
 final class BatchedFileSystemIssueLoader: IssuesLoader {
     typealias Mapper = (String) throws -> Issue
     
-    private let streamingReader: StreamingReaderStub
+    private let streamingReader: StreamingReader
     private let batchSize: Int
     private let mapper: Mapper
     
-    init(streamingReader: StreamingReaderStub, batchSize: Int, mapper: @escaping Mapper) {
+    init(streamingReader: StreamingReader, batchSize: Int, mapper: @escaping Mapper) {
         self.streamingReader = streamingReader
         self.batchSize = batchSize
         self.mapper = mapper
