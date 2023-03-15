@@ -6,35 +6,44 @@ import XCTest
 import Core
 
 final class StreamingReader {
-    init(stub: [String]) {}
+    private var stub: [String]?
+    
+    init(stub: [String]?) {
+        self.stub = stub?.reversed()
+    }
     
     private(set) var nextLineCallCount = 0
     
-    func nextLine() -> String {
+    func nextLine() -> String? {
         nextLineCallCount += 1
-        return ""
+        return stub?.popLast()
     }
 }
-
 final class BatchedFileSystemIssueLoader {
-    private let streamingReader: StreamingReader
-    private let mapper: (String) throws -> [Issue]
+    typealias Mapper = (String) throws -> Issue
     
-    init(streamingReader: StreamingReader, mapper: @escaping (String) throws -> [Issue]) {
+    private let streamingReader: StreamingReader
+    private let mapper: Mapper
+    
+    init(streamingReader: StreamingReader, mapper: @escaping Mapper) {
         self.streamingReader = streamingReader
         self.mapper = mapper
     }
     
     func loadIssues(completion: (Result<[Issue], Error>) -> Void) {
-        let _ = streamingReader.nextLine()
-        
-        do {
-            let _ = try mapper("")
-        } catch {
-            completion(.failure(error))
-            
+        var issues = [Issue]()
+        for _ in 0..<5 {
+            guard let nextLine = streamingReader.nextLine() else {
+                return completion(.success(issues))
+            }
+            do {
+                let issue = try mapper(nextLine)
+                issues.append(issue)
+            } catch {
+                completion(.failure(error))
+            }
         }
-        
+        completion(.success(issues))
     }
 }
 
@@ -71,11 +80,35 @@ class BatchedFileSystemIssueLoaderTests: XCTestCase {
         XCTAssertEqual(receivedError as? NSError, mapperError)
     }
     
+    func test_loadIssues_deliversFiniteMappedIssues() {
+        let fixedDate = Date()
+        let (sut, _) = makeSUT(
+            readerStub: ["first", "second"],
+            mapper: {
+                Issue(firstName: $0, surname: "", submissionDate: fixedDate, subject: "")
+            }
+        )
+
+        var receivedIssues: [Issue]?
+        sut.loadIssues { result in
+            if case let .success(issues) = result {
+                receivedIssues = issues
+            }
+        }
+
+        let expectedIssues = [
+            Issue(firstName: "first", surname: "", submissionDate: fixedDate, subject: ""),
+            Issue(firstName: "second", surname: "", submissionDate: fixedDate, subject: "")
+        ]
+        XCTAssertEqual(receivedIssues?.count, expectedIssues.count)
+        XCTAssertEqual(receivedIssues, expectedIssues)
+    }
+    
     // MARK: Helpers
     
     private func makeSUT(
         readerStub: [String] = [],
-        mapper: @escaping (String) throws -> [Issue] = { _ in [] },
+        mapper: @escaping BatchedFileSystemIssueLoader.Mapper = { _ in anyIssue() },
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> (BatchedFileSystemIssueLoader, StreamingReader) {
@@ -87,4 +120,8 @@ class BatchedFileSystemIssueLoaderTests: XCTestCase {
 
         return (sut, streamingReader)
     }
+}
+
+private func anyIssue() -> Issue {
+    Issue(firstName: "any", surname: "any", submissionDate: .init(), subject: "any")
 }
