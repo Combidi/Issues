@@ -21,6 +21,7 @@
 		D057CFD029A6A10B003246B4 /* ResourceErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D057CFCF29A6A10B003246B4 /* ResourceErrorView.swift */; };
 		D057CFD229A6A135003246B4 /* ResourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D057CFD129A6A135003246B4 /* ResourceView.swift */; };
 		D06275F5290AC9720014F27A /* URLSessionHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06275F4290AC9720014F27A /* URLSessionHTTPClient.swift */; };
+		D082345829C1F5D100077865 /* BatchedFileSystemIssueLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D082345729C1F5D100077865 /* BatchedFileSystemIssueLoader.swift */; };
 		D0A67F272905C52400CD7178 /* URLSessionHTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A67F262905C52400CD7178 /* URLSessionHTTPClientTests.swift */; };
 		D0AC698128BD30E00073363F /* Core.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0AC697828BD30E00073363F /* Core.framework */; };
 		D0AC699228BD31760073363F /* Issue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AC699128BD31760073363F /* Issue.swift */; };
@@ -63,6 +64,7 @@
 		D057CFCF29A6A10B003246B4 /* ResourceErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceErrorView.swift; sourceTree = "<group>"; };
 		D057CFD129A6A135003246B4 /* ResourceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceView.swift; sourceTree = "<group>"; };
 		D06275F4290AC9720014F27A /* URLSessionHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClient.swift; sourceTree = "<group>"; };
+		D082345729C1F5D100077865 /* BatchedFileSystemIssueLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchedFileSystemIssueLoader.swift; sourceTree = "<group>"; };
 		D0A67F262905C52400CD7178 /* URLSessionHTTPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClientTests.swift; sourceTree = "<group>"; };
 		D0AC697828BD30E00073363F /* Core.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Core.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0AC698028BD30E00073363F /* CoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -210,6 +212,7 @@
 				D0F0F99428C0B8D00030ED02 /* CSVIssuesMapper.swift */,
 				D0B9762228C1D45F00BF60C3 /* FileSystemIssueLoader.swift */,
 				D004B55C2901DBC800AAACE3 /* StreamingFileReader.swift */,
+				D082345729C1F5D100077865 /* BatchedFileSystemIssueLoader.swift */,
 			);
 			path = "Issues Infra";
 			sourceTree = "<group>";
@@ -349,6 +352,7 @@
 				D0EF8DDB2905AF9300661505 /* RemoteIssuesLoader.swift in Sources */,
 				D0F0F99528C0B8D00030ED02 /* CSVIssuesMapper.swift in Sources */,
 				D0AC699228BD31760073363F /* Issue.swift in Sources */,
+				D082345829C1F5D100077865 /* BatchedFileSystemIssueLoader.swift in Sources */,
 				D057CFCE29A6A0ED003246B4 /* ResourceLoadingView.swift in Sources */,
 				D0B9762328C1D45F00BF60C3 /* FileSystemIssueLoader.swift in Sources */,
 				D06275F5290AC9720014F27A /* URLSessionHTTPClient.swift in Sources */,
