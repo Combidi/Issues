@@ -81,12 +81,9 @@ class BatchedFileSystemIssueLoaderTests: XCTestCase {
     }
     
     func test_loadIssues_deliversFiniteMappedIssues() {
-        let fixedDate = Date()
         let (sut, _) = makeSUT(
-            readerStub: ["first", "second"],
-            mapper: {
-                Issue(firstName: $0, surname: "", submissionDate: fixedDate, subject: "")
-            }
+            readerStub: ["Peter", "Henk"],
+            mapper: makeIssue
         )
 
         var receivedIssues: [Issue]?
@@ -97,8 +94,8 @@ class BatchedFileSystemIssueLoaderTests: XCTestCase {
         }
 
         let expectedIssues = [
-            Issue(firstName: "first", surname: "", submissionDate: fixedDate, subject: ""),
-            Issue(firstName: "second", surname: "", submissionDate: fixedDate, subject: "")
+            makeIssue(firstname: "Peter"),
+            makeIssue(firstname: "Henk")
         ]
         XCTAssertEqual(receivedIssues?.count, expectedIssues.count)
         XCTAssertEqual(receivedIssues, expectedIssues)
@@ -120,6 +117,13 @@ class BatchedFileSystemIssueLoaderTests: XCTestCase {
 
         return (sut, streamingReader)
     }
+}
+
+private let fixedDate = Date()
+
+private func makeIssue(firstname: String) -> Issue {
+    Issue(firstName: firstname, surname: "surname", submissionDate: fixedDate, subject: "subject")
+
 }
 
 private func anyIssue() -> Issue {
