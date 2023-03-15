@@ -16,7 +16,8 @@ final class StreamingReader {
         return stub?.popLast()
     }
 }
-final class BatchedFileSystemIssueLoader {
+
+final class BatchedFileSystemIssueLoader: IssuesLoader {
     typealias Mapper = (String) throws -> Issue
     
     private let streamingReader: StreamingReader
@@ -29,7 +30,7 @@ final class BatchedFileSystemIssueLoader {
         self.mapper = mapper
     }
     
-    func loadIssues(completion: (Result<[Issue], Error>) -> Void) {
+    func loadIssues(completion: @escaping Completion) {
         var issues = [Issue]()
         for _ in 0..<batchSize {
             guard let nextLine = streamingReader.nextLine() else {
