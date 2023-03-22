@@ -99,6 +99,43 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D017C29329CA071A003C7BDB /* Shared Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				D057CFC529A64F28003246B4 /* LoadResourcePresenter.swift */,
+				D057CFC929A6A0AE003246B4 /* ResourceLoadingViewModel.swift */,
+				D057CFCB29A6A0D4003246B4 /* ResourceLoadingErrorViewModel.swift */,
+				D057CFCD29A6A0ED003246B4 /* ResourceLoadingView.swift */,
+				D057CFCF29A6A10B003246B4 /* ResourceErrorView.swift */,
+				D057CFD129A6A135003246B4 /* ResourceView.swift */,
+			);
+			path = "Shared Presentation";
+			sourceTree = "<group>";
+		};
+		D017C29429CA079D003C7BDB /* API Infra */ = {
+			isa = PBXGroup;
+			children = (
+				D06275F4290AC9720014F27A /* URLSessionHTTPClient.swift */,
+			);
+			path = "API Infra";
+			sourceTree = "<group>";
+		};
+		D017C29529CA07CB003C7BDB /* API Infra */ = {
+			isa = PBXGroup;
+			children = (
+				D0A67F262905C52400CD7178 /* URLSessionHTTPClientTests.swift */,
+			);
+			path = "API Infra";
+			sourceTree = "<group>";
+		};
+		D017C29629CA0836003C7BDB /* Shared Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				D057CFC029A635E9003246B4 /* LoadResourcePresenterTests.swift */,
+			);
+			path = "Shared Presentation";
+			sourceTree = "<group>";
+		};
 		D057CFC229A649AA003246B4 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -128,6 +165,8 @@
 		D0AC697A28BD30E00073363F /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				D017C29429CA079D003C7BDB /* API Infra */,
+				D017C29329CA071A003C7BDB /* Shared Presentation */,
 				D0EF8DD72905AF4C00661505 /* Issues API */,
 				D0F0F99628C0C1030030ED02 /* Issues Infra */,
 				D0AC699E28BD364C0073363F /* Issues Presentation */,
@@ -140,6 +179,8 @@
 			isa = PBXGroup;
 			children = (
 				D057CFC229A649AA003246B4 /* Helpers */,
+				D017C29529CA07CB003C7BDB /* API Infra */,
+				D017C29629CA0836003C7BDB /* Shared Presentation */,
 				D0EF8DD329050E3100661505 /* Issues API */,
 				D0F0F99728C0C1380030ED02 /* Issues Infra */,
 				D0AC699B28BD321A0073363F /* Issues Presentation */,
@@ -161,7 +202,6 @@
 			children = (
 				D0AC69AF28BD580C0073363F /* IssuesLocalizationTests.swift */,
 				D057CFBE29A634ED003246B4 /* IssuesViewModelMapperTests.swift */,
-				D057CFC029A635E9003246B4 /* LoadResourcePresenterTests.swift */,
 			);
 			path = "Issues Presentation";
 			sourceTree = "<group>";
@@ -172,12 +212,6 @@
 				D0AC699F28BD365E0073363F /* IssueViewModel.swift */,
 				D0AC69AD28BD57720073363F /* Issues.strings */,
 				D057CFBC29A63449003246B4 /* IssueViewModelMapper.swift */,
-				D057CFC529A64F28003246B4 /* LoadResourcePresenter.swift */,
-				D057CFC929A6A0AE003246B4 /* ResourceLoadingViewModel.swift */,
-				D057CFCB29A6A0D4003246B4 /* ResourceLoadingErrorViewModel.swift */,
-				D057CFCD29A6A0ED003246B4 /* ResourceLoadingView.swift */,
-				D057CFCF29A6A10B003246B4 /* ResourceErrorView.swift */,
-				D057CFD129A6A135003246B4 /* ResourceView.swift */,
 			);
 			path = "Issues Presentation";
 			sourceTree = "<group>";
@@ -186,7 +220,6 @@
 			isa = PBXGroup;
 			children = (
 				D0EF8DD129050E2A00661505 /* RemoteIssuesLoaderTests.swift */,
-				D0A67F262905C52400CD7178 /* URLSessionHTTPClientTests.swift */,
 			);
 			path = "Issues API";
 			sourceTree = "<group>";
@@ -197,7 +230,6 @@
 				D0EF8DD82905AF5700661505 /* HTTPClient.swift */,
 				D0EF8DDA2905AF9300661505 /* RemoteIssuesLoader.swift */,
 				D0EF8DDC2905B05700661505 /* IssuesMapper.swift */,
-				D06275F4290AC9720014F27A /* URLSessionHTTPClient.swift */,
 			);
 			path = "Issues API";
 			sourceTree = "<group>";
