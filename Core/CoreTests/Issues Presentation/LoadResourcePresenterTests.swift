@@ -24,7 +24,7 @@ final class LoadResourcePresenterTests: XCTestCase {
         ])
     }
     
-    func test_didFinishLoadingWithError_displaysShowsErrorAndStopsLoading() {
+    func test_didFinishLoadingWithError_displaysErrorAndStopsLoading() {
         let (sut, view) = makeSUT()
         
         sut.didFinishLoadingWithError()
