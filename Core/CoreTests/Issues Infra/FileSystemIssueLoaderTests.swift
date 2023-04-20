@@ -9,7 +9,7 @@ final class FileSystemIssueLoaderTests: XCTestCase {
         
     func test_loadIssues_deliversErrorOnMapperError() {
         let mapperError = anyError()
-        let sut = makeSUT(mapResultStub: .failure(mapperError))
+        let sut = makeSUT(mapper: { _ in throw mapperError })
         saveTestFileWith(data: invalidData())
         
         assertThat(sut, completesWith: mapperError)
@@ -22,28 +22,23 @@ final class FileSystemIssueLoaderTests: XCTestCase {
         assertThat(sut, completesWith: fileNotFoundError())
     }
     
-    func test_loadIssues_deliversIssuesOnSuccessfulMapping() {
-        let issues = sampleIssues()
-        let sut = makeSUT(mapResultStub: .success(issues))
-        saveTestFileWith(data: validData())
+    func test_loadIssues_deliversIssuesOnSuccessfullMapping() {
+        let issues = [sampleIssue()]
+        let validData = validData()
+        let sut = makeSUT(mapper: { data in
+            XCTAssertEqual(data, validData, "wrong data passed to mapper")
+            return issues
+        })
+        saveTestFileWith(data: validData)
 
         assertThat(sut, completesWith: issues)
     }
     
     // MARK: Helpers
     
-    private func makeSUT(mapResultStub resultStub: Result<[Issue], NSError> = .success([])) -> FileSystemIssueLoader {
+    private func makeSUT(mapper: @escaping (Data) throws -> [Issue] = { _ in [] }) -> FileSystemIssueLoader {
         let fileURL = testSpecificFileURL()
-        let sut = FileSystemIssueLoader(fileURL: fileURL, mapper: { data in
-            switch resultStub {
-            case .failure(let error):
-                throw error
-                
-            case .success(let issues):
-                return issues
-                
-            }
-        })
+        let sut = FileSystemIssueLoader(fileURL: fileURL, mapper: mapper)
         return sut
     }
 
@@ -118,12 +113,8 @@ final class FileSystemIssueLoaderTests: XCTestCase {
         return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("\(type(of: self)).csv")
     }
     
-    private func sampleIssues() -> [Issue] {
-        [
-            Issue(firstName: "Theo", surname: "Jansen", submissionDate: Date(timeIntervalSince1970: 252543600), subject: "My television is broken"),
-            Issue(firstName: "Fiona", surname: "de Vries", submissionDate: Date(timeIntervalSince1970: -603939600), subject: "Can't find my shoes"),
-            Issue(firstName: "Petra", surname: "Boersma", submissionDate: Date(timeIntervalSince1970: 987717600), subject: "Dropped my phone"),
-        ]
+    private func sampleIssue() -> Issue {
+        Issue(firstName: "Theo", surname: "Jansen", submissionDate: Date(timeIntervalSince1970: 252543600), subject: "My television is broken")
     }
     
     private func anyError() -> NSError {

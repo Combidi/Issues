@@ -4,69 +4,69 @@
 
 import Foundation
 
-public struct CSVIssuesMapper {
-    private typealias Column = [String]
-    
+public struct CSVIssuesMapper {    
     public enum Error: Swift.Error, Equatable {
         case invalidData
         case invalidHeaders
-        case invalidColumnSize(columnIndex: Int)
-        case nonIntConvertable(columnIndex: Int, elementIndex: Int)
-        case invalidDateFormat(columnIndex: Int, elementIndex: Int)
+        case invalidComponentCount(components: [String])
+        case invalidDateFormat(date: String)
     }
     
     private init() {}
     
-    public static func map(_ data: Data, timeZone: TimeZone = .current) throws -> [Issue] {
+    public static func map(data: Data, timeZone: TimeZone = .current) throws -> [Issue] {
         let dataString = try dataString(from: data)
-        var columns = columns(from: dataString)
-        try validateHeaders(colums: &columns)
+        var lines = lines(from: dataString)
+        try validateHeaders(lines: &lines)
         
-        let issues: [Issue] = try columns.enumerated().map { index, column in
-            try validateColumnSize(column: column, atIndex: index)
-            
-            return Issue(
-                firstName: column[0],
-                surname: column[1],
-                submissionDate: try date(from: column[3], forTimeZone: timeZone, columnIndex: index, elementIndex: 3),
-                subject: column[2]
-            )
+        let issues: [Issue] = try lines.enumerated().map { index, line in
+            try map(line: line, timeZone: timeZone)
         }
 
         return issues
     }
-
+    
+    private static func map(line: String, timeZone: TimeZone) throws -> Issue {
+        let components = line.components(separatedBy: ",")
+        
+        guard components.count == 4 else { throw Error.invalidComponentCount(components: components) }
+        
+        return Issue(
+            firstName: components[0],
+            surname: components[1],
+            submissionDate: try date(from: components[3], forTimeZone: timeZone),
+            subject: components[2]
+        )
+    }
+    
     private static func dataString(from data: Data) throws -> String {
         guard let dataString = String(data: data, encoding: .utf8), !dataString.isEmpty else { throw Error.invalidData }
         return dataString
     }
         
-    private static func date(from string: String, forTimeZone timeZone: TimeZone, columnIndex: Int, elementIndex: Int) throws -> Date {
+    private static func date(from string: String, forTimeZone timeZone: TimeZone) throws -> Date {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
         formatter.timeZone = timeZone
         
         guard let date = formatter.date(from: string) else {
-            throw Error.invalidDateFormat(columnIndex: columnIndex, elementIndex: elementIndex)
+            throw Error.invalidDateFormat(date: string)
         }
         return date
     }
     
-    private static func columns(from dataString: String) -> [Column] {
+    private static func lines(from dataString: String) -> [String] {
         dataString
             .replacingOccurrences(of: "\"", with: "")
             .replacingOccurrences(of: "\r", with: "\n")
             .split(separator: "\n", omittingEmptySubsequences: true)
-            .map { $0.split(separator: ",").map(String.init) }
+            .map(String.init)
     }
     
-    private static func validateHeaders(colums: inout [Column]) throws {
-        guard colums.removeFirst() == ["First name","Sur name","Subject","Date of submission"] else {
+    private static func validateHeaders(lines: inout [String]) throws {
+        let validHeader = ["First name","Sur name","Subject","Date of submission"]
+        guard lines.removeFirst().components(separatedBy: ",") == validHeader else {
             throw Error.invalidHeaders
         }
-    }
-    
-    private static func validateColumnSize(column: Column, atIndex index: Int) throws {
-        guard column.count == 4 else { throw Error.invalidColumnSize(columnIndex: index) }
     }
 }
