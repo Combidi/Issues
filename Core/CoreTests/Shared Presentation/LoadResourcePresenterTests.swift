@@ -31,7 +31,7 @@ final class LoadResourcePresenterTests: XCTestCase {
         
         XCTAssertEqual(view.messages, [
             .display(isLoading: false),
-            .display(errorMessage: "Invalid data")
+            .display(errorMessage: localized("LOAD_RESOURCE_ERROR"))
         ])
     }
     
@@ -60,6 +60,16 @@ final class LoadResourcePresenterTests: XCTestCase {
         trackForMemoryLeaks(view, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, view)
+    }
+    
+    private func localized(_ key: String, file: StaticString = #file, line: UInt = #line) -> String {
+        let table = "Shared"
+        let bundle = Bundle(for: SUT.self)
+        let value = bundle.localizedString(forKey: key, value: nil, table: table)
+        if value == key {
+            XCTFail("Missing localized string for key: \(key) in table: \(table)", file: file, line: line)
+        }
+        return value
     }
 }
 

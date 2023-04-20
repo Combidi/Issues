@@ -2,6 +2,8 @@
 //  Created by Peter Combee on 22/02/2023.
 //
 
+import Foundation
+
 public final class LoadResourcePresenter<Resource, View: ResourceView> {
     public typealias Mapper = (Resource) -> View.ResourceViewModel
     
@@ -29,7 +31,16 @@ public final class LoadResourcePresenter<Resource, View: ResourceView> {
     
     public func didFinishLoadingWithError() {
         loadingView.display(ResourceLoadingViewModel(isLoading: false))
-        errorView.display(ResourceLoadingErrorViewModel(message: "Invalid data"))
+        errorView.display(ResourceLoadingErrorViewModel(message: loadError))
+    }
+    
+    private var loadError: String {
+        NSLocalizedString("LOAD_RESOURCE_ERROR",
+            tableName: "Shared",
+            bundle: Bundle(for: Self.self),
+            comment: "Resource loading error message"
+        )
+
     }
     
     public func didFinishLoading(with resource: Resource) {

@@ -17,7 +17,8 @@ public class IssueViewModelMapper {
         NSLocalizedString("ISSUES_VIEW_TITLE",
             tableName: "Issues",
             bundle: Bundle(for: Self.self),
-            comment: "Title for the issues view")
+            comment: "Title for the issues view"
+        )
     }
 
     public func map(issues: [Issue]) -> [IssueViewModel] {
