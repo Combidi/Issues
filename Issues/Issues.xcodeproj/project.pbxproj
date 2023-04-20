@@ -101,11 +101,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D017C29729CA08F3003C7BDB /* Shared UI */ = {
+			isa = PBXGroup;
+			children = (
+				D0AB94FB28B55B470010B924 /* ListViewController.swift */,
+				D057CFB129965A56003246B4 /* Load More Cell */,
+			);
+			path = "Shared UI";
+			sourceTree = "<group>";
+		};
+		D017C29829CA09E9003C7BDB /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				D0B9762628C1F97C00BF60C3 /* SceneDelegateTests.swift */,
+				D08E51C928B3FE92005B4B80 /* IssuesUIIntegrationTests.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
 		D035DFDD28B69A4400003ACB /* Issues UI */ = {
 			isa = PBXGroup;
 			children = (
-				D035DFE028B69BD200003ACB /* snapshots */,
 				D035DFDE28B69A5600003ACB /* IssuesSnapshotTests.swift */,
+				D035DFE028B69BD200003ACB /* snapshots */,
 			);
 			path = "Issues UI";
 			sourceTree = "<group>";
@@ -117,16 +135,6 @@
 				D057CFAF29965A36003246B4 /* LoadMoreCell.swift */,
 			);
 			path = "Load More Cell";
-			sourceTree = "<group>";
-		};
-		D057CFB229965A61003246B4 /* Issues Cell */ = {
-			isa = PBXGroup;
-			children = (
-				D0AB94FE28B55BCB0010B924 /* IssueCell.swift */,
-				D05842DE28B7B44700450ACA /* IssueCell.xib */,
-				D0ED3ABF29964EE00097CAB6 /* IssueCellController.swift */,
-			);
-			path = "Issues Cell";
 			sourceTree = "<group>";
 		};
 		D057CFB329965ABA003246B4 /* Main */ = {
@@ -148,9 +156,9 @@
 			isa = PBXGroup;
 			children = (
 				D057CFB429A3727A003246B4 /* UITableView+CellRegistration.swift */,
-				D057CFB229965A61003246B4 /* Issues Cell */,
-				D057CFB129965A56003246B4 /* Load More Cell */,
-				D0AB94FB28B55B470010B924 /* ListViewController.swift */,
+				D0AB94FE28B55BCB0010B924 /* IssueCell.swift */,
+				D05842DE28B7B44700450ACA /* IssueCell.xib */,
+				D0ED3ABF29964EE00097CAB6 /* IssueCellController.swift */,
 				D057CFB629A372F6003246B4 /* UITableView+Dequeuing.swift */,
 			);
 			path = "Issues UI";
@@ -187,6 +195,7 @@
 			isa = PBXGroup;
 			children = (
 				D057CFB329965ABA003246B4 /* Main */,
+				D017C29729CA08F3003C7BDB /* Shared UI */,
 				D0AB94FD28B55BBC0010B924 /* Issues UI */,
 				D0BAC25C28B3F38A001D6538 /* Info.plist */,
 			);
@@ -196,9 +205,8 @@
 		D0BAC26428B3F38B001D6538 /* IssuesTests */ = {
 			isa = PBXGroup;
 			children = (
+				D017C29829CA09E9003C7BDB /* Main */,
 				D035DFDD28B69A4400003ACB /* Issues UI */,
-				D0B9762628C1F97C00BF60C3 /* SceneDelegateTests.swift */,
-				D08E51C928B3FE92005B4B80 /* IssuesUIIntegrationTests.swift */,
 			);
 			path = IssuesTests;
 			sourceTree = "<group>";
