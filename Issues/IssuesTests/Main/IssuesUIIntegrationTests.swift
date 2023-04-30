@@ -183,7 +183,7 @@ final class IssuesUIIntegrationTests: XCTestCase {
 
 // MARK: Helpers
 
-private extension ListViewController {
+extension ListViewController {
     
     private var issuesSection: Int { 0 }
     private var loadMoreSection: Int { 1 }

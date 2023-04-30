@@ -40,7 +40,6 @@ public final class LoadResourcePresenter<Resource, View: ResourceView> {
             bundle: Bundle(for: Self.self),
             comment: "Resource loading error message"
         )
-
     }
     
     public func didFinishLoading(with resource: Resource) {

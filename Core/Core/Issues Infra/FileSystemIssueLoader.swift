@@ -18,7 +18,7 @@ public final class FileSystemIssueLoader: IssuesLoader {
     public func loadIssues(completion: @escaping Completion) {
         let fileURL = fileURL
         let mapper = mapper
-        queue.async {
+        queue.sync {
             do {
                 let data = try Data(contentsOf: fileURL)
                 completion(.success(try mapper(data)))
