@@ -8,6 +8,8 @@ import Core
 public typealias LoadIssuesCompletion = (Result<Paginated<Issue>, Error>) -> Void
 public typealias LoadIssues = (@escaping LoadIssuesCompletion) -> Void
 
+private typealias PresentationAdapter = LoadResourcePresentationAdapter<Paginated<Issue>, IssuesViewAdapter>
+
 public struct PaginatedIssuesUIComposer {
     
     private init() {}
@@ -20,66 +22,22 @@ public struct PaginatedIssuesUIComposer {
         viewController.tableView.registerNibBasedCell(IssueCell.self)
         
         let mapper = IssueViewModelMapper(locale: locale)
-        let presenter = LoadResourcePresenter<Paginated<Issue>, IssuesViewAdapter>(
+        let presenter = LoadResourcePresenter(
             view: IssuesViewAdapter(viewController, mapper: mapper),
             loadingView: WeakRefVirtualProxy(viewController),
             errorView: WeakRefVirtualProxy(viewController),
             mapper: { $0 }
         )
         
-        let presentationAdapter = LoadResourcePresentationAdapter(
-            loadIssues: loader
+        let presentationAdapter = PresentationAdapter(
+            load: loader
         )
                
         presentationAdapter.presenter = presenter
         
-        viewController.load = presentationAdapter.load
+        viewController.load = presentationAdapter.loadResource
         viewController.title = IssueViewModelMapper.title
         return viewController
-    }
-}
-
-private class LoadResourcePresentationAdapter<Presenter: LoadResourcePresenter<Paginated<Issue>, IssuesViewAdapter>> {
-    private let loadIssues: LoadIssues
-    var presenter: Presenter!
-    
-    init(loadIssues: @escaping LoadIssues) {
-        self.loadIssues = loadIssues
-    }
-    
-    private var isLoading = false
-    
-    func load() {
-        guard !isLoading else { return }
-        presenter.didStartLoading()
-        isLoading = true
-        loadIssues { [weak self] result in
-            guard let self else { return }
-            self.isLoading = false
-            self.dispatch { [weak self] in
-                self?.present(result: result)
-            }
-        }
-    }
-    
-    private func present(result: Result<Paginated<Issue>, Error>) {
-        switch result {
-        case .success(let page):
-            presenter.didFinishLoading(with: page)
-            
-        case .failure:
-            presenter.didFinishLoadingWithError()
-        }
-    }
-    
-    private func dispatch(_ closure: @escaping () -> Void) {
-        if Thread.isMainThread {
-            closure()
-        } else {
-            DispatchQueue.main.async {
-                closure()
-            }
-        }
     }
 }
 
@@ -109,9 +67,9 @@ private final class IssuesViewAdapter: ResourceView {
             mapper: mapper
         )
 
-        let adapter = LoadResourcePresentationAdapter(loadIssues: loadMore)
+        let adapter = PresentationAdapter(load: loadMore)
         
-        let loadMoreController = LoadMoreCellController(loadMore: adapter.load)
+        let loadMoreController = LoadMoreCellController(loadMore: adapter.loadResource)
         
         let presenter = LoadResourcePresenter(
             view: viewAdapter,

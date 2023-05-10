@@ -17,61 +17,22 @@ public struct IssuesUIComposer {
         viewController.tableView.registerNibBasedCell(IssueCell.self)
         
         let mapper = IssueViewModelMapper(locale: locale)
-        let presenter = LoadResourcePresenter<[Issue], IssuesViewAdapter>(
+        let presenter = LoadResourcePresenter(
             view: IssuesViewAdapter(viewController),
             loadingView: WeakRefVirtualProxy(viewController),
             errorView: WeakRefVirtualProxy(viewController),
             mapper: mapper.map
         )
         
-        let presentationAdapter = LoadResourcePresentationAdapter(
-            loader: loader
+        let presentationAdapter = LoadResourcePresentationAdapter<[Issue], IssuesViewAdapter>(
+            load: loader.loadIssues
         )
                
         presentationAdapter.presenter = presenter
         
-        viewController.load = presentationAdapter.load
+        viewController.load = presentationAdapter.loadResource
         viewController.title = IssueViewModelMapper.title
         return viewController
-    }
-}
-
-private class LoadResourcePresentationAdapter<Presenter: LoadResourcePresenter<[Issue], IssuesViewAdapter>> {
-    private let loader: IssuesLoader
-    var presenter: Presenter!
-    
-    init(loader: IssuesLoader) {
-        self.loader = loader
-    }
-        
-    func load() {
-        presenter.didStartLoading()
-        loader.loadIssues { [weak self] result in
-            guard let self else { return }
-            self.dispatch { [weak self] in
-                self?.present(result: result)
-            }
-        }
-    }
-    
-    private func present(result: Result<[Issue], Error>) {
-        switch result {
-        case .success(let page):
-            presenter.didFinishLoading(with: page)
-            
-        case .failure:
-            presenter.didFinishLoadingWithError()
-        }
-    }
-    
-    private func dispatch(_ closure: @escaping () -> Void) {
-        if Thread.isMainThread {
-            closure()
-        } else {
-            DispatchQueue.main.async {
-                closure()
-            }
-        }
     }
 }
 

@@ -21,6 +21,7 @@
 		D075EAD62A0BDBEA00736C05 /* IssuesUIComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D075EAD52A0BDBEA00736C05 /* IssuesUIComposer.swift */; };
 		D075EADB2A0C23B900736C05 /* WeakRefVirtualProxy+ResourceLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = D075EADA2A0C23B900736C05 /* WeakRefVirtualProxy+ResourceLoading.swift */; };
 		D075EADF2A0C23FF00736C05 /* ListViewController+ResourceLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = D075EADE2A0C23FF00736C05 /* ListViewController+ResourceLoading.swift */; };
+		D075EAE32A0C2F1400736C05 /* LoadResourcePresentationAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D075EAE22A0C2F1400736C05 /* LoadResourcePresentationAdapter.swift */; };
 		D08E51CB28B3FEB7005B4B80 /* PaginatedIssuesUIIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08E51C928B3FE92005B4B80 /* PaginatedIssuesUIIntegrationTests.swift */; };
 		D0AB94FC28B55B470010B924 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AB94FB28B55B470010B924 /* ListViewController.swift */; };
 		D0AB94FF28B55BCB0010B924 /* IssueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AB94FE28B55BCB0010B924 /* IssueCell.swift */; };
@@ -83,6 +84,7 @@
 		D075EAD52A0BDBEA00736C05 /* IssuesUIComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssuesUIComposer.swift; sourceTree = "<group>"; };
 		D075EADA2A0C23B900736C05 /* WeakRefVirtualProxy+ResourceLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WeakRefVirtualProxy+ResourceLoading.swift"; sourceTree = "<group>"; };
 		D075EADE2A0C23FF00736C05 /* ListViewController+ResourceLoading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ListViewController+ResourceLoading.swift"; sourceTree = "<group>"; };
+		D075EAE22A0C2F1400736C05 /* LoadResourcePresentationAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadResourcePresentationAdapter.swift; sourceTree = "<group>"; };
 		D08E51C928B3FE92005B4B80 /* PaginatedIssuesUIIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginatedIssuesUIIntegrationTests.swift; sourceTree = "<group>"; };
 		D0AB94FB28B55B470010B924 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		D0AB94FE28B55BCB0010B924 /* IssueCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueCell.swift; sourceTree = "<group>"; };
@@ -196,6 +198,7 @@
 			children = (
 				D075EADA2A0C23B900736C05 /* WeakRefVirtualProxy+ResourceLoading.swift */,
 				D075EADE2A0C23FF00736C05 /* ListViewController+ResourceLoading.swift */,
+				D075EAE22A0C2F1400736C05 /* LoadResourcePresentationAdapter.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -409,6 +412,7 @@
 				D057CFB729A372F6003246B4 /* UITableView+Dequeuing.swift in Sources */,
 				D0AB94FC28B55B470010B924 /* ListViewController.swift in Sources */,
 				D075EAD62A0BDBEA00736C05 /* IssuesUIComposer.swift in Sources */,
+				D075EAE32A0C2F1400736C05 /* LoadResourcePresentationAdapter.swift in Sources */,
 				D0ED3AC029964EE00097CAB6 /* IssueCellController.swift in Sources */,
 				D0AB950428B55C790010B924 /* PaginatedIssuesUIComposer.swift in Sources */,
 				D0BAC24F28B3F388001D6538 /* AppDelegate.swift in Sources */,
