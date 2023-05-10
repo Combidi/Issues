@@ -5,7 +5,7 @@
 import XCTest
 import Core
 
-final class SharedLocalizationTests: XCTestCase {
+final class SharedLocalizationTests: XCTestCase, LocalizationTest {
     
     func test_localizedStrings_haveKeysAndValuesForAllSupportedLocalizations() {
         let table = "Shared"
