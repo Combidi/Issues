@@ -99,7 +99,7 @@ final class IssuesUIIntegrationTests: XCTestCase {
         line: UInt = #line
     ) -> (sut: ListViewController, loader: IssuesLoaderSpy) {
         let loader = IssuesLoaderSpy()
-        let sut = PaginatedIssuesUIComposer.compose(withLoader: loader.loadIssues, locale: locale) as! ListViewController
+        let sut = IssuesUIComposer.compose(withLoader: loader.loadIssues, locale: locale) as! ListViewController
         trackForMemoryLeaks(loader, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, loader)
@@ -176,7 +176,7 @@ private final class IssuesLoaderSpy {
     
     func completeIssuesLoadingWithError() {
         loadCompletions.last?(.failure(NSError(domain: "any", code: 1)))
-    }    
+    }
 }
 
 private extension XCTestCase {

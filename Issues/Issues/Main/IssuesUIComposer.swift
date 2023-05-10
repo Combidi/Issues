@@ -10,7 +10,7 @@ public struct IssuesUIComposer {
     private init() {}
     
     public static func compose(
-        withLoader loader: @escaping (LoadIssuesCompletion) -> Void,
+        withLoader loader: @escaping LoadIssues,
         locale: Locale = .current
     ) -> UIViewController {
         let viewController = ListViewController()
