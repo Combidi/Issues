@@ -8,7 +8,7 @@ import Core
 public typealias LoadIssuesCompletion = (Result<Paginated<Issue>, Error>) -> Void
 public typealias LoadIssues = (@escaping LoadIssuesCompletion) -> Void
 
-public struct IssuesUIComposer {
+public struct PaginatedIssuesUIComposer {
     
     private init() {}
     

@@ -6,7 +6,7 @@ import XCTest
 import Issues
 import Core
 
-final class IssuesUIIntegrationTests: XCTestCase {
+final class PaginatedIssuesUIIntegrationTests: XCTestCase {
     
     func test_issuesView_hasTitle() {
         let (sut, _) = makeSUT()
@@ -174,7 +174,7 @@ final class IssuesUIIntegrationTests: XCTestCase {
         line: UInt = #line
     ) -> (sut: ListViewController, loader: IssuesLoaderSpy) {
         let loader = IssuesLoaderSpy()
-        let sut = IssuesUIComposer.compose(withLoader: loader.loadIssues, locale: locale) as! ListViewController
+        let sut = PaginatedIssuesUIComposer.compose(withLoader: loader.loadIssues, locale: locale) as! ListViewController
         trackForMemoryLeaks(loader, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, loader)
