@@ -6,7 +6,11 @@ import XCTest
 
 final class IssuesUIAcceptanceTests: XCTestCase {
     
-    func test() {
+    func test_onLaunch_displaysLocalIssues() {
+        let app = XCUIApplication()
         
+        app.launch()
+        
+        XCTAssertEqual(app.cells.count, 3)
     }
 }
