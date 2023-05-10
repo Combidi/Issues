@@ -24,33 +24,7 @@ final class IssuesUIIntegrationTests: XCTestCase {
         sut.loadViewIfNeeded()
         XCTAssertEqual(loader.loadIssuesCallCount, 1, "Expected a loading request once view is loaded")
     }
-    
-    func test_loadMoreActions_requestMoreFromLoader() {
-        let (sut, loader) = makeSUT()
-        sut.loadViewIfNeeded()
-        loader.completeIssuesLoading()
         
-        XCTAssertEqual(loader.loadMoreCallCount, 0, "Expected no request before load more action")
-        
-        sut.simulateLoadMoreIssuesAction()
-        XCTAssertEqual(loader.loadMoreCallCount, 1, "Expected request load more request")
-        
-        sut.simulateLoadMoreIssuesAction()
-        XCTAssertEqual(loader.loadMoreCallCount, 1, "Expected no request while loading more")
-        
-        loader.completeLoadMore(lastPage: false)
-        sut.simulateLoadMoreIssuesAction()
-        XCTAssertEqual(loader.loadMoreCallCount, 2, "Expected request after load more completed with more pages")
-
-        loader.completeLoadMoreWithError()
-        sut.simulateLoadMoreIssuesAction()
-        XCTAssertEqual(loader.loadMoreCallCount, 3, "Expected request after load more failure")
-
-        loader.completeLoadMore(lastPage: true)
-        sut.simulateLoadMoreIssuesAction()
-        XCTAssertEqual(loader.loadMoreCallCount, 3, "Expected no request after loading all pages")
-    }
-    
     func test_loadIssuesCompletion_rendersSuccessfullyLoadedIssues() {
         let issue0 = Issue(firstName: "Peter", surname: "Combee", submissionDate: Date(timeIntervalSince1970: 662072400), subject: "Phone charger is missing")
         let issue1 = Issue(firstName: "Luna", surname: "Combee", submissionDate: Date(timeIntervalSince1970: 720220087), subject: "My game controller is broken")
@@ -95,29 +69,6 @@ final class IssuesUIIntegrationTests: XCTestCase {
         XCTAssertFalse(sut.isShowingLoadingIndicator, "Expected no loading indicator once loading completes with error")
     }
     
-    func test_loadingMoreIndicator_isVisibleWhileLoadingMore() {
-        let (sut, loader) = makeSUT()
-
-        sut.loadViewIfNeeded()
-        XCTAssertFalse(sut.isShowingLoadMoreIndicator, "Expected no loading indicator once view is loaded")
-
-        loader.completeIssuesLoading()
-        XCTAssertFalse(sut.isShowingLoadMoreIndicator, "Expected no loading indicator once loading completes successfully")
-
-        sut.simulateLoadMoreIssuesAction()
-        XCTAssertTrue(sut.isShowingLoadMoreIndicator, "Expected loading indicator on load more action")
-
-        loader.completeLoadMore(lastPage: false)
-
-        XCTAssertFalse(sut.isShowingLoadMoreIndicator, "Expected no loading indicator once user initiated loading completes successfully")
-
-        sut.simulateLoadMoreIssuesAction()
-        XCTAssertTrue(sut.isShowingLoadMoreIndicator, "Expected loading indicator on second load more action")
-
-        loader.completeLoadMoreWithError()
-        XCTAssertFalse(sut.isShowingLoadMoreIndicator, "Expected no loading indicator once user initiated loading completes with error")
-    }
-
     func test_loadIssuesCompletion_dispatchesFromBackgroundToMainThread() {
         let (sut, loader) = makeSUT()
         sut.loadViewIfNeeded()
@@ -129,22 +80,7 @@ final class IssuesUIIntegrationTests: XCTestCase {
         }
         wait(for: [exp], timeout: 1.0)
     }
-    
-    func test_loadMoreCompletion_dispatchesFromBackgroundToMainThread() {
-        let (sut, loader) = makeSUT()
-        sut.loadViewIfNeeded()
-        loader.completeIssuesLoading()
-        sut.simulateLoadMoreIssuesAction()
         
-        let exp = expectation(description: "wait for load more completion")
-        DispatchQueue.global().async {
-            loader.completeLoadMore(lastPage: true)
-            exp.fulfill()
-        }
-        
-        wait(for: [exp], timeout: 1.0)
-    }
-    
     func test_loadIssuesCompletion_rendersErrorMessageOnError() {
         let (sut, loader) = makeSUT()
 
@@ -155,17 +91,6 @@ final class IssuesUIIntegrationTests: XCTestCase {
         XCTAssertEqual(sut.renderedErrorMessage(), "Invalid data")
     }
     
-    func test_loadMoreCompletion_rendersErrorMessageOnError() {
-        let (sut, loader) = makeSUT()
-        sut.loadViewIfNeeded()
-        loader.completeIssuesLoading()
-        
-        sut.simulateLoadMoreIssuesAction()
-        loader.completeLoadMoreWithError()
-        
-        XCTAssertEqual(sut.renderedLoadMoreErrorMessage(), "Invalid data")
-    }
-
     // MARK: Helpers
     
     private func makeSUT(
@@ -226,24 +151,6 @@ private extension ListViewController {
     func renderedErrorMessage() -> String? {
         errorLabel.text
     }
-    
-    func renderedLoadMoreErrorMessage() -> String? {
-        renderedLoadMoreView()?.message
-    }
-    
-    func simulateLoadMoreIssuesAction() {
-        let index = IndexPath(row: 0, section: loadMoreSection)
-        guard let cell = cell(at: index) else { return }
-        tableView.delegate?.tableView?(tableView, willDisplay: cell, forRowAt: index)
-    }
-    
-    var isShowingLoadMoreIndicator: Bool {
-        renderedLoadMoreView()?.isLoading ?? false
-    }
-    
-    private func renderedLoadMoreView() -> LoadMoreCell? {
-        cell(at: IndexPath(row: 0, section: loadMoreSection)) as? LoadMoreCell
-    }
 }
 
 private final class IssuesLoaderSpy {
@@ -252,11 +159,7 @@ private final class IssuesLoaderSpy {
     var loadIssuesCallCount: Int {
         loadCompletions.count
     }
-    
-    var loadMoreCallCount: Int {
-        loadMoreCompletions.count
-    }
-    
+        
     private var loadCompletions = [LoadCompletion]()
     private var loadMoreCompletions = [LoadCompletion]()
     
@@ -273,18 +176,7 @@ private final class IssuesLoaderSpy {
     
     func completeIssuesLoadingWithError() {
         loadCompletions.last?(.failure(NSError(domain: "any", code: 1)))
-    }
-    
-    func completeLoadMore(lastPage: Bool) {
-        let paginated = Paginated(models: [], loadMore: lastPage ? nil : { [weak self] completion in
-            self?.loadMoreCompletions.append(completion)
-        })
-        loadMoreCompletions.last?(.success(paginated))
-    }
-    
-    func completeLoadMoreWithError() {
-        loadMoreCompletions.last?(.failure(NSError(domain: "any", code: 1)))
-    }
+    }    
 }
 
 private extension XCTestCase {
