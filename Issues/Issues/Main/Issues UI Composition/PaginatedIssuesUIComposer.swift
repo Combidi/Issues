@@ -125,27 +125,3 @@ private final class IssuesViewAdapter: ResourceView {
         viewController.display(sections: [issueControllers, [loadMoreController]])
     }
 }
-
-extension WeakRefVirtualProxy: ResourceLoadingView where T: ResourceLoadingView {
-    func display(_ viewModel: ResourceLoadingViewModel) {
-        object?.display(viewModel)
-    }
-}
-
-extension WeakRefVirtualProxy: ResourceErrorView where T: ResourceErrorView {
-    func display(_ viewModel: ResourceLoadingErrorViewModel) {
-        object?.display(viewModel)
-    }
-}
-
-extension ListViewController: ResourceLoadingView {
-    public func display(_ viewModel: ResourceLoadingViewModel) {
-        display(isLoading: viewModel.isLoading)
-    }
-}
-
-extension ListViewController: ResourceErrorView {
-    public func display(_ viewModel: ResourceLoadingErrorViewModel) {
-        display(message: viewModel.message)
-    }
-}
