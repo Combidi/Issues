@@ -99,7 +99,7 @@ final class IssuesUIIntegrationTests: XCTestCase {
         line: UInt = #line
     ) -> (sut: ListViewController, loader: IssuesLoaderSpy) {
         let loader = IssuesLoaderSpy()
-        let sut = IssuesUIComposer.compose(withLoader: loader.loadIssues, locale: locale) as! ListViewController
+        let sut = IssuesUIComposer.compose(withLoader: loader, locale: locale) as! ListViewController
         trackForMemoryLeaks(loader, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, loader)
@@ -111,7 +111,6 @@ final class IssuesUIIntegrationTests: XCTestCase {
 private extension ListViewController {
     
     private var issuesSection: Int { 0 }
-    private var loadMoreSection: Int { 1 }
 
     func numberOfRenderedIssueViews() -> Int {
         numberOfRows(in: issuesSection)
@@ -153,25 +152,20 @@ private extension ListViewController {
     }
 }
 
-private final class IssuesLoaderSpy {
-    typealias LoadCompletion = (Result<Paginated<Issue>, Error>) -> Void
+private final class IssuesLoaderSpy: IssuesLoader {
     
     var loadIssuesCallCount: Int {
         loadCompletions.count
     }
         
-    private var loadCompletions = [LoadCompletion]()
-    private var loadMoreCompletions = [LoadCompletion]()
+    private var loadCompletions = [IssuesLoader.Completion]()
     
-    func loadIssues(completion: @escaping LoadCompletion) {
+    func loadIssues(completion: @escaping IssuesLoader.Completion) {
         loadCompletions.append(completion)
     }
     
     func completeIssuesLoading(with issues: [Issue] = []) {
-        let paginated = Paginated(models: issues, loadMore: { [weak self] completion in
-            self?.loadMoreCompletions.append(completion)
-        })
-        loadCompletions.last?(.success(paginated))
+        loadCompletions.last?(.success(issues))
     }
     
     func completeIssuesLoadingWithError() {
