@@ -21,12 +21,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             return
         }
         let loader = FileSystemIssueLoader(fileURL: url, mapper: { try CSVIssuesMapper.map(data: $0) })
+        let issues = IssuesUIComposer.compose(withLoader: loader)
         
-        let issues = PaginatedIssuesUIComposer.compose(withLoader: { completion in
-            loader.loadIssues { result in
-                completion(result.map { Paginated(models: $0, loadMore: nil) })
-            }
-        })
         window?.rootViewController = UINavigationController(rootViewController: issues)
         window?.makeKeyAndVisible()
     }
